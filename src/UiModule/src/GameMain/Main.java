@@ -1,15 +1,22 @@
 package GameMain;
 import EnginePackage.*;
-import GamePackage.Game;
+import GamePackage.*;
 
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hey, please enter your XML file name:\n");
+        boolean validFile;
+        System.out.println("Hey, please enter your XML file name:");
         Scanner sc = new Scanner(System.in);
         String filename = sc.nextLine();
         EngineImpl engine = new EngineImpl();
-        engine.loadXmlFile(filename);
+        validFile = engine.loadXmlFile(filename);
+        while(!validFile) {
+            System.out.println("please enter your XML file name:");
+            validFile = engine.loadXmlFile(filename);
+            filename = sc.nextLine();
+        }
+
     }
 }

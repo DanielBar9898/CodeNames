@@ -1,21 +1,38 @@
 package GamePackage;
 
 public class Word {
-    public enum Team{
+    public enum cardColor{
         TEAM1,
         TEAM2,
         NEUTRAL,
         BLACK;
     }
-    private final Team team;
+    private  cardColor color;
     private String word;
-    private boolean found = false;
+    private boolean found ;
     private static int serialNumber = 0;
 
-    public Word(Team team, String word) {
-        this.team = team;
+    public Word(String word) {
         this.word = word;
         serialNumber = generateSerialNumber();
+        found = false;
+    }
+
+    public void setColor(Word.cardColor cardColor){
+        switch (cardColor){
+            case TEAM1:
+                this.color = cardColor.TEAM1;
+                break;
+            case TEAM2:
+                this.color = cardColor.TEAM2;
+                break;
+            case NEUTRAL:
+                this.color = cardColor.NEUTRAL;
+                break;
+            case BLACK:
+                this.color = cardColor.BLACK;
+                break;
+        }
     }
 
     public int getSerialNumber() {
@@ -42,5 +59,13 @@ public class Word {
 
     public boolean equals(Word word){
         return this.word.equals(word.word);
+    }
+
+    public void checkWord(Word word,Team team){
+        return;
+    }
+
+    public cardColor getColor() {
+        return color;
     }
 }

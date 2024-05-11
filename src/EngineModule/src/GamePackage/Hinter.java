@@ -1,11 +1,14 @@
 package GamePackage;
 
+import java.util.Scanner;
+
 public class Hinter extends Player {
-    private Word.Team team;
+    private Word.cardColor team;
     private String hint;
+    private int wordsHint;
     Board fullBoard;
 
-    public Hinter(Word.Team team) {
+    public Hinter(Word.cardColor team) {
         this.team = team;
     }
 
@@ -18,8 +21,16 @@ public class Hinter extends Player {
         this.hint = otherHint;
     }
 
-    public String getHint() {
-        return this.hint;
+    public void setWordsHint(int wordsHint) {
+        this.wordsHint = wordsHint;
+    }
+
+    public int getWordsHint() {
+        return wordsHint;
+    }
+
+    public void getHint() {
+        System.out.println("The hint is " + hint +",number of words related is " + wordsHint);
     }
 
     public void printBoard()
@@ -36,6 +47,12 @@ public class Hinter extends Player {
         return;
     }
     public void playHinterTurn(){
-        return;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please enter your hint:\n");
+        String hint = sc.nextLine();
+        System.out.println("How many words should your partner guess?:\n");
+        int numOfWords = sc.nextInt();
+        setHint(hint);
+        setWordsHint(numOfWords);
     }
 }

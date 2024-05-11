@@ -2,7 +2,7 @@ package EnginePackage;
 import GamePackage.*;
 public interface Engine {
 
-    public void loadXmlFile(String fileName);
+    public boolean loadXmlFile (String fileName);
 
     public void showGameMenu();
 
