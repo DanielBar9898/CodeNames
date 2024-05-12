@@ -16,7 +16,10 @@ import java.util.Scanner;
 public class EngineImpl implements Engine {
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "JAXBGenerated";
 
-    public boolean loadXmlFile(String fileName){
+    public boolean loadXmlFile(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter XML file path: ");
+        String fileName = sc.nextLine();
             if(!(fileName.endsWith(".xml"))){
                 System.out.println(fileName + " is not a valid XML file");
                 return false;
@@ -42,7 +45,15 @@ public class EngineImpl implements Engine {
     }
 
     public void showGameMenu(){
-        return;
+        System.out.println("Please select one of the following options:");
+        System.out.println("\t1. Load XML file");
+        System.out.println("\t2. Show game information");
+        System.out.println("\t3. Start game");
+        System.out.println("\t4. Play turn");
+        System.out.println("\t5. Show game statistics");
+        System.out.println("\t6. Exit");
+
+
     }
 
     public void startGame(){

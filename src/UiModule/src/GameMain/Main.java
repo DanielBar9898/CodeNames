@@ -6,15 +6,23 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        boolean validFile;
-        System.out.println("Hey, please enter your XML file name:");
+        int choice;
         Scanner sc = new Scanner(System.in);
-        String filename = sc.nextLine();
+        System.out.println("Hello, and welcome to Code Names game!");
         EngineImpl engine = new EngineImpl();
-        validFile = engine.loadXmlFile(filename);
+        engine.showGameMenu();
+        choice = sc.nextInt();
+        switch (choice){
+            case 1:
+                engine.loadXmlFile();
+        }
+        boolean validFile;
+        System.out.println("Please enter your XML file name:");
+        String filename = sc.nextLine();
+        validFile = engine.loadXmlFile();
         while(!validFile) {
             System.out.println("please enter your XML file name:");
-            validFile = engine.loadXmlFile(filename);
+            validFile = engine.loadXmlFile();
             filename = sc.nextLine();
         }
 
