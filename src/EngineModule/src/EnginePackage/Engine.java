@@ -13,9 +13,9 @@ public interface Engine {
 
     public void playTurn(Team teamTurn,String hint,int numOfWordsToGuess);
 
-    public boolean playTurn(Team teamTurn ,int wordIndex);
+    public boolean playTurn(Team teamTurn ,int wordIndex,BooleanWrapper gameOver);
 
-    public void printGameStats();
+    public void printGameStats(Game currentGame,boolean team1Turn);
 
 
 }
