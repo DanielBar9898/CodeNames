@@ -44,23 +44,5 @@ public class Guesser extends Player {
          return false;
     }
 
-    public void updateGameByWord(Word word,Team playerTeam){
-        if(true){
-           System.out.println("Its correct, you have earned your team a point");
-            playerTeam.guessedRight();
-            word.found();
-        }
-        else if(true){
-            System.out.println("Its wrong, you have earned the other team a point");
 
-        }
-        else if(word.getColor() == Word.cardColor.BLACK){
-            System.out.println("OMG, its a black word, game over!");
-
-        }
-        else{
-            word.found();
-            System.out.println("its a natural word");
-        }
-    }
 }

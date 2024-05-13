@@ -39,7 +39,7 @@ public class Game {
         ECNBoard b = game.getECNBoard();
         gameBoard = new Board(b);
         gameBoard.addWordsToBoard(gameWords);
-        team1 = new Team(game.getECNTeam1().getName(),game.getECNTeam1().getCardsCount(), Word.cardColor.TEAM1);
+        team1 = new Team(game.getECNTeam1().getName(), game.getECNTeam1().getCardsCount(), Word.cardColor.TEAM1);
         team2 = new Team(game.getECNTeam2().getName(), game.getECNTeam2().getCardsCount(), Word.cardColor.TEAM2);
         gameBoard.assignWordsToTeams(team1,team2);
     }

@@ -48,6 +48,14 @@ public class Word {
         this.found = true;
     }
 
+    public String getCharFound() {
+        if(found){
+            return "V";
+        }
+        else
+            return "X";
+    }
+
     public String toString(){
         return word;
     }
@@ -70,5 +78,22 @@ public class Word {
     }
     public boolean isFound() {
         return found;
+    }
+    public String getCharColor(){
+        switch (this.color){
+            case TEAM1:
+                return "T1";
+
+            case TEAM2:
+                return "T2";
+
+            case NEUTRAL:
+                return "N";
+
+            case BLACK:
+                return "Black";
+
+        }
+        return null;
     }
 }

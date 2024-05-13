@@ -35,7 +35,111 @@ public class Board {
             Word randomWord = wordList.get(randomIndex);
             wordsSet.add(randomWord);
         }
+        Collections.shuffle(wordList);
     }
+    public void printHiddenBoard() {
+        numRows=wordsSet.size()/numCols;
+        List<Word> wordList = new ArrayList<>(wordsSet);
+        int itr=0;
+        boolean wordsLine=true;
+        System.out.println("--------------------------------------------------------------------------");
+        for (int i = 0; i < numRows; i++) {
+            System.out.print("| ");
+            for (int j = 0; j < numCols; j++) {
+                Word currWord= wordList.get(itr);
+                if (currWord != null) {
+                    if(wordsLine) {
+                        System.out.print(currWord.toString());
+                        System.out.print("          ");
+                        System.out.print(" | ");
+                        wordsLine=false;
+                    }
+                    else {
+                        System.out.print("(" + currWord.getSerialNumber()+ ")");
+                        System.out.print(currWord.getCharFound());
+                        System.out.print("("+currWord.getCharColor()+")");
+                        System.out.print(" | ");
+                        wordsLine=true;
+                    }
+                }
+
+                System.out.print(" | ");
+                itr++;
+            }
+            if(!wordsLine) {
+                itr=itr-numCols;
+            }
+            System.out.println();
+            System.out.println("--------------------------------------------------------------------------");
+        }
+    }
+    public void printVisibleBoard() {
+        List<Word> wordList = new ArrayList<>(wordsSet);
+        int itr=0;
+        boolean wordsLine=true;
+        System.out.println("--------------------------------------------------------------------------");
+        for (int i = 0; i < numRows; i++) {
+            System.out.print("| ");
+            for (int j = 0; j < numCols; j++) {
+                Word currWord= wordList.get(itr);
+                if (currWord != null) {
+                    if(wordsLine) {
+                        System.out.print(currWord.toString());
+                        System.out.print("          ");
+                        System.out.print(" | ");
+                        wordsLine=false;
+                    }
+                    else {
+                        System.out.print("(" + currWord.getSerialNumber()+ ")");
+                        if(currWord.isFound()) {
+                            System.out.print(currWord.getCharFound());
+                            System.out.print("(" + currWord.getCharColor() + ")");
+                        }
+                        System.out.print(" | ");
+                        wordsLine=true;
+                    }
+                }
+
+                System.out.print(" | ");
+                itr++;
+            }
+            if(!wordsLine) {
+                itr=itr-numCols;
+            }
+            System.out.println();
+            System.out.println("--------------------------------------------------------------------------");
+        }
+    }
+    /*
+    public void printHiddenBoard() {
+        List<Word> wordList = new ArrayList<>(wordsSet);
+
+        final int numWordsInLine= 5;
+        int wordInLine =0;
+        int wordLength;
+        for(int i=0;i<numRows;i++){
+            System.out.print("|");
+
+            for(int j=0;j<numCols;j++){
+              while(wordInLine %numWordsInLine!=0){
+                  String currWord= wordList.get(wordInLine).toString();
+                  wordLength=currWord.length();
+                  System.out.println("     ");
+                  System.out.print(currWord);
+                  for(in)
+
+                  System.out.println();
+              }
+                System.out.println();
+            }
+        }
+for (Word word : wordsSet) {
+    System.out.println(word);
+}
+
+    }
+
+     */
 
     public void assignWordsToTeams(Team team1,Team team2){
         List<Word> wordList = new ArrayList<>(wordsSet);
@@ -46,11 +150,17 @@ public class Board {
         }
 
         for (int i = 0; i < team1.getWordsToGuess(); i++) {
+            wordList.remove(0).setColor(Word.cardColor.TEAM1);
+        }
+        for (int i = 0; i < team1.getWordsToGuess(); i++) {
             w = wordList.remove(0);
             w.setColor(Word.cardColor.TEAM1);
             team1.addWordToGuess(w);
         }
 
+        for (int i = 0; i < team2.getWordsToGuess(); i++) {
+            wordList.remove(0).setColor(Word.cardColor.TEAM2);
+        }
         for (int i = 0; i < team2.getWordsToGuess(); i++) {
             w = wordList.remove(0);
             w.setColor(Word.cardColor.TEAM2);
