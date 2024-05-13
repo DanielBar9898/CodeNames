@@ -1,6 +1,7 @@
 package EnginePackage;
 import GamePackage.Game;
 import GamePackage.Team;
+import GamePackage.Word;
 import JAXBGenerated.ECNGame;
 
 import javax.xml.bind.JAXBContext;
@@ -10,33 +11,32 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 
 public class EngineImpl implements Engine {
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "JAXBGenerated";
 
-    public boolean loadXmlFile(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter XML file path: ");
-        String fileName = sc.nextLine();
+    public Game loadXmlFile(String fileName){
             if(!(fileName.endsWith(".xml"))){
                 System.out.println(fileName + " is not a valid XML file");
-                return false;
+                return null;
             }
             else{
                 try{
                     InputStream inputStream = new FileInputStream(new File(fileName));
-                    Game game = deserializeGame(inputStream);
-                    boolean valid = game.validateFile();
-                    return valid;
+                    Game g = deserializeGame(inputStream);
+                    return g;
                 }
                 catch(JAXBException | FileNotFoundException e){
                     e.printStackTrace();
                 }
             }
-        return false;
+        return null;
     }
+
     private static Game deserializeGame(InputStream inputStream) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(JAXB_XML_GAME_PACKAGE_NAME);
         Unmarshaller unmarshaller = jc.createUnmarshaller();
@@ -56,17 +56,49 @@ public class EngineImpl implements Engine {
 
     }
 
+    public void showLoadedGameInfo(Game currentGame){
+        System.out.println("Game information:");
+        System.out.println(currentGame);
+    }
+
     public void startGame(){
         return;
     }
 
-    public void playTurn(Team teamTurn){
-        teamTurn.printTeamTurn();
+    public void playTurn(Team teamTurn,String hint,int numOfWordsToGuess){
         teamTurn.showTeamWordsState();
-        teamTurn.getHinter().printBoard();
-        teamTurn.getHinter().playTurn();
-        teamTurn.getGuesser().printBoard();
-        teamTurn.getGuesser().playTurn();
+        teamTurn.getHinter().playHinterTurn(hint, numOfWordsToGuess);
+        teamTurn.getHinter().getHint();
+    }
+
+    public boolean playTurn(Team teamTurn ,int wordIndex){
+        boolean otherTeamWord;
+        Word currWord;
+        Set<Word> wordsSet = teamTurn.getWordsNeedToGuess();
+        currWord = teamTurn.getGuesser().getHiddenBoard().getWordBySerialNumber(wordIndex);
+        if(currWord.isFound()){
+            System.out.println("Someone already guessed the word");
+            otherTeamWord = false;
+        }
+        if(wordsSet.contains(currWord)){
+            System.out.println("Its your team word! you've guessed correctly and earned your team 1 point!");
+            otherTeamWord = false;
+        }
+        else if(currWord.getColor()==Word.cardColor.BLACK){
+            System.out.println("OMG! its a black word, game over!");
+            //announce BlackWord and finish game!
+            otherTeamWord = false;
+        }
+        else if(currWord.getColor()==Word.cardColor.NEUTRAL){
+            System.out.println("Its a neutral word");
+            otherTeamWord = false;
+        }
+        else{
+            System.out.println("Its a word of the other team! you've earned them a point!");
+            otherTeamWord = true;
+        }
+        currWord.found();
+        return otherTeamWord;
     }
 
     public void printGameStats(){

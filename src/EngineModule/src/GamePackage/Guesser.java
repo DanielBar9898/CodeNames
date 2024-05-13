@@ -11,7 +11,11 @@ public class Guesser extends Player {
     public Guesser(Word.cardColor team) {
         this.team = team;
     }
+    public Guesser() {}
 
+    public Board getHiddenBoard() {
+        return hiddenBoard;
+    }
     public void printBoard()
     {
         printHiddenBoard();
@@ -36,18 +40,8 @@ public class Guesser extends Player {
 //           wordsToGet--;
 //        }
 //    }
-     public boolean getGuess(Team playerTeam){
-         int guessedWordNumber;
-         Word currGuessedWord = null;
-         Scanner scanner = new Scanner(System.in);
-         System.out.println("Please enter the word number, unless you want to exit then press 0 or negative number:\n");
-         guessedWordNumber = scanner.nextInt();
-         if(guessedWordNumber <= 0){
-             return false;
-         }
-         currGuessedWord = hiddenBoard.getWordBySerialNumber(guessedWordNumber);
-         updateGameByWord(currGuessedWord, playerTeam);
-         return true;
+     public boolean checkGuess(List<Integer> wordsIndexes){
+         return false;
     }
 
     public void updateGameByWord(Word word,Team playerTeam){

@@ -7,6 +7,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Game {
+    public enum TeamName{
+        TEAM1,
+        TEAM2;
+    }
     Team team1;
     Team team2;
     Set<Word> blackWords;
@@ -30,13 +34,14 @@ public class Game {
         System.arraycopy(sepratedBlack, 1, sepratedBlackWords, 0, sepratedBlackWords.length);
         for(String word : sepratedBlackWords) {
             gameWords.add(new Word(word));
+            blackWords.add(new Word(word));
         }
         ECNBoard b = game.getECNBoard();
         gameBoard = new Board(b);
         gameBoard.addWordsToBoard(gameWords);
         team1 = new Team(game.getECNTeam1().getName(),game.getECNTeam1().getCardsCount(), Word.cardColor.TEAM1);
         team2 = new Team(game.getECNTeam2().getName(), game.getECNTeam2().getCardsCount(), Word.cardColor.TEAM2);
-        gameBoard.assignWordsToTeams(team1.getWordsToGuess(), team2.getWordsToGuess());
+        gameBoard.assignWordsToTeams(team1,team2);
     }
     public boolean validateFile(){
         boolean cardsCount,blackCardsCount,sumOfCards,rowsColumns,teamNames;
@@ -68,10 +73,6 @@ public class Game {
         return true;
     }
 
-    public boolean fileExists(String fileName){
-        return fileName.endsWith(".xml");
-    }
-
     public boolean cardsCount(){
         return gameBoard.getNumOfWords()<gameWords.size();
     }
@@ -88,5 +89,23 @@ public class Game {
         return !(team1.getTeamName().equalsIgnoreCase(team2.getTeamName()));
     }
 
+    public Team getTeam1(){
+        return team1;
+    }
+    public Team getTeam2(){
+        return team2;
+    }
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("1. Number of all words available for choice is ").append(gameWords.size()).append("\n");
+        result.append("2. Number of black words available for choice is ").append(blackWords.size()).append("\n");
+        result.append("3. In this game there will be ").append(gameBoard.numOfTotalWords-gameBoard.numOfBlackWords).append(" normal words ")
+                .append("and ").append(gameBoard.numOfBlackWords).append(" black words\n");
+        result.append(team1.toString()).append("\n");
+        result.append(team2.toString()).append("\n");
+        return result.toString();
+    }
 
 }
+

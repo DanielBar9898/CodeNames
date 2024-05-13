@@ -11,7 +11,7 @@ public class Hinter extends Player {
     public Hinter(Word.cardColor team) {
         this.team = team;
     }
-
+    public Hinter(){}
     public Hinter(Hinter otherHinter){
         this.team = otherHinter.team;
         this.hint = otherHinter.hint;
@@ -40,18 +40,13 @@ public class Hinter extends Player {
 
     public void playTurn()
     {
-        playHinterTurn();
+        return;
     }
 
     public void printFullBoard(){
         return;
     }
-    public void playHinterTurn(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Please enter your hint:\n");
-        String hint = sc.nextLine();
-        System.out.println("How many words should your partner guess?:\n");
-        int numOfWords = sc.nextInt();
+    public void playHinterTurn(String hint,int numOfWords){
         setHint(hint);
         setWordsHint(numOfWords);
     }

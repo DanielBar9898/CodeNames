@@ -10,7 +10,7 @@ public class Word {
     private  cardColor color;
     private String word;
     private boolean found ;
-    private static int serialNumber = 0;
+    private static int serialNumber = 1;
 
     public Word(String word) {
         this.word = word;
@@ -67,5 +67,8 @@ public class Word {
 
     public cardColor getColor() {
         return color;
+    }
+    public boolean isFound() {
+        return found;
     }
 }
