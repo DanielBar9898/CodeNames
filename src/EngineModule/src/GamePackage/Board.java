@@ -22,7 +22,13 @@ public class Board {
         numOfTotalWords = board.getCardsCount()+numOfBlackWords;
         wordsSet = new HashSet<>(numOfTotalWords);
     }
-
+    public Board(Board otherBoard) {
+        numRows = otherBoard.numRows;
+        numCols = otherBoard.numCols;
+        numOfBlackWords = otherBoard.numOfBlackWords;
+        numOfTotalWords = otherBoard.numOfTotalWords;
+        wordsSet = new HashSet<>(otherBoard.getWords());
+    }
     public void addWordsToBoard(Set<Word> wordSet) {
         List<Word> wordList = new ArrayList<>(wordSet);
         Random random = new Random();
@@ -41,6 +47,7 @@ public class Board {
         List<Word> wordList = new ArrayList<>(wordsSet);
         Collections.shuffle(wordList);
         Word w = null;
+        int serial = 1;
         for (int i = 0; i < this.numOfBlackWords; i++) {
             wordList.remove(0).setColor(Word.cardColor.BLACK);
         }
@@ -58,6 +65,10 @@ public class Board {
         }
         for(Word remainingWords : wordList){
             remainingWords.setColor(Word.cardColor.NEUTRAL);
+        }
+        for(Word word: wordsSet){
+            word.setSerialNumber(serial);
+            serial++;
         }
     }
 

@@ -1,4 +1,6 @@
 package GamePackage;
+import JAXBGenerated.ECNBoard;
+
 import java.util.*;
 public class Team {
 
@@ -7,14 +9,18 @@ public class Team {
     int wordsToGuess,wordsGuessed;
     protected String teamName;
     Set<Word> wordsNeedToGuess;
+    Board teamBoard;
+    int numOfTurns;
 
-    public Team(String teamName,int wordsToGuess,Word.cardColor teamColor) {
+    public Team(String teamName, int wordsToGuess, Word.cardColor teamColor, Board teamBoard) {
         this.teamName = teamName;
         this.wordsToGuess = wordsToGuess;
         wordsGuessed = 0;
         guesser = new Guesser(teamColor);
         hinter = new Hinter(teamColor);
         wordsNeedToGuess = new HashSet<>(wordsToGuess);
+        this.teamBoard = new Board(teamBoard);
+        numOfTurns = 0;
     }
     public Team(Team otherTeam){
         this.teamName = otherTeam.teamName;
@@ -23,8 +29,21 @@ public class Team {
         guesser = new Guesser();
         hinter = new Hinter();
         wordsNeedToGuess = new HashSet<>(otherTeam.getWordsNeedToGuess());
+        numOfTurns = otherTeam.numOfTurns;
     }
-
+    public void playedTurn(){
+        numOfTurns++;
+    }
+    public int getNumOfTurns(){
+        return numOfTurns;
+    }
+    public Board getTeamBoard() {
+        return teamBoard;
+    }
+    public String howManyWordsGuessed(){
+        String s = new String("So far the team guessed correctly "+wordsGuessed+"/"+wordsToGuess+" words");
+        return s;
+    }
     public int getWordsToGuess() {
         return wordsToGuess;
     }
@@ -47,7 +66,7 @@ public class Team {
         return hinter;
     }
     public void printTeamTurn(){
-        System.out.println("Its team: "+teamName.toString()+" turn");
+        System.out.println("Its "+teamName.toString()+" turn");
     }
 
     public void addWordToGuess(Word word){

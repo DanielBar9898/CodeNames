@@ -11,11 +11,12 @@ public class Word {
     private String word;
     private boolean found ;
     private static int serialNumber = 1;
+    private int wordSerialNumber;
 
     public Word(String word) {
         this.word = word;
-        serialNumber = generateSerialNumber();
-        found = false;
+        wordSerialNumber = serialNumber;
+        serialNumber++;
     }
 
     public void setColor(Word.cardColor cardColor){
@@ -36,14 +37,12 @@ public class Word {
     }
 
     public int getSerialNumber() {
-        return serialNumber;
+        return wordSerialNumber;
     }
 
-    // Static method to generate and assign serial number
-    private static int generateSerialNumber() {
-        return ++serialNumber;
+    public void setSerialNumber(int wordSerialNumber) {
+        this.wordSerialNumber = wordSerialNumber;
     }
-
     public void found(){
         this.found = true;
     }
