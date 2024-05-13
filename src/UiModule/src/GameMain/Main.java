@@ -11,6 +11,8 @@ public class Main {
         Team team1 = null, team2 = null;
         boolean team1Turn = true;
         boolean otherTeamWord = false;
+        boolean gameStarted = false;
+        BooleanWrapper gameOver = new BooleanWrapper(false);
         Game currentGame = null;
         String fileName, currentHint;
         Scanner sc = new Scanner(System.in);
@@ -30,8 +32,7 @@ public class Main {
                         currentGame = engine.loadXmlFile(fileName);
                         validFile = currentGame.validateFile();
                     }
-                    team1 = new Team(currentGame.getTeam1());
-                    team2 = new Team(currentGame.getTeam2());
+                    System.out.println("File successfully loaded!");
                     engine.showGameMenu();
                     choice = sc.nextInt();
                     sc.nextLine();
@@ -47,11 +48,21 @@ public class Main {
                     sc.nextLine();
                     break;
                 case 3:
+                    gameStarted = true;
+                    System.out.println("The game has started! , please choose one of the following:");
+                    team1 = currentGame.getTeam1();
+                    team2 = currentGame.getTeam2();
+                    currentGame.getGameBoard().assignWordsToTeams(team1, team2);
+                    engine.showGameMenu();
+                    choice = sc.nextInt();
+                    sc.nextLine();
                     break;
-
                 case 4:
-                    if (currentGame == null || team1 == null || team2 == null) {
+                    if (currentGame == null) {
                         System.out.println("You have not entered a valid XML file!");
+                    }
+                    else if(!gameStarted|| team1 == null || team2 == null){
+                        System.out.println("You have to start a game before playing a turn");
                     }
                     else {
                         System.out.println("Please enter your hint:");
@@ -62,40 +73,63 @@ public class Main {
                         if (team1Turn) {
                             team1.printTeamTurn();
                             engine.playTurn(team1, currentHint, wordsToGuess);
-                            System.out.println("please enter the word index you want to guess:");
-                            lastIndex = sc.nextInt();
-                            sc.nextLine();
-                            while (lastIndex > 0) {
-                                otherTeamWord = engine.playTurn(team1, lastIndex);
+                            while (lastIndex > 0&&wordsToGuess>0) {
+                                System.out.println("please enter the word index you want to guess:");
+                                lastIndex = sc.nextInt();
+                                sc.nextLine();
+                                wordsToGuess--;
+                                otherTeamWord = engine.playTurn(team1, lastIndex,gameOver);
+                                if(gameOver.getValue()) {
+                                    choice = 6;
+                                    break;
+                                }
                                 if (otherTeamWord) {
                                     team2.guessedRight();
                                     otherTeamWord = false;
                                 }
-                                System.out.println("please enter the word index you want to guess:");
-                                lastIndex = sc.nextInt();
-                                sc.nextLine();
                             }
                             team1Turn = false;
                         }
                         else {
                             team2.printTeamTurn();
                             engine.playTurn(team2, currentHint, wordsToGuess);
-                            System.out.println("please enter the word index you want to guess:");
-                            lastIndex = sc.nextInt();
-                            sc.nextLine();
-                            while (lastIndex > 0) {
-                                otherTeamWord = engine.playTurn(team2, lastIndex);
+                            while (lastIndex > 0&&wordsToGuess>0) {
+                                System.out.println("please enter the word index you want to guess:");
+                                lastIndex = sc.nextInt();
+                                sc.nextLine();
+                                wordsToGuess--;
+                                otherTeamWord = engine.playTurn(team2, lastIndex,gameOver);
+                                if(gameOver.getValue()) {
+                                choice = 6;
+                                break;
+                                }
                                 if (otherTeamWord) {
                                     team1.guessedRight();
                                     otherTeamWord = false;
                                 }
-                                System.out.println("please enter the word index you want to guess:");
-                                lastIndex = sc.nextInt();
-                                sc.nextLine();
                             }
                             team1Turn = true;
                         }
+                        System.out.println("The turn has ended!");
                     }
+                    engine.showGameMenu();
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    break;
+                case 5:
+                    if(currentGame == null) {
+                        System.out.println("You have not entered a valid XML file!");
+                    }
+                    else if(!gameStarted|| team1 == null || team2 == null){
+                        System.out.println("You have to start a game before showing game stats");
+                    }
+                    else{
+                        engine.printGameStats(currentGame,team1Turn);
+                    }
+                    engine.showGameMenu();
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    break;
             }
         }
     }

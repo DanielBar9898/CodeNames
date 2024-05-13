@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -71,14 +72,20 @@ public class EngineImpl implements Engine {
         teamTurn.getHinter().getHint();
     }
 
-    public boolean playTurn(Team teamTurn ,int wordIndex){
+    public boolean playTurn(Team teamTurn ,int wordIndex,BooleanWrapper gameOver){
+        teamTurn.playedTurn();
         boolean otherTeamWord;
         Word currWord;
         Set<Word> wordsSet = teamTurn.getWordsNeedToGuess();
-        currWord = teamTurn.getGuesser().getHiddenBoard().getWordBySerialNumber(wordIndex);
+        currWord = teamTurn.getTeamBoard().getWordBySerialNumber(wordIndex);
+        if(currWord==null){
+            System.out.println("Invalid word index!");
+            otherTeamWord = false;
+        }
         if(currWord.isFound()){
             System.out.println("Someone already guessed the word");
             otherTeamWord = false;
+            return otherTeamWord;
         }
         if(wordsSet.contains(currWord)){
             System.out.println("Its your team word! you've guessed correctly and earned your team 1 point!");
@@ -86,7 +93,7 @@ public class EngineImpl implements Engine {
         }
         else if(currWord.getColor()==Word.cardColor.BLACK){
             System.out.println("OMG! its a black word, game over!");
-            //announce BlackWord and finish game!
+            gameOver.setValue(true);
             otherTeamWord = false;
         }
         else if(currWord.getColor()==Word.cardColor.NEUTRAL){
@@ -101,8 +108,21 @@ public class EngineImpl implements Engine {
         return otherTeamWord;
     }
 
-    public void printGameStats(){
-        return;
+    public void printGameStats(Game currentGame,boolean team1Turn){
+       List<Team> teams = new ArrayList<>();
+       teams.add(currentGame.getTeam1());
+       teams.add(currentGame.getTeam2());
+       for(Team t:teams){
+           System.out.println(t.getTeamName());
+           System.out.println(t.howManyWordsGuessed());
+           System.out.println("The team has played "+t.getNumOfTurns()+" turns");
+       }
+       if(team1Turn){
+           System.out.println("Next turn is "+currentGame.getTeam1().getTeamName()+ " turn");
+       }
+       else{
+           System.out.println("Next turn is "+currentGame.getTeam2().getTeamName()+ " turn");
+       }
     }
 
 }
