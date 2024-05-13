@@ -37,19 +37,24 @@ public class Board {
         }
     }
 
-    public void assignWordsToTeams(int numTeam1,int numTeam2){
+    public void assignWordsToTeams(Team team1,Team team2){
         List<Word> wordList = new ArrayList<>(wordsSet);
         Collections.shuffle(wordList);
+        Word w = null;
         for (int i = 0; i < this.numOfBlackWords; i++) {
             wordList.remove(0).setColor(Word.cardColor.BLACK);
         }
 
-        for (int i = 0; i < numTeam1; i++) {
-            wordList.remove(0).setColor(Word.cardColor.TEAM1);
+        for (int i = 0; i < team1.getWordsToGuess(); i++) {
+            w = wordList.remove(0);
+            w.setColor(Word.cardColor.TEAM1);
+            team1.addWordToGuess(w);
         }
 
-        for (int i = 0; i < numTeam2; i++) {
-            wordList.remove(0).setColor(Word.cardColor.TEAM2);
+        for (int i = 0; i < team2.getWordsToGuess(); i++) {
+            w = wordList.remove(0);
+            w.setColor(Word.cardColor.TEAM2);
+            team2.addWordToGuess(w);
         }
         for(Word remainingWords : wordList){
             remainingWords.setColor(Word.cardColor.NEUTRAL);
