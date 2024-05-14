@@ -48,6 +48,9 @@ public class Main {
                     sc.nextLine();
                     break;
                 case 3:
+                    if (currentGame == null) {
+                        System.out.println("You have not entered a valid XML file!");
+                    }
                     gameStarted = true;
                     System.out.println("The game has started! , please choose one of the following:");
                     team1 = currentGame.getTeam1();

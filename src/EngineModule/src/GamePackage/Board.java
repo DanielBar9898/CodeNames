@@ -157,17 +157,11 @@ for (Word word : wordsSet) {
         }
 
         for (int i = 0; i < team1.getWordsToGuess(); i++) {
-            wordList.remove(0).setColor(Word.cardColor.TEAM1);
-        }
-        for (int i = 0; i < team1.getWordsToGuess(); i++) {
             w = wordList.remove(0);
             w.setColor(Word.cardColor.TEAM1);
             team1.addWordToGuess(w);
         }
 
-        for (int i = 0; i < team2.getWordsToGuess(); i++) {
-            wordList.remove(0).setColor(Word.cardColor.TEAM2);
-        }
         for (int i = 0; i < team2.getWordsToGuess(); i++) {
             w = wordList.remove(0);
             w.setColor(Word.cardColor.TEAM2);
