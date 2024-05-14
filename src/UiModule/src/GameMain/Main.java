@@ -56,6 +56,7 @@ public class Main {
                     team1 = currentGame.getTeam1();
                     team2 = currentGame.getTeam2();
                     currentGame.getGameBoard().assignWordsToTeams(team1, team2);
+                    currentGame.getGameBoard().printTheBoard(true);
                     engine.showGameMenu();
                     choice = sc.nextInt();
                     sc.nextLine();
