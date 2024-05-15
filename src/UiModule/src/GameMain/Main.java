@@ -48,6 +48,9 @@ public class Main {
                     sc.nextLine();
                     break;
                 case 3:
+                    if (currentGame == null) {
+                        System.out.println("You have not entered a valid XML file!");
+                    }
                     gameStarted = true;
                     System.out.println("The game has started! , please choose one of the following:");
                     team1 = currentGame.getTeam1();
@@ -58,6 +61,8 @@ public class Main {
                     sc.nextLine();
                     break;
                 case 4:
+                    boolean HiddenBoard = true;
+                    boolean VisibleBoard = false;
                     if (currentGame == null) {
                         System.out.println("You have not entered a valid XML file!");
                     }
@@ -65,15 +70,18 @@ public class Main {
                         System.out.println("You have to start a game before playing a turn");
                     }
                     else {
-                        System.out.println("Please enter your hint:");
-                        currentHint = sc.nextLine();
-                        System.out.println("How many words should your partner guess?:");
-                        wordsToGuess = sc.nextInt();
-                        sc.nextLine();
                         if (team1Turn) {
                             team1.printTeamTurn();
+                            currentGame.getGameBoard().printTheBoard(VisibleBoard);
+                            System.out.println("Please enter your hint:");
+                            currentHint = sc.nextLine();
+                            System.out.println("How many words should your partner guess?:");
+                            wordsToGuess = sc.nextInt();
+                            sc.nextLine();
                             engine.playTurn(team1, currentHint, wordsToGuess);
+                            currentGame.getGameBoard().printTheBoard(HiddenBoard);
                             while (lastIndex > 0&&wordsToGuess>0) {
+                                HiddenBoard=true;
                                 System.out.println("please enter the word index you want to guess:");
                                 lastIndex = sc.nextInt();
                                 sc.nextLine();
@@ -92,6 +100,13 @@ public class Main {
                         }
                         else {
                             team2.printTeamTurn();
+                            currentGame.getGameBoard().printTheBoard(VisibleBoard);
+                            System.out.println("Please enter your hint:");
+                            currentHint = sc.nextLine();
+                            System.out.println("How many words should your partner guess?:");
+                            wordsToGuess = sc.nextInt();
+                            sc.nextLine();
+                            currentGame.getGameBoard().printTheBoard(HiddenBoard);
                             engine.playTurn(team2, currentHint, wordsToGuess);
                             while (lastIndex > 0&&wordsToGuess>0) {
                                 System.out.println("please enter the word index you want to guess:");
@@ -109,8 +124,16 @@ public class Main {
                                 }
                             }
                             team1Turn = true;
-                        }
-                        System.out.println("The turn has ended!");
+                        }try {Thread.sleep(2000); // Sleep for 2 seconds
+                        } catch (InterruptedException e) {
+                            // Handle InterruptedException if needed
+                            e.printStackTrace();}
+                        System.out.println("Here's the board for now :");
+                        currentGame.getGameBoard().printTheBoard(HiddenBoard);
+                        if(gameOver.getValue()) {
+                            System.out.println("Game Over!");
+                        }else {
+                        System.out.println("The turn has ended!");}
                     }
                     engine.showGameMenu();
                     choice = sc.nextInt();
