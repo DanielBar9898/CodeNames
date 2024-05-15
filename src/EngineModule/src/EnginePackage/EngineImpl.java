@@ -46,10 +46,10 @@ public class EngineImpl implements Engine {
     }
 
     public void showGameMenu(){
-        System.out.println("Please select one of the following options:");
+        System.out.println("\nPlease select one of the following options:");
         System.out.println("\t1. Load XML file");
         System.out.println("\t2. Show game information");
-        System.out.println("\t3. Start game");
+        System.out.println("\t3. Start New game");
         System.out.println("\t4. Play turn");
         System.out.println("\t5. Show game statistics");
         System.out.println("\t6. Exit");
