@@ -89,6 +89,7 @@ public class EngineImpl implements Engine {
         }
         if(wordsSet.contains(currWord)){
             System.out.println("Its your team word! you've guessed correctly and earned your team 1 point!");
+            teamTurn.guessedRight();
             otherTeamWord = false;
         }
         else if(currWord.getColor()==Word.cardColor.BLACK){

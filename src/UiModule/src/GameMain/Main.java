@@ -21,7 +21,7 @@ public class Main {
         engine.showGameMenu();
         choice = sc.nextInt();
         sc.nextLine();
-        while (choice != 6) {
+        while (!gameOver.getValue()) {
             switch (choice) {
                 case 1:
                     System.out.println("Enter XML file path: ");
@@ -78,14 +78,16 @@ public class Main {
                                 lastIndex = sc.nextInt();
                                 sc.nextLine();
                                 wordsToGuess--;
-                                otherTeamWord = engine.playTurn(team1, lastIndex,gameOver);
-                                if(gameOver.getValue()) {
-                                    choice = 6;
-                                    break;
-                                }
-                                if (otherTeamWord) {
-                                    team2.guessedRight();
-                                    otherTeamWord = false;
+                                if(lastIndex>0){
+                                    otherTeamWord = engine.playTurn(team1, lastIndex,gameOver);
+                                    if(gameOver.getValue()) {
+                                        choice = 6;
+                                        break;
+                                    }
+                                    if (otherTeamWord) {
+                                        team2.guessedRight();
+                                        otherTeamWord = false;
+                                    }
                                 }
                             }
                             team1Turn = false;
@@ -98,19 +100,23 @@ public class Main {
                                 lastIndex = sc.nextInt();
                                 sc.nextLine();
                                 wordsToGuess--;
-                                otherTeamWord = engine.playTurn(team2, lastIndex,gameOver);
-                                if(gameOver.getValue()) {
-                                choice = 6;
-                                break;
-                                }
-                                if (otherTeamWord) {
-                                    team1.guessedRight();
-                                    otherTeamWord = false;
+                                if (lastIndex > 0) {
+                                    otherTeamWord = engine.playTurn(team2, lastIndex, gameOver);
+                                    if (gameOver.getValue()) {
+                                        choice = 6;
+                                        break;
+                                    }
+                                    if (otherTeamWord) {
+                                        team1.guessedRight();
+                                        otherTeamWord = false;
+                                    }
+
                                 }
                             }
                             team1Turn = true;
                         }
                         System.out.println("The turn has ended!");
+                        lastIndex = 1;
                     }
                     engine.showGameMenu();
                     choice = sc.nextInt();
@@ -130,6 +136,13 @@ public class Main {
                     choice = sc.nextInt();
                     sc.nextLine();
                     break;
+                case 6:
+                    gameOver.setValue(true);
+                    System.out.println("Game over! BYE BYE");
+                    break;
+                default:
+                    System.out.println("Invalid choice!");
+
             }
         }
     }
