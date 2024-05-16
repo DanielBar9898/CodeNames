@@ -7,10 +7,10 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         int choice, wordsToGuess, lastIndex = 1;
-        boolean validFile = false;
+        boolean validFile;
         Team team1 = null, team2 = null;
         boolean team1Turn = true;
-        boolean otherTeamWord = false;
+        boolean otherTeamWord ;
         boolean gameStarted = false;
         BooleanWrapper gameOver = new BooleanWrapper(false);
         Game currentGame = null;
@@ -27,12 +27,19 @@ public class Main {
                     System.out.println("Enter XML file path: ");
                     fileName = sc.nextLine();
                     currentGame = engine.loadXmlFile(fileName);
-                    while (currentGame == null && !validFile) {
+                    while (currentGame == null) {
                         System.out.println("please enter your XML file name:");
+                        fileName = sc.nextLine();
                         currentGame = engine.loadXmlFile(fileName);
-                        validFile = currentGame.validateFile();
                     }
-                    System.out.println("File successfully loaded!");
+                    validFile = currentGame.validateFile();
+                    if(!validFile){
+                        System.out.println("The game you loaded is invalid!");
+                        currentGame = null;
+                    }
+                    else{
+                        System.out.println("File successfully loaded!");
+                    }
                     engine.showGameMenu();
                     choice = sc.nextInt();
                     sc.nextLine();
@@ -51,11 +58,13 @@ public class Main {
                     if (currentGame == null) {
                         System.out.println("You have not entered a valid XML file!");
                     }
-                    gameStarted = true;
-                    System.out.println("The game has started! , please choose one of the following:");
-                    team1 = currentGame.getTeam1();
-                    team2 = currentGame.getTeam2();
-                    currentGame.getGameBoard().assignWordsToTeams(team1, team2);
+                    else{
+                        gameStarted = true;
+                        System.out.println("The game has started! , please choose one of the following:");
+                        team1 = currentGame.getTeam1();
+                        team2 = currentGame.getTeam2();
+                        currentGame.getGameBoard().assignWordsToTeams(team1, team2);
+                    }
                     engine.showGameMenu();
                     choice = sc.nextInt();
                     sc.nextLine();
@@ -82,21 +91,23 @@ public class Main {
                             currentGame.getGameBoard().printTheBoard(HiddenBoard);
                             while (lastIndex > 0&&wordsToGuess>0) {
                                 HiddenBoard=true;
-                                System.out.println("please enter the word index you want to guess:");
+                                System.out.println("please enter the word index you want to guess:\nif you want to stop guessing press 0 or negative number");
                                 lastIndex = sc.nextInt();
                                 sc.nextLine();
                                 wordsToGuess--;
-                                otherTeamWord = engine.playTurn(team1, lastIndex,gameOver);
-                                if(gameOver.getValue()) {
-                                    choice = 6;
-                                    break;
-                                }
-                                if (otherTeamWord) {
-                                    team2.guessedRight();
-                                    otherTeamWord = false;
+                                if(lastIndex>0){
+                                    otherTeamWord = engine.playTurn(team1, lastIndex,gameOver);
+                                    if(gameOver.getValue()) {
+                                        return;
+                                    }
+                                    if (otherTeamWord) {
+                                        team2.guessedRight();
+                                        otherTeamWord = false;
+                                    }
                                 }
                             }
                             team1Turn = false;
+                            lastIndex = 1;
                         }
                         else {
                             team2.printTeamTurn();
@@ -109,21 +120,23 @@ public class Main {
                             currentGame.getGameBoard().printTheBoard(HiddenBoard);
                             engine.playTurn(team2, currentHint, wordsToGuess);
                             while (lastIndex > 0&&wordsToGuess>0) {
-                                System.out.println("please enter the word index you want to guess:");
+                                System.out.println("please enter the word index you want to guess:\nif you want to stop guessing press 0 or negative number");
                                 lastIndex = sc.nextInt();
                                 sc.nextLine();
                                 wordsToGuess--;
-                                otherTeamWord = engine.playTurn(team2, lastIndex,gameOver);
-                                if(gameOver.getValue()) {
-                                choice = 6;
-                                break;
-                                }
-                                if (otherTeamWord) {
-                                    team1.guessedRight();
-                                    otherTeamWord = false;
+                                if(lastIndex>0){
+                                    otherTeamWord = engine.playTurn(team2, lastIndex,gameOver);
+                                    if(gameOver.getValue()) {
+                                        return;
+                                    }
+                                    if (otherTeamWord) {
+                                        team1.guessedRight();
+                                        otherTeamWord = false;
+                                    }
                                 }
                             }
                             team1Turn = true;
+                            lastIndex = 1;
                         }try {Thread.sleep(2000); // Sleep for 2 seconds
                         } catch (InterruptedException e) {
                             // Handle InterruptedException if needed

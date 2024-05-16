@@ -82,7 +82,7 @@ public class Game {
         return team1.getWordsToGuess()+team2.getWordsToGuess()<gameBoard.getNumOfWords();
     }
     public boolean blackCardsCount(){
-        return gameBoard.getNumOfBlackWords()>blackWords.size();
+        return gameBoard.getNumOfBlackWords()<blackWords.size();
     }
     public boolean rowsColumnsCount(){
         return gameBoard.getNumCols()*gameBoard.getNumRows()>=gameBoard.getNumOfWords();
