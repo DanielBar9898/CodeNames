@@ -9,7 +9,7 @@ public interface Engine {
 
     public void showLoadedGameInfo(Game currentGame);
 
-    public void startGame();
+    public void startGame(Game currentGame);
 
     public void playTurn(Team teamTurn,String hint,int numOfWordsToGuess);
 

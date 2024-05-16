@@ -63,7 +63,7 @@ public class Main {
                         System.out.println("The game has started! , please choose one of the following:");
                         team1 = currentGame.getTeam1();
                         team2 = currentGame.getTeam2();
-                        currentGame.getGameBoard().assignWordsToTeams(team1, team2);
+                        engine.startGame(currentGame);
                     }
                     engine.showGameMenu();
                     choice = sc.nextInt();
@@ -75,17 +75,28 @@ public class Main {
                     if (currentGame == null) {
                         System.out.println("You have not entered a valid XML file!");
                     }
-                    else if(!gameStarted|| team1 == null || team2 == null){
+                    else if(!gameStarted){
                         System.out.println("You have to start a game before playing a turn");
                     }
                     else {
                         if (team1Turn) {
+                            team1.playedTurn();
                             team1.printTeamTurn();
                             currentGame.getGameBoard().printTheBoard(VisibleBoard);
                             System.out.println("Please enter your hint:");
                             currentHint = sc.nextLine();
                             System.out.println("How many words should your partner guess?:");
-                            wordsToGuess = sc.nextInt();
+                            while (true) {
+                                System.out.print("Enter a number: ");
+
+                                if (sc.hasNextInt()) {
+                                    wordsToGuess = sc.nextInt();
+                                    break; // Break out of the loop if input is valid
+                                } else {
+                                    System.out.println("Input is not an integer. Try again.");
+                                    sc.nextLine(); // Consume invalid input
+                                }
+                            }
                             sc.nextLine();
                             engine.playTurn(team1, currentHint, wordsToGuess);
                             currentGame.getGameBoard().printTheBoard(HiddenBoard);
@@ -110,12 +121,23 @@ public class Main {
                             lastIndex = 1;
                         }
                         else {
+                            team2.playedTurn();
                             team2.printTeamTurn();
                             currentGame.getGameBoard().printTheBoard(VisibleBoard);
                             System.out.println("Please enter your hint:");
                             currentHint = sc.nextLine();
                             System.out.println("How many words should your partner guess?:");
-                            wordsToGuess = sc.nextInt();
+                            while (true) {
+                                System.out.print("Enter a number: ");
+
+                                if (sc.hasNextInt()) {
+                                    wordsToGuess = sc.nextInt();
+                                    break; // Break out of the loop if input is valid
+                                } else {
+                                    System.out.println("Input is not an integer. Try again.");
+                                    sc.nextLine(); // Consume invalid input
+                                }
+                            }
                             sc.nextLine();
                             currentGame.getGameBoard().printTheBoard(HiddenBoard);
                             engine.playTurn(team2, currentHint, wordsToGuess);

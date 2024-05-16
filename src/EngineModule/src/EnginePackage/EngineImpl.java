@@ -51,7 +51,7 @@ public class EngineImpl implements Engine {
         System.out.println("\t2. Show game information");
         System.out.println("\t3. Start New game");
         System.out.println("\t4. Play turn");
-        System.out.println("\t5. Show game statistics");
+        System.out.println("\t5. Show active game statistics");
         System.out.println("\t6. Exit");
 
 
@@ -62,8 +62,10 @@ public class EngineImpl implements Engine {
         System.out.println(currentGame);
     }
 
-    public void startGame(){
-        return;
+    public void startGame(Game currentGame){
+        Team team1 = currentGame.getTeam1();
+        Team team2 = currentGame.getTeam2();
+        currentGame.getGameBoard().assignWordsToTeams(team1, team2);
     }
 
     public void playTurn(Team teamTurn,String hint,int numOfWordsToGuess){
@@ -73,7 +75,6 @@ public class EngineImpl implements Engine {
     }
 
     public boolean playTurn(Team teamTurn ,int wordIndex,BooleanWrapper gameOver){
-        teamTurn.playedTurn();
         boolean otherTeamWord;
         Word currWord;
         Set<Word> wordsSet = teamTurn.getWordsNeedToGuess();
@@ -110,6 +111,7 @@ public class EngineImpl implements Engine {
     }
 
     public void printGameStats(Game currentGame,boolean team1Turn){
+        currentGame.getGameBoard().printTheBoard(false);
        List<Team> teams = new ArrayList<>();
        teams.add(currentGame.getTeam1());
        teams.add(currentGame.getTeam2());
@@ -127,3 +129,4 @@ public class EngineImpl implements Engine {
     }
 
 }
+
