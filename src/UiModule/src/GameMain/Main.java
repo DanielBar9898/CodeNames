@@ -1,7 +1,7 @@
 package GameMain;
 import EnginePackage.*;
 import GamePackage.*;
-
+import java.io.IOException;
 import java.util.*;
 
 public class Main {
@@ -12,9 +12,10 @@ public class Main {
         boolean team1Turn = true;
         boolean otherTeamWord = false;
         boolean gameStarted = false;
+        boolean newGame = true;
         BooleanWrapper gameOver = new BooleanWrapper(false);
         Game currentGame = null;
-        String fileName, currentHint;
+        String fileName=null, currentHint;
         Scanner sc = new Scanner(System.in);
         System.out.println("Hello, and welcome to Code Names game!");
         EngineImpl engine = new EngineImpl();
@@ -58,7 +59,8 @@ public class Main {
                         System.out.println("You have not entered a valid XML file!");
                     }
                     else{
-                        gameStarted = true;
+                        currentGame = engine.loadXmlFile(fileName);
+                        gameStarted = true; newGame=true;
                         System.out.println("The game has started! , please choose one of the following:");
                         team1 = currentGame.getTeam1();
                         team2 = currentGame.getTeam2();
@@ -71,6 +73,10 @@ public class Main {
                 case 4:
                     boolean HiddenBoard = true;
                     boolean VisibleBoard = false;
+                    if(newGame) {
+                        team1Turn = true;
+                        newGame = false;
+                    }
                     if (currentGame == null) {
                         System.out.println("You have not entered a valid XML file!");
                     }
@@ -78,7 +84,7 @@ public class Main {
                         System.out.println("You have to start a game before playing a turn");
                     }
                     else {
-                        if (team1Turn) {
+                        if (team1Turn) {                      //         Team 1 turn!!!
                             team1.printTeamTurn();
                             currentGame.getGameBoard().printTheBoard(VisibleBoard);
                             System.out.println("Please enter your hint:");
@@ -89,8 +95,8 @@ public class Main {
                             engine.playTurn(team1, currentHint, wordsToGuess);
                             currentGame.getGameBoard().printTheBoard(HiddenBoard);
                             while (lastIndex > 0&&wordsToGuess>0) {
+                                currentGame.printInfoAboutTheTurn(currentHint, wordsToGuess);
                                 HiddenBoard=true;
-                                System.out.println("please enter the word index you want to guess:\nif you want to stop guessing press 0 or negative number");
                                 lastIndex = sc.nextInt();
                                 sc.nextLine();
                                 wordsToGuess--;
@@ -102,13 +108,14 @@ public class Main {
                                     if (otherTeamWord) {
                                         team2.guessedRight();
                                         otherTeamWord = false;
+                                        team1Turn=false;
                                     }
                                 }
                             }
                             team1Turn = false;
                             lastIndex = 1;
                         }
-                        else {
+                        else {                         //         Team 2 turn!!!
                             team2.printTeamTurn();
                             currentGame.getGameBoard().printTheBoard(VisibleBoard);
                             System.out.println("Please enter your hint:");
@@ -116,10 +123,10 @@ public class Main {
                             System.out.println("How many words should your partner guess?:");
                             wordsToGuess = sc.nextInt();
                             sc.nextLine();
-                            currentGame.getGameBoard().printTheBoard(HiddenBoard);
                             engine.playTurn(team2, currentHint, wordsToGuess);
+                            currentGame.getGameBoard().printTheBoard(HiddenBoard);
                             while (lastIndex > 0&&wordsToGuess>0) {
-                                System.out.println("please enter the word index you want to guess:\nif you want to stop guessing press 0 or negative number");
+                                currentGame.printInfoAboutTheTurn(currentHint, wordsToGuess);
                                 lastIndex = sc.nextInt();
                                 sc.nextLine();
                                 wordsToGuess--;
@@ -131,12 +138,15 @@ public class Main {
                                     if (otherTeamWord) {
                                         team1.guessedRight();
                                         otherTeamWord = false;
+                                        team1Turn=true;
                                     }
                                 }
                             }
                             team1Turn = true;
                             lastIndex = 1;
-                        }try {Thread.sleep(2000); // Sleep for 2 seconds
+                        }try { // Sleep for 2 seconds
+                            System.out.println("Wait please..");
+                            Thread.sleep(2000);
                         } catch (InterruptedException e) {
                             // Handle InterruptedException if needed
                             e.printStackTrace();}
@@ -168,4 +178,5 @@ public class Main {
             }
         }
     }
+
 }
