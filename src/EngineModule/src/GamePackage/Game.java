@@ -42,6 +42,7 @@ public class Game {
         team1 = new Team(game.getECNTeam1().getName(),game.getECNTeam1().getCardsCount(), Word.cardColor.TEAM1,gameBoard);
         team2 = new Team(game.getECNTeam2().getName(), game.getECNTeam2().getCardsCount(), Word.cardColor.TEAM2,gameBoard);
     }
+
     public Board getGameBoard() {
         return gameBoard;
     }
@@ -96,6 +97,11 @@ public class Game {
     }
     public Team getTeam2(){
         return team2;
+    }
+    public void printInfoAboutTheTurn(String currentHint,int wordsToGuess){
+        System.out.println("\n**If you want to stop guessing press 0 or negative number");
+        System.out.println("Remember: The Hint is: *"+currentHint+ "* |||||||||| Number of words remain to guess:"+wordsToGuess);
+        System.out.println("Please enter the word index you want to guess:");
     }
     @Override
     public String toString() {
