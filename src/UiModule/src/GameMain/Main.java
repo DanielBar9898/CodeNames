@@ -1,27 +1,23 @@
 package GameMain;
 import EnginePackage.*;
 import GamePackage.*;
-import java.io.IOException;
+
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         int choice, wordsToGuess, lastIndex = 1;
-        boolean validFile = false;
         Team team1 = null, team2 = null;
-        boolean team1Turn = true;
-        boolean otherTeamWord = false;
-        boolean gameStarted = false;
-        boolean newGame = true;
+        boolean team1Turn = true, otherTeamWord = false, gameStarted = false, newGame = true, validFile = false;
         BooleanWrapper gameOver = new BooleanWrapper(false);
         Game currentGame = null;
-        String fileName=null, currentHint;
+        String fileName=null, currentHint,numToCheck;
         Scanner sc = new Scanner(System.in);
         System.out.println("Hello, and welcome to Code Names game!");
         EngineImpl engine = new EngineImpl();
         engine.showGameMenu();
-        choice = sc.nextInt();
-        sc.nextLine();
+        numToCheck= sc.nextLine();
+        choice=currentGame.checkChoiceInput(numToCheck);
         while (choice != 6) {
             switch (choice) {
                 case 1:
@@ -89,27 +85,38 @@ public class Main {
                             currentGame.getGameBoard().printTheBoard(VisibleBoard);
                             System.out.println("Please enter your hint:");
                             currentHint = sc.nextLine();
+                            currentHint = currentGame.checkHintInput(currentHint);
                             System.out.println("How many words should your partner guess?:");
-                            wordsToGuess = sc.nextInt();
-                            sc.nextLine();
+                            numToCheck = sc.nextLine();
+                            wordsToGuess= currentGame.checkNumInput(numToCheck);
                             engine.playTurn(team1, currentHint, wordsToGuess);
                             currentGame.getGameBoard().printTheBoard(HiddenBoard);
                             while (lastIndex > 0&&wordsToGuess>0) {
                                 currentGame.printInfoAboutTheTurn(currentHint, wordsToGuess);
                                 HiddenBoard=true;
-                                lastIndex = sc.nextInt();
-                                sc.nextLine();
+                                numToCheck = sc.nextLine();
+                                lastIndex= currentGame.checkNumInput(numToCheck);
                                 wordsToGuess--;
                                 if(lastIndex>0){
-                                    otherTeamWord = engine.playTurn(team1, lastIndex,gameOver);
+                                    if(currentGame.getGameBoard().getWordBySerialNumber(lastIndex).isFound()) {
+                                        System.out.println("Someone already guessed the word, please choose another one:");
+                                        numToCheck = sc.nextLine();
+                                        lastIndex= currentGame.checkNumInput(numToCheck);
+                                        wordsToGuess++;
+                                    }
+                                    otherTeamWord = engine.playTurn(team2, lastIndex,gameOver);
+
                                     if(gameOver.getValue()) {
                                         return;
                                     }
                                     if (otherTeamWord) {
                                         team2.guessedRight();
                                         otherTeamWord = false;
-                                        team1Turn=false;
+                                        wordsToGuess=0;
                                     }
+                                }
+                                if(wordsToGuess>0) {
+                                    currentGame.getGameBoard().printTheBoard(HiddenBoard);
                                 }
                             }
                             team1Turn = false;
@@ -120,36 +127,39 @@ public class Main {
                             currentGame.getGameBoard().printTheBoard(VisibleBoard);
                             System.out.println("Please enter your hint:");
                             currentHint = sc.nextLine();
+                            currentHint = currentGame.checkHintInput(currentHint);
                             System.out.println("How many words should your partner guess?:");
-                            wordsToGuess = sc.nextInt();
-                            sc.nextLine();
+                            numToCheck = sc.nextLine();
+                            wordsToGuess= currentGame.checkNumInput(numToCheck);
                             engine.playTurn(team2, currentHint, wordsToGuess);
                             currentGame.getGameBoard().printTheBoard(HiddenBoard);
                             while (lastIndex > 0&&wordsToGuess>0) {
                                 currentGame.printInfoAboutTheTurn(currentHint, wordsToGuess);
-                                lastIndex = sc.nextInt();
-                                sc.nextLine();
+                                numToCheck = sc.nextLine();
+                                lastIndex= currentGame.checkNumInput(numToCheck);
                                 wordsToGuess--;
                                 if(lastIndex>0){
+                                    if(currentGame.getGameBoard().getWordBySerialNumber(lastIndex).isFound()) {
+                                        System.out.println("Someone already guessed the word, please choose another one:");
+                                        numToCheck = sc.nextLine();
+                                        lastIndex= currentGame.checkNumInput(numToCheck);
+                                    }
                                     otherTeamWord = engine.playTurn(team2, lastIndex,gameOver);
+
                                     if(gameOver.getValue()) {
                                         return;
                                     }
                                     if (otherTeamWord) {
-                                        team1.guessedRight();
+                                        team2.guessedRight();
                                         otherTeamWord = false;
-                                        team1Turn=true;
+                                        wordsToGuess=0;
                                     }
                                 }
+                                currentGame.getGameBoard().printTheBoard(HiddenBoard);
                             }
                             team1Turn = true;
                             lastIndex = 1;
-                        }try { // Sleep for 2 seconds
-                            System.out.println("Wait please..");
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            // Handle InterruptedException if needed
-                            e.printStackTrace();}
+                        }
                         System.out.println("Here's the board for now :");
                         currentGame.getGameBoard().printTheBoard(HiddenBoard);
                         if(gameOver.getValue()) {
