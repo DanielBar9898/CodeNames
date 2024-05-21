@@ -2,6 +2,7 @@ package GamePackage;
 
 import java.util.Scanner;
 
+
 public class Hinter extends Player {
     private Word.cardColor team;
     private String hint;
@@ -45,4 +46,7 @@ public class Hinter extends Player {
         setHint(hint);
         setWordsHint(numOfWords);
     }
+
+
+
 }

@@ -74,24 +74,27 @@ public class EngineImpl implements Engine {
         teamTurn.getHinter().getHint();
     }
 
+
     public boolean playTurn(Team teamTurn ,int wordIndex,BooleanWrapper gameOver){
         boolean otherTeamWord;
         Word currWord;
+        Scanner sc = new Scanner(System.in);
         Set<Word> wordsSet = teamTurn.getWordsNeedToGuess();
+        int validInput=wordsSet.size();
         currWord = teamTurn.getTeamBoard().getWordBySerialNumber(wordIndex);
         if(currWord==null){
             System.out.println("Invalid word index!");
+           // checkIndexInput(teamTurn,wordIndex,gameOver,validInput);
             otherTeamWord = false;
         }
-        if(currWord.isFound()){
-            System.out.println("Someone already guessed the word");
-            otherTeamWord = false;
-            return otherTeamWord;
+        else if(currWord.isFound()){
+           // System.out.println("Someone already guessed the word, please choose another one:");
+            otherTeamWord=false;
         }
-        if(wordsSet.contains(currWord)){
+        else if(wordsSet.contains(currWord)){
             System.out.println("Its your team word! you've guessed correctly and earned your team 1 point!");
             teamTurn.guessedRight();
-            otherTeamWord = false;
+            otherTeamWord = true;
         }
         else if(currWord.getColor()==Word.cardColor.BLACK){
             System.out.println("OMG! its a black word, game over!");
@@ -127,6 +130,7 @@ public class EngineImpl implements Engine {
            System.out.println("Next turn is "+currentGame.getTeam2().getTeamName()+ " turn");
        }
     }
+
 
 }
 
