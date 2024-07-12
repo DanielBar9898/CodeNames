@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact name="EngineModule:jar">
+    <output-path>$PROJECT_DIR$/../../CodeNamesEX1</output-path>
+    <root id="root">
+      <element id="archive" name="EngineModule.jar">
+        <element id="module-output" name="EngineModule" />
+      </element>
+    </root>
+  </artifact>
+</component>
