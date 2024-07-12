@@ -1,5 +1,4 @@
 package engine.EnginePackage;
-import GamePackage.*;
 import engine.GamePackage.Game;
 import engine.GamePackage.Team;
 

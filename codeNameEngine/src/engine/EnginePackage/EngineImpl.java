@@ -18,7 +18,7 @@ import java.util.Set;
 
 
 public class EngineImpl implements Engine {
-    private final static String JAXB_XML_GAME_PACKAGE_NAME = "engine/JAXBGenerated";
+    private final static String JAXB_XML_GAME_PACKAGE_NAME = "engine/JAXBGenerated2";
 
     public Game loadXmlFile(String fileName){
             if(!(fileName.endsWith(".xml"))){
