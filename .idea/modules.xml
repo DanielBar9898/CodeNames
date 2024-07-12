@@ -3,9 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CodeNames.iml" filepath="$PROJECT_DIR$/CodeNames.iml" />
-      <module fileurl="file://$PROJECT_DIR$/codeNameClient/codeNameClient.iml" filepath="$PROJECT_DIR$/codeNameClient/codeNameClient.iml" />
-      <module fileurl="file://$PROJECT_DIR$/codeNameEngine/codeNameEngine.iml" filepath="$PROJECT_DIR$/codeNameEngine/codeNameEngine.iml" />
-      <module fileurl="file://$PROJECT_DIR$/codeNameWeb/codeNameWeb.iml" filepath="$PROJECT_DIR$/codeNameWeb/codeNameWeb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/EngineModule/EngineModule.iml" filepath="$PROJECT_DIR$/src/EngineModule/EngineModule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/UiModule/UiModule.iml" filepath="$PROJECT_DIR$/src/UiModule/UiModule.iml" />
     </modules>
   </component>
 </project>
