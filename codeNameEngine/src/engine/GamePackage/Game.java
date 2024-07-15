@@ -2,7 +2,13 @@ package engine.GamePackage;
 
 import engine.JAXBGenerated.ECNBoard;
 import engine.JAXBGenerated.ECNGame;
-
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -12,7 +18,7 @@ public class Game {
         TEAM1,
         TEAM2;
     }
-
+    private String name;
     Team team1;
     Team team2;
     Set<Word> blackWords;
@@ -45,10 +51,33 @@ public class Game {
         team2 = new Team(game.getECNTeam2().getName(), game.getECNTeam2().getCardsCount(), Word.cardColor.TEAM2, gameBoard);
     }
 
+    public void extractWordsFromFile(File file) throws IOException {
+        Set<Word> words = new HashSet<>();
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String line;
+        Pattern pattern = Pattern.compile("[^a-zA-Z0-9]");
+
+        while ((line = reader.readLine()) != null) {
+            // Split the line into words using whitespace as the delimiter
+            String[] lineWords = line.split("\\s+");
+            for (String word : lineWords) {
+                // Remove punctuation and trim whitespace
+                word = pattern.matcher(word).replaceAll("").trim();
+                if (!word.isEmpty()) {
+                    words.add(new Word(word.toLowerCase()));
+                }
+            }
+        }
+        reader.close();
+        gameWords = words;
+    }
+
     public Board getGameBoard() {
         return gameBoard;
     }
-
+    public String getName() {
+        return name;
+    }
     public boolean validateFile() {
         boolean cardsCount, blackCardsCount, sumOfCards, rowsColumns, teamNames;
         cardsCount = this.cardsCount();
