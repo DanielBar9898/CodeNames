@@ -1,13 +1,8 @@
 package codeName.servlets;
 
-import engine.*;
-import codeName.constants.Constants;
-import codeName.utils.ServletUtils;
-import codeName.utils.SessionUtils;
-import engine.EnginePackage.Engine;
 import engine.EnginePackage.EngineImpl;
+import engine.GamePackage.AllGames;
 import engine.GamePackage.Game;
-import engine.users.UserManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,10 +13,25 @@ import java.io.IOException;
 public class LoadXMLServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         EngineImpl engine = new EngineImpl();
-        Game currentGame = engine.loadXmlFile(request.getReader().readLine());
-        getServletContext().setAttribute("game", currentGame);
-        currentGame.validateFile();
+        AllGames allGames = (AllGames) getServletContext().getAttribute("allGames");
+        if (allGames == null) {
+            allGames = new AllGames();
+            getServletContext().setAttribute("allGames", allGames);
+        }
+
+        String filePath = request.getParameter("filePath");
+        String gameName = request.getParameter("gameName");
+
+        Game currentGame = engine.loadXmlFile(filePath);
+
+        if (currentGame != null && currentGame.validateFile()) {
+            allGames.addGame(currentGame);
+            getServletContext().setAttribute("game", currentGame);
+            response.getWriter().write("XML file loaded and validated successfully.");
+        } else {
+            response.getWriter().write("Failed to load or validate the XML file.");
+        }
     }
 }
