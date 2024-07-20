@@ -7,7 +7,17 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="codeNameEngine" />
-    <orderEntry type="module" module-name="codeNameEngine" />
+    <orderEntry type="module" module-name="codeNameEngine" exported="" />
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../../OkHttp" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/../../../OkHttp" recursive="false" />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Tomcat 10.0.11" level="application_server_libraries" />
   </component>
 </module>

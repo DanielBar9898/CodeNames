@@ -1,56 +1,41 @@
 package engine.GamePackage;
 
-import engine.JAXBGenerated.ECNBoard;
-import engine.JAXBGenerated.ECNGame;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import engine.JAXBGenerated2.*;
+
+import java.io.*;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
 
 public class Game {
-    public enum TeamName {
-        TEAM1,
-        TEAM2;
-    }
     private String name;
-    Team team1;
-    Team team2;
     Set<Word> blackWords;
     Set<Word> gameWords;
     Board gameBoard;
+    private boolean active ;
+    String dictName;
+    Set<Team> teams;
+    private int gameNumber = 0;
 
     public Game(ECNGame game) {
+        this.gameNumber+=1;
         gameWords = new HashSet<>();
         blackWords = new HashSet<>();
-        String words = game.getECNWords().getECNGameWords();
-        String[] s = words.split("\\s");
-        String[] sepratedWords = new String[s.length - 1];
-        System.arraycopy(s, 1, sepratedWords, 0, sepratedWords.length);
-        //avoid first spot because its""
-        for (String word : sepratedWords) {
-            gameWords.add(new Word(word));
-        }
-        String bWords = game.getECNWords().getECNBlackWords();
-        String[] sepratedBlack = bWords.split("\\s");
-        String[] sepratedBlackWords = new String[sepratedBlack.length - 1];
-        System.arraycopy(sepratedBlack, 1, sepratedBlackWords, 0, sepratedBlackWords.length);
-        for (String word : sepratedBlackWords) {
-            gameWords.add(new Word(word));
-            blackWords.add(new Word(word));
+        teams = new HashSet<>();
+        List<ECNTeam> ecnTeamList = game.getECNTeams().getECNTeam();
+        for(ECNTeam e : ecnTeamList){
+            teams.add(new Team(e));
         }
         ECNBoard b = game.getECNBoard();
         gameBoard = new Board(b);
         gameBoard.addWordsToBoard(gameWords);
-        team1 = new Team(game.getECNTeam1().getName(), game.getECNTeam1().getCardsCount(), Word.cardColor.TEAM1, gameBoard);
-        team2 = new Team(game.getECNTeam2().getName(), game.getECNTeam2().getCardsCount(), Word.cardColor.TEAM2, gameBoard);
+        setDictName(game.getECNDictionaryFile());
+        active = false;
     }
-
+    public void setDictName(String dictName) {
+        this.dictName = dictName;
+    }
     public void extractWordsFromFile(File file) throws IOException {
         Set<Word> words = new HashSet<>();
         BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -78,32 +63,46 @@ public class Game {
     public String getName() {
         return name;
     }
-    public boolean validateFile() {
-        boolean cardsCount, blackCardsCount, sumOfCards, rowsColumns, teamNames;
+    public boolean validateFile(PrintWriter out) {
+        boolean cardsCount, blackCardsCount, sumOfCards, rowsColumns, teamNames,guessersDefiners;
         cardsCount = this.cardsCount();
         blackCardsCount = this.blackCardsCount();
         sumOfCards = this.sumOfCardsCount();
         rowsColumns = this.rowsColumnsCount();
         teamNames = this.teamNames();
+        guessersDefiners = this.definersGuessers();
         if (!cardsCount) {
-            System.out.println("The cards count is not valid");
+            out.println("The cards count is not valid");
             return false;
         }
         if (!blackCardsCount) {
-            System.out.println("The black cards count is not valid");
+            out.println("The black cards count is not valid");
             return false;
         }
         if (!sumOfCards) {
-            System.out.println("The sum of the cards count is not valid");
+            out.println("The sum of the cards count is not valid");
             return false;
         }
         if (!rowsColumns) {
-            System.out.println("The rows columns count is not valid");
+            out.println("The rows columns count is not valid");
             return false;
         }
         if (!teamNames) {
-            System.out.println("The teams have the same name!");
+            out.println("The teams have the same name!");
             return false;
+        }
+        if(!guessersDefiners){
+            out.println("Not enough guessers/definers defined");
+            return false;
+        }
+        return true;
+    }
+
+    public boolean definersGuessers(){
+        for(Team t : teams){
+            if(t.getNumOfGuessers()<=0||t.getNumOfDefiners()<=0){
+                return false;
+            }
         }
         return true;
     }
@@ -113,7 +112,11 @@ public class Game {
     }
 
     public boolean sumOfCardsCount() {
-        return team1.getWordsToGuess() + team2.getWordsToGuess() < gameBoard.getNumOfWords();
+        int num = 0;
+        for(Team team : teams){
+            num += team.getWordsToGuess();
+        }
+        return num < gameBoard.getNumOfWords();
     }
 
     public boolean blackCardsCount() {
@@ -125,15 +128,13 @@ public class Game {
     }
 
     public boolean teamNames() {
-        return !(team1.getTeamName().equalsIgnoreCase(team2.getTeamName()));
-    }
-
-    public Team getTeam1() {
-        return team1;
-    }
-
-    public Team getTeam2() {
-        return team2;
+        Set<String> names = new HashSet<>();
+        for (Team team : teams) {
+            if (!names.add(team.getTeamName())) {
+                return false; // Duplicate name found
+            }
+        }
+        return true; // All names are unique
     }
 
     public void printInfoAboutTheTurn(String currentHint, int wordsToGuess) {
@@ -145,12 +146,18 @@ public class Game {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append("1. Number of all words available for choice is ").append(gameWords.size()).append("\n");
-        result.append("2. Number of black words available for choice is ").append(blackWords.size()).append("\n");
-        result.append("3. In this game there will be ").append(gameBoard.numOfTotalWords - gameBoard.numOfBlackWords).append(" normal words ")
+        result.append("Game number #"+gameNumber);
+        result.append("1.Game name : " + name + "\n");
+        result.append("2.Game status is " + (active ?  "ACTIVE" : "PENDING") + "\n");
+        result.append("3.Number of rows X columns is : " + gameBoard.getNumRows() + "X" + gameBoard.getNumCols() + "\n");
+        result.append("4.The name of the dictionary file is: " + dictName);
+        result.append("and the number of all words available for choice is ").append(gameWords.size()).append("\n");
+        result.append("5. In this game there will be ").append(gameBoard.numOfTotalWords - gameBoard.numOfBlackWords).append(" normal words ")
                 .append("and ").append(gameBoard.numOfBlackWords).append(" black words\n");
-        result.append(team1.toString()).append("\n");
-        result.append(team2.toString()).append("\n");
+        result.append("6.There is "+ teams.size()+ " teams, here are their information:\n");
+        for(Team t : teams) {
+            result.append(t.toString());
+        }
         return result.toString();
     }
 
@@ -227,6 +234,18 @@ public class Game {
             }
         }
         return Integer.parseInt(choice);
+    }
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
+    }
+
+    public boolean isActive(){
+        return active;
+    }
+
+    public int getGameNumber(){
+        return gameNumber;
     }
 
 }

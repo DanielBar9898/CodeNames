@@ -1,8 +1,10 @@
 package engine.EnginePackage;
+
 import engine.GamePackage.Game;
 import engine.GamePackage.Team;
 import engine.GamePackage.Word;
-import engine.JAXBGenerated.ECNGame;
+import engine.JAXBGenerated2.ECNGame;
+import engine.users.User;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -19,10 +21,11 @@ import java.util.Set;
 
 public class EngineImpl implements Engine {
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "engine/JAXBGenerated2";
+    Set<Game> games;
+    Set<User> users;
 
     public Game loadXmlFile(String fileName){
             if(!(fileName.endsWith(".xml"))){
-                System.out.println(fileName + " is not a valid XML file");
                 return null;
             }
             else{
@@ -57,15 +60,16 @@ public class EngineImpl implements Engine {
 
     }
 
-    public void showLoadedGameInfo(Game currentGame){
-        System.out.println("Game information:");
-        System.out.println(currentGame);
+    public String showLoadedGameInfo(Game currentGame){
+        String s = new String("Game information");
+        s = s+ currentGame.toString();
+        return s;
     }
 
     public void startGame(Game currentGame){
-        Team team1 = currentGame.getTeam1();
-        Team team2 = currentGame.getTeam2();
-        currentGame.getGameBoard().assignWordsToTeams(team1, team2);
+//        Team team1 = currentGame.getTeam1();
+//        Team team2 = currentGame.getTeam2();
+//        currentGame.getGameBoard().assignWordsToTeams(team1, team2);
     }
 
     public void playTurn(Team teamTurn, String hint, int numOfWordsToGuess){
@@ -116,19 +120,6 @@ public class EngineImpl implements Engine {
     public void printGameStats(Game currentGame,boolean team1Turn){
         currentGame.getGameBoard().printTheBoard(false);
        List<Team> teams = new ArrayList<>();
-       teams.add(currentGame.getTeam1());
-       teams.add(currentGame.getTeam2());
-       for(Team t:teams){
-           System.out.println(t.getTeamName());
-           System.out.println(t.howManyWordsGuessed());
-           System.out.println("The team has played "+t.getNumOfTurns()+" turns");
-       }
-       if(team1Turn){
-           System.out.println("Next turn is "+currentGame.getTeam1().getTeamName()+ " turn");
-       }
-       else{
-           System.out.println("Next turn is "+currentGame.getTeam2().getTeamName()+ " turn");
-       }
     }
 
 

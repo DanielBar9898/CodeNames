@@ -1,13 +1,17 @@
 package codeName.servlets;
 
+import engine.GamePackage.AllGames;
 import engine.GamePackage.Game;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.File;
 import java.io.IOException;
+
+@WebServlet (name = "loadTxt" , urlPatterns = "/loadTxtFile")
 
 public class LoadTXTServlet extends HttpServlet {
 
@@ -29,6 +33,8 @@ public class LoadTXTServlet extends HttpServlet {
 
         try {
             currentGame.extractWordsFromFile(txtFile);
+            AllGames games = (AllGames) getServletContext().getAttribute("games");
+            games.addGame(currentGame);
             response.getWriter().write("TXT file loaded successfully.");
         } catch (IOException e) {
             response.getWriter().write("Failed to load the TXT file: " + e.getMessage());
