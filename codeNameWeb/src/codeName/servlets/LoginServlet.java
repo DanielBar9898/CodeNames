@@ -5,6 +5,7 @@ import codeName.utils.ServletUtils;
 import codeName.utils.SessionUtils;
 import engine.users.UserManager;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,6 +14,8 @@ import java.io.IOException;
 
 import static codeName.constants.Constants.USERNAME;
 
+
+@WebServlet (name = "Login" , urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
 
     // urls that starts with forward slash '/' are considered absolute

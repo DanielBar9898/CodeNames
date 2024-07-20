@@ -10,7 +10,7 @@ public class AllGames {
         games = new HashSet<>();
     }
 
-    public boolean addGame(Game game) {
+    public synchronized boolean addGame(Game game) {
         return games.add(game);
     }
 
@@ -23,12 +23,26 @@ public class AllGames {
         return true;
     }
 
-    public Game getGameByName(String gameName) {
+    public Game getGameById(int gameId) {
         for (Game game : games) {
-            if (game.getName().equalsIgnoreCase(gameName)) {
+            if(game.getGameNumber()==gameId)
                 return game;
-            }
         }
         return null;
+    }
+
+
+    public Set<Game> getGames() {
+        return games;
+    }
+
+    public Set<Game> getActiveGames() {
+        Set<Game> activeGames = new HashSet<>();
+        for (Game game : games) {
+            if(game.isActive()){
+                activeGames.add(game);
+            }
+        }
+        return activeGames;
     }
 }

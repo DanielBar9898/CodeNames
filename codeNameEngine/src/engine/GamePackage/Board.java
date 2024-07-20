@@ -1,8 +1,6 @@
 package engine.GamePackage;
 
-import engine.JAXBGenerated.ECNBoard;
-import engine.JAXBGenerated.ECNLayout;
-
+import engine.JAXBGenerated2.*;
 import java.util.*;
 
 

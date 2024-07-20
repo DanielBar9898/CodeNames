@@ -8,7 +8,7 @@ public interface Engine {
 
     public void showGameMenu();
 
-    public void showLoadedGameInfo(Game currentGame);
+    public String showLoadedGameInfo(Game currentGame);
 
     public void startGame(Game currentGame);
 

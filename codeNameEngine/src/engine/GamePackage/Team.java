@@ -1,34 +1,29 @@
 package engine.GamePackage;
 
+import engine.JAXBGenerated2.ECNTeam;
+
 import java.util.*;
 public class Team {
 
     private Guesser guesser;
     private Hinter hinter;
-    int wordsToGuess,wordsGuessed;
+    private int wordsToGuess,wordsGuessed;
     protected String teamName;
     Set<Word> wordsNeedToGuess;
     Board teamBoard;
-    int numOfTurns;
+    private int numOfTurns;
+    private int numOfGuessers;
+    private int numOfDefiners;
+    private int activeGuessers;
+    private int activeDefiners;
 
-    public Team(String teamName, int wordsToGuess, Word.cardColor teamColor, Board teamBoard) {
-        this.teamName = teamName;
-        this.wordsToGuess = wordsToGuess;
-        wordsGuessed = 0;
-        guesser = new Guesser(teamColor);
-        hinter = new Hinter(teamColor);
-        wordsNeedToGuess = new HashSet<>(wordsToGuess);
-        this.teamBoard = new Board(teamBoard);
-        numOfTurns = 0;
-    }
-    public Team(Team otherTeam){
-        this.teamName = otherTeam.teamName;
-        this.wordsToGuess = otherTeam.wordsToGuess;
-        this.wordsGuessed = otherTeam.wordsGuessed;
-        guesser = new Guesser();
-        hinter = new Hinter();
-        wordsNeedToGuess = new HashSet<>(otherTeam.getWordsNeedToGuess());
-        numOfTurns = otherTeam.numOfTurns;
+    public Team(ECNTeam otherTeam){
+        this.teamName = otherTeam.getName();
+        this.wordsToGuess = otherTeam.getCardsCount();
+        numOfGuessers = otherTeam.getGuessers();
+        numOfDefiners = otherTeam.getDefiners();
+        activeDefiners = 0;
+        activeGuessers = 0;
     }
     public void playedTurn(){
         numOfTurns++;
@@ -50,7 +45,7 @@ public class Team {
         return wordsNeedToGuess;
     }
     public String toString(){
-        return "1.Team name: "+teamName.toString()+"\n2.Words to guess: "+wordsToGuess;
+        return "a.Team name: "+teamName.toString()+"\nb.Words to guess: "+wordsToGuess + "c.Number of guessers: "+numOfGuessers + "d.Number of definers: "+numOfDefiners+"\n\n";
     }
 
     public void showTeamWordsState(){
@@ -64,6 +59,7 @@ public class Team {
     public Hinter getHinter() {
         return hinter;
     }
+
     public void printTeamTurn(){
         System.out.println("Its "+teamName.toString()+" turn");
     }
@@ -71,12 +67,15 @@ public class Team {
     public void addWordToGuess(Word word){
         wordsNeedToGuess.add(word);
     }
+
     public void guessedRight(){
         wordsGuessed++;
     }
+
     public String getTeamName(){
         return teamName;
     }
+
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -88,4 +87,17 @@ public class Team {
     public int hashCode() {
         return teamName.hashCode();
     }
+
+    public int getNumOfGuessers(){
+        return numOfGuessers;
+    }
+
+    public int getNumOfDefiners(){
+        return numOfDefiners;
+    }
+
+    public int getWordsGuessed(){
+        return wordsGuessed;
+    }
+
 }
