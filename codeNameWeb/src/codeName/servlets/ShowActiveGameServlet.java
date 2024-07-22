@@ -14,12 +14,12 @@ import java.util.Set;
 
 @WebServlet(name = "showActiveGame" , urlPatterns = "/activeGame")
 
-public class WatchActiveGameServlet  extends HttpServlet {
+public class ShowActiveGameServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String gameNumberStr = request.getParameter("gameNumber");
         if(gameNumberStr == null || gameNumberStr.isEmpty()){
             AllGames games = (AllGames) getServletContext().getAttribute("games");
-
+            int gameActiveSerialNumber=0;
             if(games == null) {
                 response.getWriter().println("No active games");
                 return;
@@ -33,7 +33,10 @@ public class WatchActiveGameServlet  extends HttpServlet {
             StringBuilder result = new StringBuilder();
             result.append("The active games are:  \n");
             for(Game game : activeGames) {
-                result.append("Game number " + game.getGameNumber() + ": " + game.getName() + "\n");
+                result.append("Game number " + gameActiveSerialNumber + ": " + game.getName() + "\n");
+                gameActiveSerialNumber++;
+
+                // we need to
             }
         }
         else{

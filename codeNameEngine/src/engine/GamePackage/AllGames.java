@@ -25,7 +25,7 @@ public class AllGames {
 
     public Game getGameById(int gameId) {
         for (Game game : games) {
-            if(game.getGameNumber()==gameId)
+            if(game.getGameSerialNumber()==gameId)
                 return game;
         }
         return null;
@@ -45,4 +45,14 @@ public class AllGames {
         }
         return activeGames;
     }
+    public Set<Game> getPendingGames() {
+        Set<Game> pendingGames = new HashSet<>();
+        for (Game game : games) {
+            if(!game.isActive()){
+                pendingGames.add(game);
+            }
+        }
+        return pendingGames;
+    }
+
 }

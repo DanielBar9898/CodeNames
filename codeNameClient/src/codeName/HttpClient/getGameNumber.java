@@ -1,4 +1,5 @@
 package codeName.HttpClient;
+
 import okhttp3.*;
 
 import java.io.IOException;
@@ -6,13 +7,13 @@ import java.io.IOException;
 import static codeName.Configuration.GameConfig.BASE_URL;
 import static codeName.Configuration.GameConfig.HTTP_CLIENT;
 
+public class getGameNumber {
+    private final String RESOURCE = "/getOriginalGameNumber";
 
-public class ShowAllGames {
-    private final String RESOURCE = "/gamesInfo";
-
-    public String showAllGames() throws IOException {
+    public int getOriginalGameNumber(int gameNumber) throws IOException {
+        String url = BASE_URL + RESOURCE + "?gameNumber=" + gameNumber;
         Request request = new Request.Builder()
-                .url(BASE_URL + RESOURCE)
+                .url(url)
                 .get()
                 .build();
 
@@ -21,7 +22,7 @@ public class ShowAllGames {
             if (!response.isSuccessful()) {
                 throw new IOException("Unexpected code " + response);
             }
-            return response.body().string();
+            return Integer.parseInt(response.body().string().trim());
         }
     }
 }
