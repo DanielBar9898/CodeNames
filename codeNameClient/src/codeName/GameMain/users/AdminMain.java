@@ -1,7 +1,13 @@
-package codeName.HttpClient;
+package codeName.GameMain.users;
+
+import codeName.HttpClient.ActiveGames;
+import codeName.HttpClient.FileUpload;
+import codeName.HttpClient.ShowAllGames;
 
 import java.io.IOException;
 import java.util.Scanner;
+
+import static javafx.application.Platform.exit;
 
 
 public class AdminMain {
@@ -28,13 +34,15 @@ public class AdminMain {
             response = new ActiveGames().showActiveGames();
                 System.out.println(response);
             if(!response.equalsIgnoreCase("No active games")) {
-                System.out.println("Please select the game you want to watch (Enter a number):");
+                System.out.println("Please select the number of the game you would like to watch:");
                 sc.nextLine();
                 gameNumber = sc.nextInt();
                 System.out.println(new ActiveGames().selectActiveGame(gameNumber));
             }
             break;
-
+            case 4:
+                System.out.println("Thank you for playing!");
+                exit();
 
         }
     }
@@ -42,6 +50,6 @@ public class AdminMain {
     public static void showAdminMenu(){
         System.out.println("Admin Menu:\n");
         System.out.println("1.Load XML+TXT file\n2.Show active games info\n" +
-                "3.Watch an active game\n4.Exit\nPlease enter your choice");
+                "3.Watch an active game\n4.Exit\nPlease enter your choice:");
     }
 }

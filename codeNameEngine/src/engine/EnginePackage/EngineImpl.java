@@ -74,8 +74,8 @@ public class EngineImpl implements Engine {
 
     public void playTurn(Team teamTurn, String hint, int numOfWordsToGuess){
         teamTurn.showTeamWordsState();
-        teamTurn.getHinter().playHinterTurn(hint, numOfWordsToGuess);
-        teamTurn.getHinter().getHint();
+        teamTurn.getDefiner().playHinterTurn(hint, numOfWordsToGuess);
+        teamTurn.getDefiner().getHint();
     }
 
 

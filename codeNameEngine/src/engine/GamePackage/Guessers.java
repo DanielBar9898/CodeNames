@@ -3,15 +3,15 @@ package engine.GamePackage;
 import java.util.*;
 
 
-public class Guesser extends Player {
+public class Guessers extends Player {
 
     private Word.cardColor team;
     Board hiddenBoard;
 
-    public Guesser(Word.cardColor team) {
+    public Guessers(Word.cardColor team) {
         this.team = team;
     }
-    public Guesser() {}
+    public Guessers() {}
 
     public Board getHiddenBoard() {
         return hiddenBoard;

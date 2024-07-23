@@ -16,10 +16,10 @@ public class Game {
     private boolean active ;
     String dictName;
     Set<Team> teams;
-    private int gameNumber = 0;
+    private int gameSerialNumber = 0;
 
     public Game(ECNGame game) {
-        this.gameNumber+=1;
+        this.gameSerialNumber +=1;
         gameWords = new HashSet<>();
         blackWords = new HashSet<>();
         teams = new HashSet<>();
@@ -137,6 +137,10 @@ public class Game {
         return true; // All names are unique
     }
 
+    public Set<Team> getTeams() {
+        return teams;
+    }
+
     public void printInfoAboutTheTurn(String currentHint, int wordsToGuess) {
         System.out.println("\n**If you want to stop guessing press 0 or negative number");
         System.out.println("Remember: The Hint is: *" + currentHint + "*, Number of words remain to guess:" + wordsToGuess);
@@ -146,7 +150,7 @@ public class Game {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append("Game number #"+gameNumber);
+        //result.append("Game number #"+gameNumber);
         result.append("1.Game name : " + name + "\n");
         result.append("2.Game status is " + (active ?  "ACTIVE" : "PENDING") + "\n");
         result.append("3.Number of rows X columns is : " + gameBoard.getNumRows() + "X" + gameBoard.getNumCols() + "\n");
@@ -244,8 +248,8 @@ public class Game {
         return active;
     }
 
-    public int getGameNumber(){
-        return gameNumber;
+    public int getGameSerialNumber(){
+        return gameSerialNumber;
     }
 
 }
