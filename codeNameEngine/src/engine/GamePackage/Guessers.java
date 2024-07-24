@@ -8,8 +8,8 @@ public class Guessers extends Player {
     private Word.cardColor team;
     Board hiddenBoard;
 
-    public Guessers(String name, Role role) {
-        super(name, role);
+    public Guessers(String name, Role role,int gameSerialNumber) {
+        super(name, role, gameSerialNumber);
     }
 
     //public Guessers(Word.cardColor team) {
