@@ -5,38 +5,34 @@ import engine.JAXBGenerated2.ECNTeam;
 import java.util.*;
 public class Team {
 
-    private Guesser guesser;
-    private Hinter hinter;
     private int wordsToGuess,wordsGuessed;
     protected String teamName;
     Set<Word> wordsNeedToGuess;
     Board teamBoard;
+
+    private Set<Guessers> guessers;
+    private Set<Definers> definers;
     private int numOfTurns;
     private int numOfGuessers;
     private int numOfDefiners;
-    private int activeGuessers;
-    private int activeDefiners;
+   // private int activeGuessers;
+    // private int activeDefiners; function get active!
 
     public Team(ECNTeam otherTeam){
         this.teamName = otherTeam.getName();
         this.wordsToGuess = otherTeam.getCardsCount();
         numOfGuessers = otherTeam.getGuessers();
         numOfDefiners = otherTeam.getDefiners();
-        activeDefiners = 0;
-        activeGuessers = 0;
+
+        wordsNeedToGuess = new HashSet<>();
+        wordsGuessed = 0;
+        guessers = new HashSet<>();
+        definers = new HashSet<>();
+
     }
-    public void playedTurn(){
-        numOfTurns++;
-    }
-    public int getNumOfTurns(){
-        return numOfTurns;
-    }
+
     public Board getTeamBoard() {
         return teamBoard;
-    }
-    public String howManyWordsGuessed(){
-        String s = new String("So far the team guessed correctly "+wordsGuessed+"/"+wordsToGuess+" words");
-        return s;
     }
     public int getWordsToGuess() {
         return wordsToGuess;
@@ -45,20 +41,37 @@ public class Team {
         return wordsNeedToGuess;
     }
     public String toString(){
-        return "a.Team name: "+teamName.toString()+"\nb.Words to guess: "+wordsToGuess + "c.Number of guessers: "+numOfGuessers + "d.Number of definers: "+numOfDefiners+"\n\n";
+        return "a. Team name: " + teamName + "\n" +
+                "b. Words to guess: " + wordsToGuess + "\n" +
+                "c. Number of guessers: " + numOfGuessers + ", Guessers registered: " + getActiveGuessers() + "\n" +
+                "d. Number of definers: " + numOfDefiners + ", Definers registered: " + getActiveDefiners() + "\n\n";
     }
 
     public void showTeamWordsState(){
         System.out.println("So far the team guessed correctly "+wordsGuessed+"/"+wordsToGuess+" words");
     }
 
-    public Guesser getGuesser() {
-        return guesser;
+
+    public void addPlayerToTeam(Player player) {
+        if (player.getRole() == Player.Role.DEFINER && getActiveDefiners() < numOfDefiners) {
+            definers.add((Definers) player);
+        } else if (player.getRole() == Player.Role.GUESSER && getActiveGuessers() < numOfGuessers) {
+            guessers.add((Guessers) player);
+        }
     }
 
-    public Hinter getHinter() {
-        return hinter;
+    public Definers getDefiner() { // the first one!
+        if (!definers.isEmpty()) {
+            return definers.iterator().next();
+        }
+        return null;
     }
+public Guessers getGuesser(){
+        if (!guessers.isEmpty()) {
+            return guessers.iterator().next();
+        }
+        return null;
+}
 
     public void printTeamTurn(){
         System.out.println("Its "+teamName.toString()+" turn");
@@ -96,8 +109,33 @@ public class Team {
         return numOfDefiners;
     }
 
-    public int getWordsGuessed(){
+
+    public int getActiveGuessers(){
+        return guessers.size();
+    }
+    public int getActiveDefiners(){
+        return definers.size();
+    }
+
+    public int getWordsGuessed() {
         return wordsGuessed;
     }
 
+    public int getNumOfTurns() {
+        return numOfTurns;
+    }
+
+    public boolean teamMember(String playerName){
+     for(Guessers guesser : guessers){
+         if(guesser.getName().equals(playerName)){
+             return true;
+         }
+     }
+     for(Definers definer : definers){
+         if(definer.getName().equals(playerName)){
+             return true;
+         }
+     }
+     return false;
+    }
 }

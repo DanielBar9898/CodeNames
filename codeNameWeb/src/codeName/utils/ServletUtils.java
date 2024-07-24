@@ -1,10 +1,22 @@
 package codeName.utils;
 
+import DTO.BoardDTO;
+import DTO.WordDTO;
+import engine.GamePackage.Board;
+import engine.GamePackage.Word;
 import engine.users.UserManager;
 import jakarta.servlet.ServletContext;
-import jakarta.servlet.http.HttpServletRequest;
 
-import static codeName.constants.Constants.INT_PARAMETER_ERROR;
+import com.google.gson.Gson;
+import DTO.GameDTO;
+import DTO.TeamDTO;
+import engine.GamePackage.Game;
+import engine.GamePackage.Team;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ServletUtils {
 
@@ -25,5 +37,89 @@ public class ServletUtils {
 			}
 		}
 		return (UserManager) servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME);
+	}
+	public static String convertGamesToJson(Set<Game> games) {
+		List<GameDTO> gameDTOs = new ArrayList<>();
+		for (Game game : games) {
+			Set<TeamDTO> teamDTOs = new HashSet<>();
+			for (Team team : game.getTeams()) {
+				teamDTOs.add(new TeamDTO(team.getTeamName(), team.getWordsToGuess(), team.getNumOfDefiners(), team.getActiveDefiners(), team.getNumOfGuessers(), team.getActiveGuessers()));
+			}
+
+			GameDTO gameDTO = new GameDTO(
+					game.getName(),
+					game.getBlackWordsCount(),
+					game.getGameWordsCount(),
+					game.isActive(),
+					game.getDictName(),
+					teamDTOs,
+					game.getGameSerialNumber(),
+					game.getGameBoard().getNumRows(),
+					game.getGameBoard().getNumCols()
+			);
+
+			gameDTOs.add(gameDTO);
+		}
+
+		Gson gson = new Gson();
+		return gson.toJson(gameDTOs);
+	}
+	public static String convertTeamToJson(Team team) {
+		TeamDTO teamDTO = new TeamDTO(
+				team.getTeamName(),
+				team.getWordsToGuess(),
+				team.getNumOfDefiners(),
+				team.getActiveDefiners(),
+				team.getNumOfGuessers(),
+				team.getActiveGuessers()
+		);
+
+		Gson gson = new Gson();
+		return gson.toJson(teamDTO);
+	}
+	public static GameDTO convertGameToDTO(Game game) {
+		Set<TeamDTO> teamDTOs = new HashSet<>();
+		for (Team team : game.getTeams()) {
+			teamDTOs.add(new TeamDTO(
+					team.getTeamName(),
+					team.getWordsToGuess(),
+					team.getNumOfDefiners(),
+					team.getActiveDefiners(),
+					team.getNumOfGuessers(),
+					team.getActiveGuessers()
+			));
+		}
+
+		return new GameDTO(
+				game.getName(),
+				game.getBlackWordsCount(),
+				game.getGameWordsCount(),
+				game.isActive(),
+				game.getDictName(),
+				teamDTOs,
+				game.getGameSerialNumber(),
+				game.getGameBoard().getNumRows(),
+				game.getGameBoard().getNumCols()
+		);
+	}
+	public static BoardDTO convertBoardToDTO(Board board) {
+		Set<WordDTO> wordDTOs = new HashSet<>();
+		for (Word word : board.getWords()) {
+			WordDTO wordDTO = new WordDTO(
+					word.toString(),
+					word.getColor().toString(),
+					word.isFound(),
+					word.getSerialNumber()
+			);
+			wordDTOs.add(wordDTO);
+		}
+
+		return new BoardDTO(
+				board.getNumRows(),
+				board.getNumCols(),
+				board.getNumOfBlackWords(),
+				board.getNumOfWords(),
+				wordDTOs
+		);
 	}
 }

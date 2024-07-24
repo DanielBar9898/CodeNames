@@ -15,23 +15,24 @@ public class Game {
     Board gameBoard;
     private boolean active ;
     String dictName;
-    Set<Team> teams;
-    private int gameNumber = 0;
+    List<Team> teams;
+    private int gameSerialNumber = 0;
+    private Team currentTeam;
 
     public Game(ECNGame game) {
-        this.gameNumber+=1;
+        this.gameSerialNumber +=1;
         gameWords = new HashSet<>();
         blackWords = new HashSet<>();
-        teams = new HashSet<>();
+        teams = new ArrayList<>();
         List<ECNTeam> ecnTeamList = game.getECNTeams().getECNTeam();
         for(ECNTeam e : ecnTeamList){
             teams.add(new Team(e));
         }
-        ECNBoard b = game.getECNBoard();
-        gameBoard = new Board(b);
+        gameBoard = new Board(game.getECNBoard());
         gameBoard.addWordsToBoard(gameWords);
         setDictName(game.getECNDictionaryFile());
         active = false;
+        currentTeam = teams.get(0);
     }
     public void setDictName(String dictName) {
         this.dictName = dictName;
@@ -137,6 +138,10 @@ public class Game {
         return true; // All names are unique
     }
 
+    public List<Team> getTeams() {
+        return teams;
+    }
+
     public void printInfoAboutTheTurn(String currentHint, int wordsToGuess) {
         System.out.println("\n**If you want to stop guessing press 0 or negative number");
         System.out.println("Remember: The Hint is: *" + currentHint + "*, Number of words remain to guess:" + wordsToGuess);
@@ -146,7 +151,7 @@ public class Game {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        result.append("Game number #"+gameNumber);
+        //result.append("Game number #"+gameNumber);
         result.append("1.Game name : " + name + "\n");
         result.append("2.Game status is " + (active ?  "ACTIVE" : "PENDING") + "\n");
         result.append("3.Number of rows X columns is : " + gameBoard.getNumRows() + "X" + gameBoard.getNumCols() + "\n");
@@ -166,7 +171,14 @@ public class Game {
         return input.matches("^[a-zA-Z]+( [a-zA-Z]+)?$");
     }
 
-
+    public Team getNextTeam() {
+        int currentIndex = teams.indexOf(currentTeam);
+        int nextIndex = (currentIndex + 1) % teams.size();
+        return teams.get(nextIndex);
+    }
+    public void nextTurn() {
+        currentTeam = getNextTeam();
+    }
 
     public static String checkHintInput(String hint) {
         boolean valid = true;
@@ -244,8 +256,24 @@ public class Game {
         return active;
     }
 
-    public int getGameNumber(){
-        return gameNumber;
+    public int getGameSerialNumber(){
+        return gameSerialNumber;
+    }
+
+
+    public int getBlackWordsCount() {
+        return blackWords.size();
+    }
+
+    public int getGameWordsCount() {
+        return gameWords.size();
+    }
+    public String getDictName() {
+        return dictName;
+    }
+
+    public Team getCurrentTeam() {
+        return currentTeam;
     }
 
 }

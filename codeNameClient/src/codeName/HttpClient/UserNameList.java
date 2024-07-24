@@ -7,12 +7,13 @@ import java.io.IOException;
 import static codeName.Configuration.GameConfig.BASE_URL;
 import static codeName.Configuration.GameConfig.HTTP_CLIENT;
 
-public class ActiveGames {
-    private final String RESOURCE = "/activeGame";
+public class UserNameList {
+    private final String RESOURCE = "/UserNameList";
 
-    public String showActiveGames() throws IOException {
+    public String addUserName(String userName) throws IOException {
+        String url = BASE_URL + RESOURCE + "?username=" + userName + "&action=add";
         Request request = new Request.Builder()
-                .url(BASE_URL + RESOURCE)
+                .url(url)
                 .get()
                 .build();
 
@@ -24,8 +25,9 @@ public class ActiveGames {
             return response.body().string();
         }
     }
-    public String selectActiveGame(int gameNumber) throws IOException {
-        String url = BASE_URL + RESOURCE + "?gameNumber=" + gameNumber;
+
+    public String removeUserName(String userName) throws IOException {
+        String url = BASE_URL + RESOURCE + "?username=" + userName + "&action=remove";
         Request request = new Request.Builder()
                 .url(url)
                 .get()

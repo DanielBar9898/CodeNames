@@ -27,6 +27,13 @@ public class Board {
         numOfTotalWords = otherBoard.numOfTotalWords;
         wordsSet = new HashSet<>(otherBoard.getWords());
     }
+    public Board(int numRows, int numCols, int numOfBlackWords, int numOfTotalWords, Set<Word> words) {
+        this.numRows = numRows;
+        this.numCols = numCols;
+        this.numOfBlackWords = numOfBlackWords;
+        this.numOfTotalWords = numOfTotalWords;
+        this.wordsSet = words;
+    }
     public void addWordsToBoard(Set<Word> wordSet) {
         List<Word> wordList = new ArrayList<>(wordSet);
         Random random = new Random();
@@ -90,50 +97,6 @@ public class Board {
             System.out.println();
         }
 
-    }
-    public void printVisibleBoard() {
-        List<Word> wordList = new ArrayList<>(wordsSet);
-        int itr=0;
-        boolean wordsLine=true;
-        System.out.println("--------------------------------------------------------------------------");
-        for (int i = 0; i < numRows; i++) {
-            System.out.print("| ");
-            for (int j = 0; j < numCols; j++) {
-                Word currWord= wordList.get(itr);
-                if (currWord != null) {
-                    if(wordsLine) {
-                        System.out.print(currWord.toString());
-                        // Create a string with 25 spaces using String.format
-                        String spaces = String.format("%" + (20-currWord.toString().length()) + "s", "");
-                        // Print the string containing 25 spaces
-                        System.out.println(spaces);
-                        System.out.print("|");
-                        wordsLine=false;
-                    }
-                    else {
-                        int charCount= calculateChars(currWord.getSerialNumber(),currWord.getCharColor());
-                        System.out.print("(" + currWord.getSerialNumber()+ ")");
-                        if(currWord.isFound()) {
-                            System.out.print(currWord.getCharFound());
-                            System.out.print("(" + currWord.getCharColor() + ")");
-                            String spaces = String.format("%" + (20-charCount) + "s", "");
-                            // Print the string containing 25 spaces
-                            System.out.println(spaces);
-                            System.out.print("|");
-                        }
-                        wordsLine=true;
-                    }
-                }
-
-                System.out.print(" | ");
-                itr++;
-            }
-            if(!wordsLine) {
-                itr=itr-numCols;
-            }
-            System.out.println();
-            System.out.println("--------------------------------------------------------------------------");
-        }
     }
     public void printInfoVisibleBoard(Word currWord){
         int charCount= calculateChars(currWord.getSerialNumber(),currWord.getCharColor());

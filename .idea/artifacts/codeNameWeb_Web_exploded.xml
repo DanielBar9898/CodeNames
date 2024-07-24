@@ -8,6 +8,9 @@
           <element id="module-output" name="codeNameWeb" />
           <element id="module-output" name="codeNameEngine" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="gson-2.8.8" />
+        </element>
       </element>
     </root>
   </artifact>
