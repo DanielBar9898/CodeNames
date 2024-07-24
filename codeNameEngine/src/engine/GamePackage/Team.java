@@ -52,9 +52,13 @@ public class Team {
     }
 
 
-public void addPlayerToTeam(Player player){
-
-}
+    public void addPlayerToTeam(Player player) {
+        if (player.getRole() == Player.Role.DEFINER && getActiveDefiners() < numOfDefiners) {
+            definers.add((Definers) player);
+        } else if (player.getRole() == Player.Role.GUESSER && getActiveGuessers() < numOfGuessers) {
+            guessers.add((Guessers) player);
+        }
+    }
 
     public Definers getDefiner() { // the first one!
         if (!definers.isEmpty()) {
@@ -113,4 +117,11 @@ public Guessers getGuesser(){
         return definers.size();
     }
 
+    public int getWordsGuessed() {
+        return wordsGuessed;
+    }
+
+    public int getNumOfTurns() {
+        return numOfTurns;
+    }
 }

@@ -6,10 +6,14 @@ public class Definers extends Player {
     private String hint;
     private int wordsHint;
 
-    public Definers(Word.cardColor team) {
-        this.team = team;
+    public Definers(String name, Role role) {
+        super(name, role);
     }
-    public Definers(){}
+
+    //  public Definers(Word.cardColor team) {
+      //  this.team = team;
+   // }
+   // public Definers(){}
 
     public void setHint(String otherHint) {
         this.hint = otherHint;
@@ -24,10 +28,6 @@ public class Definers extends Player {
         System.out.println("The hint is " + hint +",number of words related is " + wordsHint);
     }
 
-    public void printBoard()
-    {
-        printFullBoard();
-    }
 
     public void printFullBoard(){
         return;
@@ -36,7 +36,6 @@ public class Definers extends Player {
         setHint(hint);
         setWordsHint(numOfWords);
     }
-
 
 
 }

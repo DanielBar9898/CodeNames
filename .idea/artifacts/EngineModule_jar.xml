@@ -3,7 +3,7 @@
     <output-path>$PROJECT_DIR$/../../CodeNamesEX1</output-path>
     <root id="root">
       <element id="archive" name="EngineModule.jar">
-        <element id="module-output" name="EngineModule" />
+        <element id="module-output" name="codeNameEngine" />
       </element>
     </root>
   </artifact>

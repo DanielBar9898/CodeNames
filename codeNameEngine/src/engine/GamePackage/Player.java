@@ -1,8 +1,33 @@
 package engine.GamePackage;
 
-public abstract class Player {
+public class Player {
+    public enum Role {
+        GUESSER,
+        DEFINER
+    }
 
-    public abstract void printBoard();
+    private String name;
+    private int serialGameNumber;
+    private Role role;
 
-    public abstract void playTurn();
+    public Player(String name, Role role, int serialGameNumber) {
+        this.name = name;
+        this.serialGameNumber=serialGameNumber;
+        this.role = role;
+
+    }
+
+
+    public String getName() {
+        return name;
+    }
+
+    public int getSerialGameNumber() {
+        return serialGameNumber;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
 }

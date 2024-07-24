@@ -1,7 +1,7 @@
 package codeName.servlets;
 
 import engine.EnginePackage.EngineImpl;
-import engine.GamePackage.AllGames;
+import engine.GamePackage.App;
 import engine.GamePackage.Game;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -21,9 +21,9 @@ public class LoadXMLServlet extends HttpServlet {
         Part filePart = request.getPart("filePath");
         String fileName = filePart.getSubmittedFileName();
         EngineImpl engine = new EngineImpl();
-        AllGames allGames = (AllGames) getServletContext().getAttribute("allGames");
+        App allGames = (App) getServletContext().getAttribute("allGames");
         if (allGames == null) {
-            allGames = new AllGames();
+            allGames = new App();
             getServletContext().setAttribute("allGames", allGames);
         }
 
