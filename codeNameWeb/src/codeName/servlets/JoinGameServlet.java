@@ -1,11 +1,10 @@
 package codeName.servlets;
 
-import engine.GamePackage.AllGames;
+import engine.GamePackage.App;
 import engine.GamePackage.Game;
 import engine.GamePackage.Team;
-import engine.GamePackage.Guessers;
-import engine.GamePackage.Definers;
 import engine.GamePackage.Player;
+import engine.GamePackage.Player.Role;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -22,13 +21,13 @@ public class JoinGameServlet extends HttpServlet {
         response.setContentType("text/plain");
         PrintWriter out = response.getWriter();
 
-        AllGames games = (AllGames) getServletContext().getAttribute("games");
+        App games = (App) getServletContext().getAttribute("games");
         String gameNumberStr = request.getParameter("gameNumber");
         String teamNumberStr = request.getParameter("teamNumber");
-        String role = request.getParameter("role");
+        String roleStr = request.getParameter("role");
         String username = request.getParameter("username");
 
-        if (games == null || gameNumberStr == null || teamNumberStr == null || role == null || username == null) {
+        if (games == null || gameNumberStr == null || teamNumberStr == null || roleStr == null || username == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             out.print("All parameters (gameNumber, teamNumber, role, username) are required.");
             return;
@@ -52,20 +51,17 @@ public class JoinGameServlet extends HttpServlet {
                 return;
             }
 
-            Player player;
-            if (role.equalsIgnoreCase("Definer")) {
-                player = new Definers();
-                selectedTeam.addPlayerToTeam(player);
-
-            } else if (role.equalsIgnoreCase("Guesser")) {
-                player = new Guessers();
-                selectedTeam.addPlayerToTeam(player);
-
-            } else {
+            Role role;
+            try {
+                role = Role.valueOf(roleStr.toUpperCase());
+            } catch (IllegalArgumentException e) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 out.print("Invalid role.");
                 return;
             }
+
+            Player player = new Player(username, role,gameNumber);
+            selectedTeam.addPlayerToTeam(player);
 
             out.print("User " + username + " has joined team " + selectedTeam.getTeamName() + " as a " + role);
 

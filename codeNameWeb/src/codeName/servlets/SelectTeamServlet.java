@@ -1,9 +1,9 @@
 package codeName.servlets;
 
-import engine.GamePackage.AllGames;
+import codeName.utils.ServletUtils;
+import engine.GamePackage.App;
 import engine.GamePackage.Game;
 import engine.GamePackage.Team;
-import com.google.gson.Gson;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,9 +18,10 @@ public class SelectTeamServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
-        AllGames games = (AllGames) getServletContext().getAttribute("games");
+        App games = (App) getServletContext().getAttribute("games");
         String gameNumberStr = request.getParameter("gameNumber");
         String teamNumberStr = request.getParameter("teamNumber");
 
@@ -54,16 +55,15 @@ public class SelectTeamServlet extends HttpServlet {
                 return;
             }
 
-            String json = new Gson().toJson(selectedTeam);
-            out.print(json);
-            out.flush();
+            String json = ServletUtils.convertTeamToJson(selectedTeam);
+            response.getWriter().write(json);
 
         } catch (NumberFormatException e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            out.print("{\"error\": \"Invalid game number or team number format\"}");
+            response.getWriter().write("{\"error\": \"Invalid game number or team number format\"}");
         } catch (IndexOutOfBoundsException e) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            out.print("{\"error\": \"Team not found\"}");
+            response.getWriter().write("{\"error\": \"Team not found\"}");
         }
     }
 }

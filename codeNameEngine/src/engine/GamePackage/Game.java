@@ -15,14 +15,15 @@ public class Game {
     Board gameBoard;
     private boolean active ;
     String dictName;
-    Set<Team> teams;
+    List<Team> teams;
     private int gameSerialNumber = 0;
+    private Team currentTeam;
 
     public Game(ECNGame game) {
         this.gameSerialNumber +=1;
         gameWords = new HashSet<>();
         blackWords = new HashSet<>();
-        teams = new HashSet<>();
+        teams = new ArrayList<>();
         List<ECNTeam> ecnTeamList = game.getECNTeams().getECNTeam();
         for(ECNTeam e : ecnTeamList){
             teams.add(new Team(e));
@@ -32,6 +33,7 @@ public class Game {
         gameBoard.addWordsToBoard(gameWords);
         setDictName(game.getECNDictionaryFile());
         active = false;
+        currentTeam = teams.get(0);
     }
     public void setDictName(String dictName) {
         this.dictName = dictName;
@@ -137,7 +139,7 @@ public class Game {
         return true; // All names are unique
     }
 
-    public Set<Team> getTeams() {
+    public List<Team> getTeams() {
         return teams;
     }
 
@@ -170,7 +172,14 @@ public class Game {
         return input.matches("^[a-zA-Z]+( [a-zA-Z]+)?$");
     }
 
-
+    public Team getNextTeam() {
+        int currentIndex = teams.indexOf(currentTeam);
+        int nextIndex = (currentIndex + 1) % teams.size();
+        return teams.get(nextIndex);
+    }
+    public void nextTurn() {
+        currentTeam = getNextTeam();
+    }
 
     public static String checkHintInput(String hint) {
         boolean valid = true;
@@ -250,6 +259,22 @@ public class Game {
 
     public int getGameSerialNumber(){
         return gameSerialNumber;
+    }
+
+
+    public int getBlackWordsCount() {
+        return blackWords.size();
+    }
+
+    public int getGameWordsCount() {
+        return gameWords.size();
+    }
+    public String getDictName() {
+        return dictName;
+    }
+
+    public Team getCurrentTeam() {
+        return currentTeam;
     }
 
 }

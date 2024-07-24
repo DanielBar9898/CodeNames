@@ -27,6 +27,13 @@ public class Board {
         numOfTotalWords = otherBoard.numOfTotalWords;
         wordsSet = new HashSet<>(otherBoard.getWords());
     }
+    public Board(int numRows, int numCols, int numOfBlackWords, int numOfTotalWords, Set<Word> words) {
+        this.numRows = numRows;
+        this.numCols = numCols;
+        this.numOfBlackWords = numOfBlackWords;
+        this.numOfTotalWords = numOfTotalWords;
+        this.wordsSet = words;
+    }
     public void addWordsToBoard(Set<Word> wordSet) {
         List<Word> wordList = new ArrayList<>(wordSet);
         Random random = new Random();

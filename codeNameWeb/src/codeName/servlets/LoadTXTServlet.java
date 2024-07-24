@@ -1,6 +1,6 @@
 package codeName.servlets;
 
-import engine.GamePackage.AllGames;
+import engine.GamePackage.App;
 import engine.GamePackage.Game;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -33,7 +33,7 @@ public class LoadTXTServlet extends HttpServlet {
 
         try {
             currentGame.extractWordsFromFile(txtFile);
-            AllGames games = (AllGames) getServletContext().getAttribute("games");
+            App games = (App) getServletContext().getAttribute("games");
             games.addGame(currentGame);
             response.getWriter().write("TXT file loaded successfully.");
         } catch (IOException e) {

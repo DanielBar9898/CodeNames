@@ -7,10 +7,10 @@ import java.io.IOException;
 import static codeName.Configuration.GameConfig.BASE_URL;
 import static codeName.Configuration.GameConfig.HTTP_CLIENT;
 
-public class getGameNumber {
-    private final String RESOURCE = "/getOriginalGameNumber";
+public class GetBoard {
+    private final String RESOURCE = "/getBoard";
 
-    public int getOriginalGameNumber(int gameNumber) throws IOException {
+    public String getBoard(int gameNumber) throws IOException {
         String url = BASE_URL + RESOURCE + "?gameNumber=" + gameNumber;
         Request request = new Request.Builder()
                 .url(url)
@@ -22,7 +22,7 @@ public class getGameNumber {
             if (!response.isSuccessful()) {
                 throw new IOException("Unexpected code " + response);
             }
-            return Integer.parseInt(response.body().string().trim());
+            return response.body().string();
         }
     }
 }
