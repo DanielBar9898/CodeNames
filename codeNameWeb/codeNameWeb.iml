@@ -21,7 +21,19 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="Tomcat 10.0.11" level="application_server_libraries" />
     <orderEntry type="module" module-name="codeNameEngine" />
-    <orderEntry type="library" name="gson-2.8.8" level="project" />
     <orderEntry type="module" module-name="codeNameDTO" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/../../../OkHttp" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/../../../OkHttp" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/../../../OkHttp" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/../../../OkHttp" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
   </component>
 </module>

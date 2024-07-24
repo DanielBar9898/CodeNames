@@ -124,4 +124,18 @@ public Guessers getGuesser(){
     public int getNumOfTurns() {
         return numOfTurns;
     }
+
+    public boolean teamMember(String playerName){
+     for(Guessers guesser : guessers){
+         if(guesser.getName().equals(playerName)){
+             return true;
+         }
+     }
+     for(Definers definer : definers){
+         if(definer.getName().equals(playerName)){
+             return true;
+         }
+     }
+     return false;
+    }
 }

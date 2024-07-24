@@ -28,8 +28,7 @@ public class Game {
         for(ECNTeam e : ecnTeamList){
             teams.add(new Team(e));
         }
-        ECNBoard b = game.getECNBoard();
-        gameBoard = new Board(b);
+        gameBoard = new Board(game.getECNBoard());
         gameBoard.addWordsToBoard(gameWords);
         setDictName(game.getECNDictionaryFile());
         active = false;

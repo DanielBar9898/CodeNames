@@ -1,6 +1,7 @@
 package engine.GamePackage;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class App {
@@ -67,5 +68,10 @@ public class App {
             }
         }
         return pendingGames;
+    }
+
+    @Override
+    public int hashCode() {
+        return userNames.hashCode();
     }
 }

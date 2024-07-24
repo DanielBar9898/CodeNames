@@ -6,9 +6,10 @@ import DTO.WordDTO;
 import codeName.HttpClient.*;
 import com.google.gson.Gson;
 import engine.GamePackage.Board;
+import engine.GamePackage.Game;
 import engine.GamePackage.Player;
 import engine.GamePackage.Word;
-
+import codeName.HttpClient.*;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -19,22 +20,53 @@ public class UserPlayGame {
         showUserPlayGameMenu();
         boolean Hidden=true,Visible=false;
         Scanner sc = new Scanner(System.in);
-        int choice = sc.nextInt();
+        int numOfWords;
+        String response , hint , guess;
+        int choice;
+        boolean first = true;
+        System.out.print("Enter your choice from the menu: ");
+        choice = sc.nextInt();
         if(player == null){
-            choice=3;
+            return;
         }
-        switch(choice){
-            case 1:
+        while(choice!= 3){
+            if(!first){
+                System.out.print("Enter your choice from the menu: ");
+                choice = sc.nextInt();
+            }
+            first = false;
+            switch(choice){
+                case 1:
+                    String gameStatusJson = new GameStatus().getGameStatus(player.getSerialGameNumber());
+                    Gson gson = new Gson();
+                    GameStatusDTO gameStatus = gson.fromJson(gameStatusJson, GameStatusDTO.class);
 
-                String gameStatusJson = new GameStatus().getGameStatus(player.getSerialGameNumber());
-                Gson gson = new Gson();
-                GameStatusDTO gameStatus = gson.fromJson(gameStatusJson, GameStatusDTO.class);
-
-                printGameStatus(gameStatus);
-                displayBoard(player, gson);
-
+                    printGameStatus(gameStatus);
+                    displayBoard(player, gson);
+                    break;
+                case 2:
+                    if(player.getRole()== Player.Role.DEFINER){
+                        //print the visible board
+                        System.out.println("Put your hint:");
+                        hint = sc.nextLine();
+                        sc.nextInt();
+                        System.out.println("How many words related?");
+                        numOfWords = sc.nextInt();
+                        response = new PlayTurn().playTurnDefiner(player , hint , numOfWords);
+                    }
+                    else{
+                        //print the unvvisible board
+                        System.out.println("Put your Guess:");
+                        guess = sc.nextLine();
+                        sc.nextInt();
+                        response = new PlayTurn().playTurnGuesser(player,guess);
+                    }
+                    System.out.println(response);
+                    break;
+                case 3:
+                    break;
+            }
         }
-
     }
     public static void showUserPlayGameMenu(){
         System.out.println("Welcome!\n");
