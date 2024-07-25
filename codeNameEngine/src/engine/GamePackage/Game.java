@@ -40,6 +40,7 @@ public class Game {
     public void setDictName(String dictName) {
         this.dictName = dictName;
     }
+
     public void extractWordsFromFile(File file) throws IOException {
         Set<Word> words = new HashSet<>();
         BufferedReader reader = new BufferedReader(new FileReader(file));

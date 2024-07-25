@@ -17,7 +17,7 @@ public class Board {
         numRows = e.getRows();
         numCols = e.getColumns();
         numOfBlackWords = board.getBlackCardsCount();
-        numOfTotalWords = board.getCardsCount()+numOfBlackWords;
+        numOfTotalWords = board.getCardsCount();
         wordsSet = new HashSet<>(numOfTotalWords);
     }
     public Board(Board otherBoard) {

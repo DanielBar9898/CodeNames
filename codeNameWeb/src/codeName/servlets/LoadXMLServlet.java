@@ -27,7 +27,6 @@ public class LoadXMLServlet extends HttpServlet {
             getServletContext().setAttribute("allGames", allGames);
         }
         Game currentGame = engine.loadXmlFile(filePath);
-
         if(currentGame == null) {
             response.getWriter().write("XML file could not be loaded.");
             return;
@@ -36,6 +35,8 @@ public class LoadXMLServlet extends HttpServlet {
             response.getWriter().write("The game name is already in use.");
             return;
         }
+        String txtPath = replaceFileName(filePath , currentGame.getDictName());
+        currentGame.extractWordsFromFile(new File(txtPath));
         if (currentGame.validateFile(response.getWriter())) {
             allGames.addGame(currentGame);
             getServletContext().setAttribute("game", currentGame);
@@ -52,5 +53,17 @@ public class LoadXMLServlet extends HttpServlet {
             }
         }
         return stringBuilder.toString();
+    }
+    private static String replaceFileName(String filePath, String newFileName) {
+        // Find the last occurrence of the file separator
+        int lastSeparatorIndex = filePath.lastIndexOf(File.separator);
+
+        if (lastSeparatorIndex == -1) {
+            // If no separator is found, return the newFileName only
+            return newFileName;
+        }
+
+        // Create the new file path by combining the path up to the last separator with the new file name
+        return filePath.substring(0, lastSeparatorIndex + 1) + newFileName;
     }
 }
