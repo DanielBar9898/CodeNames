@@ -21,7 +21,7 @@ import java.util.Set;
 
 
 public class EngineImpl implements Engine {
-    private final static String JAXB_XML_GAME_PACKAGE_NAME = "engine/JAXBGenerated2";
+    private final static String JAXB_XML_GAME_PACKAGE_NAME = "engine.JAXBGenerated2";
     Set<Game> games;
     Set<User> users;
 
