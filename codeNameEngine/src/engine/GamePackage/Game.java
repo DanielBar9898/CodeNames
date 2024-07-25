@@ -21,8 +21,10 @@ public class Game {
 
     public Game(ECNGame game) {
         this.gameSerialNumber +=1;
-        gameWords = new HashSet<>();
-        blackWords = new HashSet<>();
+        int blackCards = game.getECNBoard().getBlackCardsCount();
+        int cards = game.getECNBoard().getCardsCount();
+        gameWords = new HashSet<>(blackCards);
+        blackWords = new HashSet<>(cards);
         teams = new ArrayList<>();
         List<ECNTeam> ecnTeamList = game.getECNTeams().getECNTeam();
         for(ECNTeam e : ecnTeamList){
@@ -33,6 +35,7 @@ public class Game {
         setDictName(game.getECNDictionaryFile());
         active = false;
         currentTeam = teams.get(0);
+        name = game.getName();
     }
     public void setDictName(String dictName) {
         this.dictName = dictName;

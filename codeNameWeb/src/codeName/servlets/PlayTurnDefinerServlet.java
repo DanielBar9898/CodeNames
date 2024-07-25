@@ -43,6 +43,7 @@ public class PlayTurnDefinerServlet extends HttpServlet{
             res.addMessage("Hint cannot be empty");
             jsonResponse = gson.toJson(res);
             out.write(jsonResponse);
+            return;
         }
         Game currentGame = games.getGameById(gameID);
         Team teamTurn = currentGame.getNextTeam();
