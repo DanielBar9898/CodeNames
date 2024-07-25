@@ -18,16 +18,13 @@ public class LoadXMLServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        Part filePart = request.getPart("filePath");
-        String fileName = filePart.getSubmittedFileName();
+        String fileName = request.getParameter("filePath");
         EngineImpl engine = new EngineImpl();
         App allGames = (App) getServletContext().getAttribute("allGames");
         if (allGames == null) {
             allGames = new App();
             getServletContext().setAttribute("allGames", allGames);
         }
-
-
         Game currentGame = engine.loadXmlFile(fileName);
 
         if(currentGame == null) {

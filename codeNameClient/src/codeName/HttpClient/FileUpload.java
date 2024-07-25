@@ -10,14 +10,15 @@ import static codeName.Configuration.GameConfig.HTTP_CLIENT;
 public class FileUpload {
     private final String RESOURCE = "/loadXmlFile";
     private File file;
-
+    private String filePath;
     public FileUpload(String filePath){
+        this.filePath = filePath;
         this.file = new File(filePath);
     }
     public String uploadFile() throws IOException{
         RequestBody body =
-                new MultipartBody.Builder()
-                        .addFormDataPart("filePath", file.getName(), RequestBody.create(file, MediaType.parse("text/plain")))
+                new MultipartBody.Builder().addFormDataPart("filePath" , filePath)
+                        .addFormDataPart("file", file.getName(), RequestBody.create(file, MediaType.parse("text/plain")))
                         .build();
 
         Request request = new Request.Builder()
