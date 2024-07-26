@@ -12,6 +12,7 @@ public class Word {
     private boolean found ;
     private static int serialNumber = 1;
     private int wordSerialNumber;
+    private String teamWord;
 
     public Word(String word) {
         this.word = word;
@@ -36,6 +37,9 @@ public class Word {
         }
     }
 
+    public void setTeamWord(String teamWord){
+        this.teamWord = teamWord;
+    }
     public int getSerialNumber() {
         return wordSerialNumber;
     }

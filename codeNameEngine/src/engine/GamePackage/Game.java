@@ -18,11 +18,13 @@ public class Game {
     List<Team> teams;
     private int gameSerialNumber = 0;
     private Team currentTeam;
+    private int numOfWords;
 
     public Game(ECNGame game) {
         this.gameSerialNumber +=1;
         int blackCards = game.getECNBoard().getBlackCardsCount();
         int cards = game.getECNBoard().getCardsCount();
+        numOfWords = cards;
         gameWords = new HashSet<>(blackCards);
         blackWords = new HashSet<>(cards);
         teams = new ArrayList<>();
@@ -41,19 +43,21 @@ public class Game {
         this.dictName = dictName;
     }
 
-    public void extractWordsFromFile(File file) throws IOException {
+    public synchronized void extractWordsFromFile(File file) throws IOException {
         Set<Word> words = new HashSet<>();
+        int size = numOfWords;
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String line;
         Pattern pattern = Pattern.compile("[^a-zA-Z0-9]");
 
-        while ((line = reader.readLine()) != null) {
+        while ((line = reader.readLine()) != null&&size>0) {
             // Split the line into words using whitespace as the delimiter
             String[] lineWords = line.split("\\s+");
             for (String word : lineWords) {
                 // Remove punctuation and trim whitespace
                 word = pattern.matcher(word).replaceAll("").trim();
-                if (!word.isEmpty()) {
+                if (!word.isEmpty()&&size>0) {
+                    size--;
                     words.add(new Word(word.toLowerCase()));
                 }
             }
@@ -68,7 +72,7 @@ public class Game {
     public String getName() {
         return name;
     }
-    public boolean validateFile(PrintWriter out) {
+    public synchronized boolean validateFile(PrintWriter out) {
         boolean cardsCount, blackCardsCount, sumOfCards, rowsColumns, teamNames,guessersDefiners;
         cardsCount = this.cardsCount();
         blackCardsCount = this.blackCardsCount();
