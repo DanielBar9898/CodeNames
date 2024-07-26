@@ -17,7 +17,7 @@ public class Board {
         numRows = e.getRows();
         numCols = e.getColumns();
         numOfBlackWords = board.getBlackCardsCount();
-        numOfTotalWords = board.getCardsCount()+numOfBlackWords;
+        numOfTotalWords = board.getCardsCount();
         wordsSet = new HashSet<>(numOfTotalWords);
     }
     public Board(Board otherBoard) {
@@ -136,28 +136,23 @@ public class Board {
         System.out.print(spaces);
         System.out.print("|");
     }
-    public void assignWordsToTeams(Team team1,Team team2){
+    public synchronized void assignWordsToTeams(List<Team> teams){
         List<Word> wordList = new ArrayList<>(wordsSet);
         Collections.shuffle(wordList);
         Word w = null;
         int serial = 1;
         for (int i = 0; i < this.numOfBlackWords; i++) {
-            wordList.remove(0).setColor(Word.cardColor.BLACK);
+            wordList.remove(0).setTeamWord("Black");
         }
-
-        for (int i = 0; i < team1.getWordsToGuess(); i++) {
-            w = wordList.remove(0);
-            w.setColor(Word.cardColor.TEAM1);
-            team1.addWordToGuess(w);
-        }
-
-        for (int i = 0; i < team2.getWordsToGuess(); i++) {
-            w = wordList.remove(0);
-            w.setColor(Word.cardColor.TEAM2);
-            team2.addWordToGuess(w);
+        for(Team team : teams){
+            for(int i =0;i<team.getWordsToGuess();i++){
+                w = wordList.remove(0);
+                w.setTeamWord(team.getTeamName());
+                team.addWordToGuess(w);
+            }
         }
         for(Word remainingWords : wordList){
-            remainingWords.setColor(Word.cardColor.NEUTRAL);
+            remainingWords.setTeamWord("Neutral");
         }
         for(Word word: wordsSet){
             word.setSerialNumber(serial);
