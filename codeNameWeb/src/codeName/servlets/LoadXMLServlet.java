@@ -40,6 +40,7 @@ public class LoadXMLServlet extends HttpServlet {
         currentGame.getGameBoard().assignWordsToTeams(currentGame.getTeams());
         currentGame.setBlackWords();
         if (currentGame.validateFile(response.getWriter())) {
+            allGames.setAdmin(true);
             allGames.addGame(currentGame);
             getServletContext().setAttribute("game", currentGame);
             response.getWriter().write("XML file loaded and validated successfully.");

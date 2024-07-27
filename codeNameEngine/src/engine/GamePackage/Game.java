@@ -296,4 +296,8 @@ public class Game {
     public void setBlackWords() {
         blackWords = gameBoard.getBlackWords();
     }
+
+    public int getWordsSize(){
+        return gameBoard.getWords().size();
+    }
 }

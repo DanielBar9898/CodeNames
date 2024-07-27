@@ -63,7 +63,8 @@ public class ServletUtils {
 					teamDTOs,
 					game.getGameSerialNumber(),
 					game.getGameBoard().getNumRows(),
-					game.getGameBoard().getNumCols()
+					game.getGameBoard().getNumCols(),
+					game.getWordsSize()
 			);
 
 			gameDTOs.add(gameDTO);
@@ -109,7 +110,8 @@ public class ServletUtils {
 				teamDTOs,
 				game.getGameSerialNumber(),
 				game.getGameBoard().getNumRows(),
-				game.getGameBoard().getNumCols()
+				game.getGameBoard().getNumCols(),
+				game.getWordsSize()
 		);
 	}
 
