@@ -126,7 +126,7 @@ public class Game {
     }
 
     public boolean blackCardsCount() {
-        return gameBoard.getNumOfBlackWords() < blackWords.size();
+        return gameBoard.getNumOfBlackWords() < gameWords.size();
     }
 
     public boolean rowsColumnsCount() {
@@ -281,5 +281,8 @@ public class Game {
         return currentTeam;
     }
 
+    public void setBlackWords(){
+        blackWords = gameBoard.getBlackWords();
+    }
 }
 

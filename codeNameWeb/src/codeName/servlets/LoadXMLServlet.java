@@ -38,6 +38,7 @@ public class LoadXMLServlet extends HttpServlet {
         String txtPath = replaceFileName(filePath , currentGame.getDictName());
         currentGame.extractWordsFromFile(new File(txtPath));
         currentGame.getGameBoard().assignWordsToTeams(currentGame.getTeams());
+        currentGame.setBlackWords();
         if (currentGame.validateFile(response.getWriter())) {
             allGames.addGame(currentGame);
             getServletContext().setAttribute("game", currentGame);
