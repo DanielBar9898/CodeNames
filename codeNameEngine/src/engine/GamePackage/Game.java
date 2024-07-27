@@ -268,6 +268,10 @@ public class Game {
         return active;
     }
 
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public int getGameSerialNumber() {
         return gameSerialNumber;
     }
