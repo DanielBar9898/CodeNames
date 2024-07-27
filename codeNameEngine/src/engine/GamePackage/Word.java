@@ -79,6 +79,9 @@ public class Word {
     public cardColor getColor() {
         return color;
     }
+    public String getTeamWord(){
+        return this.teamWord;
+    }
     public boolean isFound() {
         return found;
     }

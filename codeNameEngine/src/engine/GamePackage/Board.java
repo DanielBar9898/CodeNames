@@ -210,6 +210,16 @@ public class Board {
 
         return counterChars;
     }
+
+    public Set<Word> getBlackWords(){
+        Set<Word> blackWords = new HashSet<>(numOfBlackWords);
+        for(Word word : wordsSet){
+            if(word.getTeamWord().equalsIgnoreCase("Black")){
+                blackWords.add(word);
+            }
+        }
+        return blackWords;
+    }
 }
 
 
