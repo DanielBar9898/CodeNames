@@ -93,7 +93,7 @@ public class AdminMain {
                 List<GameDTO> games = Arrays.asList(gamesArray);
 
                 for (GameDTO game : games) {
-                    int totalWords = game.getGameWordsCount();
+                    int totalWords = game.getGameSetSize();
                     int totalBlack = game.getBlackWordsCount();
                     int sum = totalWords - totalBlack;
                     System.out.println("1. Game name: " + game.getName());
