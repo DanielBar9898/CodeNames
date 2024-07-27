@@ -1,8 +1,8 @@
 package codeName.servlets;
 
-
 import codeName.utils.ServletUtils;
-import engine.EnginePackage.EngineImpl;
+import com.google.gson.Gson;
+import DTO.GameDTO;
 import engine.GamePackage.App;
 import engine.GamePackage.Game;
 import jakarta.servlet.ServletException;
@@ -12,56 +12,57 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @WebServlet(name = "showPendingGame", urlPatterns = "/pendingGame")
 public class PendingGamesServlet extends HttpServlet {
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        App games = (App) getServletContext().getAttribute("games");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
         String gameNumberStr = request.getParameter("gameNumber");
-        Set<Game> pendingGames;
-        if(gameNumberStr == null || gameNumberStr.isEmpty()) {
-            if (games == null) {
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("{\"message\":\"No pending games\"}");
-                return;
-            }
+        App games = (App) getServletContext().getAttribute("allGames");
 
-            pendingGames = games.getPendingGames();
+        if (games == null) {
+            response.getWriter().write("{\"error\": \"No games found\"}");
+            return;
+        }
+
+        if (gameNumberStr == null || gameNumberStr.isEmpty()) {
+            Set<Game> pendingGames = games.getPendingGames();
             if (pendingGames.isEmpty()) {
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("{\"message\":\"No pending games\"}");
+                response.getWriter().write("{\"error\": \"No pending games\"}");
                 return;
             }
 
-            String json = ServletUtils.convertGamesToJson(pendingGames);
+            List<GameDTO> pendingGameDTOs = new ArrayList<>();
+            int gamePendingSerialNumber = 1;
+            for (Game game : pendingGames) {
+                GameDTO gameDTO = ServletUtils.convertGameToDTO(game);
+                gameDTO.setGameSerialNumber(gamePendingSerialNumber);
+                pendingGameDTOs.add(gameDTO);
+                gamePendingSerialNumber++;
+            }
 
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
+            String json = new Gson().toJson(pendingGameDTOs);
             response.getWriter().write(json);
+
         } else {
             try {
                 int gameNumber = Integer.parseInt(gameNumberStr);
-                pendingGames = games.getPendingGames();
-                if (gameNumber <= 0 || gameNumber > pendingGames.size()) {
-                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    response.getWriter().println("{\"message\":\"Game not found\"}");
+                Game pendingGame = games.getGameById(gameNumber);
+                if (pendingGame == null) {
+                    response.getWriter().write("{\"error\": \"Game not found\"}");
                     return;
                 }
-                Game chosenGame = (Game) pendingGames.toArray()[gameNumber - 1];
-                EngineImpl g = new EngineImpl();
-                response.setContentType("application/json");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write(g.showLoadedGameInfo(chosenGame));
+
+                String json = new Gson().toJson(ServletUtils.convertGameToDTO(pendingGame));
+                response.getWriter().write(json);
+
             } catch (NumberFormatException e) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().println("{\"message\":\"Invalid game number format\"}");
-            } catch (IndexOutOfBoundsException e) {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                response.getWriter().println("{\"message\":\"Game not found\"}");
+                response.getWriter().write("{\"error\": \"Invalid game number format\"}");
             }
         }
     }

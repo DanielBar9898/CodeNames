@@ -21,7 +21,7 @@ public class JoinGameServlet extends HttpServlet {
         response.setContentType("text/plain");
         PrintWriter out = response.getWriter();
 
-        App games = (App) getServletContext().getAttribute("games");
+        App games = (App) getServletContext().getAttribute("allGames");
         String gameNumberStr = request.getParameter("gameNumber");
         String teamNumberStr = request.getParameter("teamNumber");
         String roleStr = request.getParameter("role");

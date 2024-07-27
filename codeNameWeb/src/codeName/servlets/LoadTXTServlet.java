@@ -17,7 +17,7 @@ public class LoadTXTServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        Game currentGame = (Game) getServletContext().getAttribute("game");
+        Game currentGame = (Game) getServletContext().getAttribute("allGames");
         if (currentGame == null) {
             response.getWriter().write("No game is currently loaded.");
             return;

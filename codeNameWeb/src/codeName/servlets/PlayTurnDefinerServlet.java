@@ -21,7 +21,7 @@ public class PlayTurnDefinerServlet extends HttpServlet{
         Gson gson = new Gson();
         Response res = new Response();
         String jsonResponse;
-        App games = (App) getServletContext().getAttribute("games");
+        App games = (App) getServletContext().getAttribute("allGames");
         if(games == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;

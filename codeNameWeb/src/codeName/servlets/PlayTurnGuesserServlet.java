@@ -22,7 +22,7 @@ public class PlayTurnGuesserServlet extends HttpServlet {
         Response res = new Response();
         Gson gson = new Gson();
         String jsonResponse;
-        App games = (App) getServletContext().getAttribute("games");
+        App games = (App) getServletContext().getAttribute("allGames");
         if(games == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
