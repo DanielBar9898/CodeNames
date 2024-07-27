@@ -34,14 +34,19 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$MODULE_DIR$/../../../OkHttp" />
+          <root url="jar://$MODULE_DIR$/../out/artifacts/codeNameDTO_jar/codeNameDTO.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/../../../OkHttp" />
-        </SOURCES>
-        <jarDirectory url="file://$MODULE_DIR$/../../../OkHttp" recursive="false" />
-        <jarDirectory url="file://$MODULE_DIR$/../../../OkHttp" recursive="false" type="SOURCES" />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../../OkHttp/gson-2.8.8.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
       </library>
     </orderEntry>
   </component>

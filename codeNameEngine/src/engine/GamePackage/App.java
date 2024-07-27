@@ -7,10 +7,12 @@ import java.util.Set;
 public class App {
     private Set<Game> games;
     private Set<String> userNames;
+    boolean hasAdmin;
 
     public App() {
         games = new HashSet<>();
         userNames = new HashSet<>();
+        hasAdmin = false;
     }
 
     public synchronized boolean addGame(Game game) {
@@ -68,6 +70,12 @@ public class App {
             }
         }
         return pendingGames;
+    }
+    public void setAdmin(boolean flag) {
+        hasAdmin = flag;
+    }
+    public boolean isAdmin() {
+        return hasAdmin;
     }
 
     @Override
