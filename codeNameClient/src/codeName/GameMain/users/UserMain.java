@@ -4,17 +4,25 @@ import com.google.gson.Gson;
 import DTO.GameDTO;
 import DTO.TeamDTO;
 import engine.GamePackage.Player;
+import jakarta.servlet.http.HttpServletResponse;
 
-import java.util.Arrays;
 import java.util.InputMismatchException;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Scanner;
 
 import static javafx.application.Platform.exit;
 
 public class UserMain {
+    public static void main(String[] args) {
+        UserMain userMain = new UserMain();
+        try {
+            userMain.userMainMenu();
+        } catch (IOException e) {
+            System.out.println("An error occurred: " + e.getMessage());
+        }
+    }
+
     public void userMainMenu() throws IOException {
         Scanner sc = new Scanner(System.in);
         String username = getUsername();
@@ -31,7 +39,7 @@ public class UserMain {
             case 2:
                 try {
                     response = new PendingGames().showPendingGames();
-                    printPendingGameDetails(response);
+                    printAllPendingGamesDetails(response);
                     if (!response.equalsIgnoreCase("{\"message\":\"No pending games\"}")) {
                         gameNumber = selectGame(sc);
                         if (gameNumber != 0) {
@@ -69,34 +77,6 @@ public class UserMain {
         }
     }
 
-    private static void printPendingGameDetails(String jsonResponse) {
-        Gson gson = new Gson();
-        GameDTO[] gamesArray = gson.fromJson(jsonResponse, GameDTO[].class);
-        List<GameDTO> games = Arrays.asList(gamesArray);
-
-        int gameIndex = 1;
-        for (GameDTO game : games) {
-            System.out.println("Game " + gameIndex + ":");
-            System.out.println("1. Game name: " + game.getName());
-            System.out.println("2. Game status: " + (game.isActive() ? "Active" : "Pending"));
-            System.out.println("3. Board details: " + game.getNumRows() + "X" + game.getNumCols());
-            System.out.println("4. Dictionary file name: " + game.getDictName() + ", Unique words: " + game.getGameWordsCount());
-            System.out.println("5. Normal words: " + game.getGameWordsCount() + ", Black words: " + game.getBlackWordsCount());
-            System.out.println("6. Teams details:");
-
-            int teamIndex = 1;
-            for (TeamDTO team : game.getTeams()) {
-                System.out.println("  Team " + teamIndex + ":");
-                System.out.println("    a. Team name: " + team.getTeamName());
-                System.out.println("    b. Words to guess: " + team.getWordsToGuess());
-                System.out.println("    c. Definers required: " + team.getNumOfDefiners() + ", Registered definers: " + team.getNumOfRegisteredDefiners());
-                System.out.println("    d. Guessers required: " + team.getNumOfGuessers() + ", Registered guessers: " + team.getNumOfRegisteredGuessers());
-                teamIndex++;
-            }
-            System.out.println();
-            gameIndex++;
-        }
-    }
 
     private int selectGame(Scanner sc) {
         int gameNumber = 0;
@@ -111,10 +91,16 @@ public class UserMain {
                     return gameNumber; // Return 0 to cancel
                 }
 
-                // Fetch and display game details
                 String gameDetails = new PendingGames().selectPendingGame(selectedGameIndex);
+
+                // Check if the response contains an error message
+                if (gameDetails.contains("\"error\"")) {
+                    System.out.println("Game not found. Please enter a valid game number.");
+                    continue; // Ask for input again
+                }
+
                 System.out.println("Selected Game Details:");
-                System.out.println(gameDetails);
+                printSingelPendingGameDetails(gameDetails);
 
                 // Parse the JSON response to get the game serial number
                 Gson gson = new Gson();
@@ -126,11 +112,12 @@ public class UserMain {
                 sc.nextLine(); // Clear the invalid input
                 System.out.println("Invalid input. Please enter a valid game number.");
             } catch (IOException e) {
-                System.out.println("Error fetching game details: " + e.getMessage());
+                System.out.println("Game not found. Please enter a valid team number. ");
             }
         }
         return gameNumber;
     }
+
 
     private int selectTeam(Scanner sc, int gameNumber) {
         int teamNumber = 0;
@@ -146,6 +133,15 @@ public class UserMain {
                 }
 
                 String teamDetails = new SelectTeam().selectTeam(gameNumber, teamNumber);
+                // Check if the response contains an error message
+                if (teamDetails.contains("\"Full\"")) {
+                    System.out.println("This team is already Full. Please enter a valid team number.");
+                    continue; // Ask for input again
+                }
+                else if (teamDetails.contains("\"error\"")) {
+                    System.out.println("Team not found. Please enter a valid team number.");
+                    continue; // Ask for input again
+                }
                 System.out.println("Selected Team Details:");
                 printTeamDetails(teamDetails);
 
@@ -154,7 +150,7 @@ public class UserMain {
                 sc.nextLine(); // Clear the invalid input
                 System.out.println("Invalid input. Please enter a valid team number.");
             } catch (IOException e) {
-                System.out.println("Error fetching team details: " + e.getMessage());
+                System.out.println("Team not found. Please enter a valid team number. ");
             }
         }
         return teamNumber;
@@ -191,20 +187,17 @@ public class UserMain {
                 }
 
                 String roleDetails = new SelectRole().selectRole(gameNumber, teamNumber, role);
-                if (roleDetails.contains("Role not available")) {
-                    System.out.println("The selected role is not available. Please choose another role.");
+                if (roleDetails.contains("\"error\":")) {
+                    System.out.println("The role you selected cannot be selected. Please enter 1 for Definer or 2 for Guesser." );
                     continue;
                 }
-
-                System.out.println("Selected Role Details:");
-                System.out.println(roleDetails);
 
                 validInput = true;
             } catch (InputMismatchException e) {
                 sc.nextLine(); // Clear the invalid input
                 System.out.println("Invalid input. Please enter 1 for Definer or 2 for Guesser.");
             } catch (IOException e) {
-                System.out.println("Error fetching role details: " + e.getMessage());
+                System.out.println("The role you selected cannot be selected. Please enter a valid role number.");
             }
         }
         return role;
@@ -237,7 +230,43 @@ public class UserMain {
 
     public static void showUserMenu(){
         System.out.println("User Menu:\n");
-        System.out.println("1.Show active games info\n2.Join a game!\n" +
+        System.out.println("1.Show All games info\n2.Join a game!\n" +
                 "3.Exit\nPlease enter your choice:");
+    }
+    public static void printAllPendingGamesDetails(String jsonResponse) {
+        Gson gson = new Gson();
+        GameDTO[] gamesArray = gson.fromJson(jsonResponse, GameDTO[].class);
+        int gameIndex = 1;
+        for (GameDTO game : gamesArray) {
+            System.out.println("Game " + gameIndex + ":");
+            printPendingDetails(game);
+            gameIndex++;
+        }
+    }
+    public static void printSingelPendingGameDetails(String jsonResponse) {
+        Gson gson = new Gson();
+        GameDTO game = gson.fromJson(jsonResponse, GameDTO.class);
+        printPendingDetails(game);
+    }
+
+    private static void printPendingDetails(GameDTO game) {
+
+        System.out.println("1. Game name: " + game.getName());
+        System.out.println("2. Game status: " + (game.isActive() ? "Active" : "Pending"));
+        System.out.println("3. Board details: " + game.getNumRows() + "X" + game.getNumCols());
+        System.out.println("4. Normal words: " + game.getGameWordsCount() + ", Black words: " + game.getBlackWordsCount());
+        System.out.println("5. Teams details:");
+
+        int teamIndex = 1;
+        for (TeamDTO team : game.getTeams()) {
+            System.out.println("  Team " + teamIndex + ":");
+            System.out.println("    a. Team name: " + team.getTeamName());
+            System.out.println("    b. Words to guess: " + team.getWordsToGuess());
+            System.out.println("    c. Definers required: " + team.getNumOfDefiners() + ", Registered definers: " + team.getNumOfRegisteredDefiners());
+            System.out.println("    d. Guessers required: " + team.getNumOfGuessers() + ", Registered guessers: " + team.getNumOfRegisteredGuessers());
+            teamIndex++;
+        }
+        System.out.println();
+
     }
 }

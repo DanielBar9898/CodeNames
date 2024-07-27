@@ -23,7 +23,7 @@ public class ShowActiveGameServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         String gameNumberStr = request.getParameter("gameNumber");
-        App games = (App) getServletContext().getAttribute("games");
+        App games = (App) getServletContext().getAttribute("allGames");
 
         if (games == null) {
             response.getWriter().write("{\"error\": \"No games found\"}");

@@ -21,7 +21,7 @@ public class JoinGameServlet extends HttpServlet {
         response.setContentType("text/plain");
         PrintWriter out = response.getWriter();
 
-        App games = (App) getServletContext().getAttribute("games");
+        App games = (App) getServletContext().getAttribute("allGames");
         String gameNumberStr = request.getParameter("gameNumber");
         String teamNumberStr = request.getParameter("teamNumber");
         String roleStr = request.getParameter("role");
@@ -62,6 +62,9 @@ public class JoinGameServlet extends HttpServlet {
 
             Player player = new Player(username, role,gameNumber);
             selectedTeam.addPlayerToTeam(player);
+            if ((selectedTeam.getActiveGuessers()== selectedTeam.getNumOfGuessers())&& (selectedTeam.getActiveDefiners()== selectedTeam.getNumOfDefiners())) {
+                selectedGame.setActive(true);
+            }
 
             out.print("User " + username + " has joined team " + selectedTeam.getTeamName() + " as a " + role);
 
