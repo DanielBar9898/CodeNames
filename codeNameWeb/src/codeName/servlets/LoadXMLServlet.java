@@ -45,7 +45,7 @@ public class LoadXMLServlet extends HttpServlet {
             response.getWriter().write("XML file loaded and validated successfully.");
         }
     }
-    private String extractString(Part part) throws IOException {
+    private synchronized String extractString(Part part) throws IOException {
         InputStream inputStream = part.getInputStream();
         StringBuilder stringBuilder = new StringBuilder();
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {

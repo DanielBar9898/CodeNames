@@ -28,7 +28,7 @@ public class GetBoardServlet extends HttpServlet {
             return;
         }
 
-        App games = (App) getServletContext().getAttribute("games");
+        App games = (App) getServletContext().getAttribute("allGames");
         if (games == null) {
             response.getWriter().write("{\"error\": \"No games found\"}");
             return;

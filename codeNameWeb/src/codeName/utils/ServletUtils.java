@@ -38,14 +38,22 @@ public class ServletUtils {
 		}
 		return (UserManager) servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME);
 	}
+
 	public static String convertGamesToJson(Set<Game> games) {
 		List<GameDTO> gameDTOs = new ArrayList<>();
 		for (Game game : games) {
-			Set<TeamDTO> teamDTOs = new HashSet<>();
+			ArrayList<TeamDTO> teamDTOs = new ArrayList<>();
 			for (Team team : game.getTeams()) {
-				teamDTOs.add(new TeamDTO(team.getTeamName(), team.getWordsToGuess(), team.getNumOfDefiners(), team.getActiveDefiners(), team.getNumOfGuessers(), team.getActiveGuessers()));
-			}
+				String teamName = team.getTeamName();
+				int wordsToGuess = team.getWordsToGuess();
+				int numOfDefiners = team.getNumOfDefiners();
+				int activeDefiners = team.getActiveDefiners();
+				int numOfGuessers = team.getNumOfGuessers();
+				int activeGuessers = team.getActiveGuessers();
 
+				TeamDTO teamDTO = new TeamDTO(teamName, wordsToGuess, numOfDefiners, activeDefiners, numOfGuessers, activeGuessers);
+				teamDTOs.add(teamDTO);
+			}
 			GameDTO gameDTO = new GameDTO(
 					game.getName(),
 					game.getBlackWordsCount(),
@@ -64,6 +72,7 @@ public class ServletUtils {
 		Gson gson = new Gson();
 		return gson.toJson(gameDTOs);
 	}
+
 	public static String convertTeamToJson(Team team) {
 		TeamDTO teamDTO = new TeamDTO(
 				team.getTeamName(),
@@ -77,8 +86,9 @@ public class ServletUtils {
 		Gson gson = new Gson();
 		return gson.toJson(teamDTO);
 	}
+
 	public static GameDTO convertGameToDTO(Game game) {
-		Set<TeamDTO> teamDTOs = new HashSet<>();
+		ArrayList<TeamDTO> teamDTOs = new ArrayList<>();
 		for (Team team : game.getTeams()) {
 			teamDTOs.add(new TeamDTO(
 					team.getTeamName(),
@@ -102,6 +112,7 @@ public class ServletUtils {
 				game.getGameBoard().getNumCols()
 		);
 	}
+
 	public static BoardDTO convertBoardToDTO(Board board) {
 		Set<WordDTO> wordDTOs = new HashSet<>();
 		for (Word word : board.getWords()) {

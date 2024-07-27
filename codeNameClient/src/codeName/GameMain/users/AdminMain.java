@@ -35,7 +35,7 @@ public class AdminMain {
                 break;
             case 2:
                 response = new ShowAllGames().showAllGames();
-                printGameDetails(response);
+                printAllGamesDetails(response);
                 break;
             case 3:
 
@@ -72,26 +72,35 @@ public class AdminMain {
         return gameDTO.getGameSerialNumber();
     }
 
-    private static void printGameDetails(String jsonResponse) {
+    public static void printAllGamesDetails(String jsonResponse) {
         Gson gson = new Gson();
         GameDTO[] gamesArray = gson.fromJson(jsonResponse, GameDTO[].class);
-        List<GameDTO> games = Arrays.asList(gamesArray);
-
-        for (GameDTO game : games) {
-            System.out.println("1. Game name: " + game.getName());
-            System.out.println("2. Game status: " + (game.isActive() ? "Active" : "Pending"));
-            System.out.println("3. Board details: " + game.getNumRows() + "X" + game.getNumCols());
-            System.out.println("4. Dictionary file name: " + game.getDictName() + ", Unique words: " + game.getGameWordsCount());
-            System.out.println("5. Normal words: " + game.getGameWordsCount() + ", Black words: " + game.getBlackWordsCount());
-            System.out.println("6. Teams details:");
-            for (TeamDTO team : game.getTeams()) {
-                System.out.println("  a. Team name: " + team.getTeamName());
-                System.out.println("  b. Words to guess: " + team.getWordsToGuess());
-                System.out.println("  c. Definers required: " + team.getNumOfDefiners());
-                System.out.println("  d. Guessers required: " + team.getNumOfGuessers());
-            }
-            System.out.println();
+        int gameIndex=1;
+        for (GameDTO game : gamesArray) {
+            System.out.println("Game " + gameIndex + ":");
+            printDetails(game);
+            gameIndex++;
         }
+    }
+    public static void printSingleGameDetail(String jsonResponse) {
+        Gson gson = new Gson();
+        GameDTO game = gson.fromJson(jsonResponse, GameDTO.class);
+        printDetails(game);
+    }
+    private static void printDetails(GameDTO game) {
+        System.out.println("1. Game name: " + game.getName());
+        System.out.println("2. Game status: " + (game.isActive() ? "Active" : "Pending"));
+        System.out.println("3. Board details: " + game.getNumRows() + "X" + game.getNumCols());
+        System.out.println("4. Dictionary file name: " + game.getDictName() + ", Unique words: " + game.getGameWordsCount());
+        System.out.println("5. Normal words: " + game.getGameWordsCount() + ", Black words: " + game.getBlackWordsCount());
+        System.out.println("6. Teams details:");
+        for (TeamDTO team : game.getTeams()) {
+            System.out.println("  a. Team name: " + team.getTeamName());
+            System.out.println("  b. Words to guess: " + team.getWordsToGuess());
+            System.out.println("  c. Definers required: " + team.getNumOfDefiners());
+            System.out.println("  d. Guessers required: " + team.getNumOfGuessers());
+        }
+        System.out.println();
     }
     private static void printActiveGameDetails(String jsonResponse) {
         Gson gson = new Gson();

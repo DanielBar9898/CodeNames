@@ -5,30 +5,28 @@ import engine.JAXBGenerated2.*;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.HashSet;
-import java.util.Set;
 
 public class Game {
     private String name;
-    Set<Word> blackWords;
-    Set<Word> gameWords;
-    Board gameBoard;
-    private boolean active ;
-    String dictName;
-    List<Team> teams;
+    private Set<Word> blackWords;
+    private Set<Word> gameWords;
+    private Board gameBoard;
+    private boolean active;
+    private String dictName;
+    private ArrayList<Team> teams;
     private int gameSerialNumber = 0;
     private Team currentTeam;
     private int numOfWords;
 
     public Game(ECNGame game) {
-        this.gameSerialNumber +=1;
+        this.gameSerialNumber += 1;
         int blackCards = game.getECNBoard().getBlackCardsCount();
         int cards = game.getECNBoard().getCardsCount();
         gameWords = new HashSet<>(blackCards);
         blackWords = new HashSet<>(cards);
         teams = new ArrayList<>();
         List<ECNTeam> ecnTeamList = game.getECNTeams().getECNTeam();
-        for(ECNTeam e : ecnTeamList){
+        for (ECNTeam e : ecnTeamList) {
             teams.add(new Team(e));
         }
         gameBoard = new Board(game.getECNBoard());
@@ -37,6 +35,7 @@ public class Game {
         currentTeam = teams.get(0);
         name = game.getName();
     }
+
     public void setDictName(String dictName) {
         this.dictName = dictName;
     }
@@ -66,11 +65,13 @@ public class Game {
     public Board getGameBoard() {
         return gameBoard;
     }
+
     public String getName() {
         return name;
     }
+
     public synchronized boolean validateFile(PrintWriter out) {
-        boolean cardsCount, blackCardsCount, sumOfCards, rowsColumns, teamNames,guessersDefiners;
+        boolean cardsCount, blackCardsCount, sumOfCards, rowsColumns, teamNames, guessersDefiners;
         cardsCount = this.cardsCount();
         blackCardsCount = this.blackCardsCount();
         sumOfCards = this.sumOfCardsCount();
@@ -97,16 +98,16 @@ public class Game {
             out.println("The teams have the same name!");
             return false;
         }
-        if(!guessersDefiners){
+        if (!guessersDefiners) {
             out.println("Not enough guessers/definers defined");
             return false;
         }
         return true;
     }
 
-    public boolean definersGuessers(){
-        for(Team t : teams){
-            if(t.getNumOfGuessers()<=0||t.getNumOfDefiners()<=0){
+    public boolean definersGuessers() {
+        for (Team t : teams) {
+            if (t.getNumOfGuessers() <= 0 || t.getNumOfDefiners() <= 0) {
                 return false;
             }
         }
@@ -119,7 +120,7 @@ public class Game {
 
     public boolean sumOfCardsCount() {
         int num = 0;
-        for(Team team : teams){
+        for (Team team : teams) {
             num += team.getWordsToGuess();
         }
         return num < gameBoard.getNumOfWords();
@@ -143,7 +144,7 @@ public class Game {
         return true; // All names are unique
     }
 
-    public List<Team> getTeams() {
+    public ArrayList<Team> getTeams() {
         return teams;
     }
 
@@ -158,14 +159,14 @@ public class Game {
         StringBuilder result = new StringBuilder();
         //result.append("Game number #"+gameNumber);
         result.append("1.Game name : " + name + "\n");
-        result.append("2.Game status is " + (active ?  "ACTIVE" : "PENDING") + "\n");
+        result.append("2.Game status is " + (active ? "ACTIVE" : "PENDING") + "\n");
         result.append("3.Number of rows X columns is : " + gameBoard.getNumRows() + "X" + gameBoard.getNumCols() + "\n");
         result.append("4.The name of the dictionary file is: " + dictName);
         result.append("and the number of all words available for choice is ").append(gameWords.size()).append("\n");
         result.append("5. In this game there will be ").append(gameBoard.numOfTotalWords - gameBoard.numOfBlackWords).append(" normal words ")
                 .append("and ").append(gameBoard.numOfBlackWords).append(" black words\n");
-        result.append("6.There is "+ teams.size()+ " teams, here are their information:\n");
-        for(Team t : teams) {
+        result.append("6.There is " + teams.size() + " teams, here are their information:\n");
+        for (Team t : teams) {
             result.append(t.toString());
         }
         return result.toString();
@@ -181,6 +182,7 @@ public class Game {
         int nextIndex = (currentIndex + 1) % teams.size();
         return teams.get(nextIndex);
     }
+
     public void nextTurn() {
         currentTeam = getNextTeam();
     }
@@ -199,8 +201,9 @@ public class Game {
                 hint = sc.nextLine();
             }
         }
-     return hint;
+        return hint;
     }
+
     public boolean isValidNumInput(String input) {
         try {
             int number = Integer.parseInt(input);
@@ -210,6 +213,7 @@ public class Game {
         }
 
     }
+
     public int checkNumInput(String numOfWords) {
         boolean valid = true;
         Scanner sc = new Scanner(System.in);
@@ -220,13 +224,14 @@ public class Game {
                 // Proceed with the logic using the valid input
             } else {
 
-                System.out.println("Invalid input. Please enter a number between 0 and "+ gameBoard.getWords().size()+":");
+                System.out.println("Invalid input. Please enter a number between 0 and " + gameBoard.getWords().size() + ":");
                 // You can prompt the user again or handle the invalid input appropriately
                 numOfWords = sc.nextLine();
             }
         }
         return Integer.parseInt(numOfWords);
     }
+
     public static boolean isValidChoiceInput(String input) {
         try {
             int number = Integer.parseInt(input);
@@ -236,6 +241,7 @@ public class Game {
         }
 
     }
+
     public static int checkChoiceInput(String choice) {
         boolean valid = true;
         Scanner sc = new Scanner(System.in);
@@ -252,16 +258,21 @@ public class Game {
         }
         return Integer.parseInt(choice);
     }
+
     @Override
     public int hashCode() {
         return name != null ? name.hashCode() : 0;
     }
 
-    public boolean isActive(){
+    public boolean isActive() {
         return active;
     }
 
-    public int getGameSerialNumber(){
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public int getGameSerialNumber() {
         return gameSerialNumber;
     }
 
@@ -273,6 +284,7 @@ public class Game {
     public int getGameWordsCount() {
         return gameWords.size();
     }
+
     public String getDictName() {
         return dictName;
     }
@@ -281,8 +293,7 @@ public class Game {
         return currentTeam;
     }
 
-    public void setBlackWords(){
+    public void setBlackWords() {
         blackWords = gameBoard.getBlackWords();
     }
 }
-
