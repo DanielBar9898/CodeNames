@@ -24,7 +24,6 @@ public class Game {
         this.gameSerialNumber +=1;
         int blackCards = game.getECNBoard().getBlackCardsCount();
         int cards = game.getECNBoard().getCardsCount();
-        numOfWords = cards;
         gameWords = new HashSet<>(blackCards);
         blackWords = new HashSet<>(cards);
         teams = new ArrayList<>();
@@ -33,7 +32,6 @@ public class Game {
             teams.add(new Team(e));
         }
         gameBoard = new Board(game.getECNBoard());
-        gameBoard.addWordsToBoard(gameWords);
         setDictName(game.getECNDictionaryFile());
         active = false;
         currentTeam = teams.get(0);
@@ -45,25 +43,24 @@ public class Game {
 
     public synchronized void extractWordsFromFile(File file) throws IOException {
         Set<Word> words = new HashSet<>();
-        int size = numOfWords;
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String line;
         Pattern pattern = Pattern.compile("[^a-zA-Z0-9]");
 
-        while ((line = reader.readLine()) != null&&size>0) {
+        while ((line = reader.readLine()) != null) {
             // Split the line into words using whitespace as the delimiter
             String[] lineWords = line.split("\\s+");
             for (String word : lineWords) {
                 // Remove punctuation and trim whitespace
                 word = pattern.matcher(word).replaceAll("").trim();
-                if (!word.isEmpty()&&size>0) {
-                    size--;
+                if (!word.isEmpty()) {
                     words.add(new Word(word.toLowerCase()));
                 }
             }
         }
         reader.close();
         gameWords = words;
+        gameBoard.addWordsToBoard(gameWords);
     }
 
     public Board getGameBoard() {
