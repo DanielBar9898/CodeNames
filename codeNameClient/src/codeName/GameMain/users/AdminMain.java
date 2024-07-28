@@ -56,7 +56,7 @@ public class AdminMain {
 
                         String gameResponse = new ActiveGames().selectActiveGame(gameNumber);
                         int gameSerialNumber = extractGameSerialNumber(gameResponse);
-                        Player player = new Player("Admin", Player.Role.DEFINER, gameSerialNumber);
+                        Player player = new Player("Admin", Player.Role.DEFINER, gameSerialNumber,null);
                         if (gameSerialNumber != -1) {
                             String gameStatusResponse = new GameStatus().getGameStatus(gameSerialNumber);
                             Gson gson = new Gson();
@@ -93,20 +93,23 @@ public class AdminMain {
                 List<GameDTO> games = Arrays.asList(gamesArray);
 
                 for (GameDTO game : games) {
-                    int totalWords = game.getGameSetSize();
+                    int totalWords = game.getNumOfWordsInSingleGame();
                     int totalBlack = game.getBlackWordsCount();
                     int sum = totalWords - totalBlack;
                     System.out.println("1. Game name: " + game.getName());
                     System.out.println("2. Game status: " + (game.isActive() ? "Active" : "Pending"));
                     System.out.println("3. Board details: " + game.getNumRows() + "X" + game.getNumCols());
-                    System.out.println("4. Dictionary file name: " + game.getDictName() + ", Unique words: " + game.getGameWordsCount());
-                    System.out.println("5. Normal words: " + sum + ", Black words: " + totalBlack);
+                    System.out.println("4. Dictionary file name: " + game.getDictName() + ", Optional game words number: " + game.getGameWordsCount());
+                    System.out.println("5. Regular words: " + sum + ", Black words: " + totalBlack);
                     System.out.println("6. Teams details:");
+                    int teamIndex=1;
                     for (TeamDTO team : game.getTeams()) {
+                        System.out.println("  Team " + teamIndex + ":");
                         System.out.println("  a. Team name: " + team.getTeamName());
                         System.out.println("  b. Words to guess: " + team.getWordsToGuess());
                         System.out.println("  c. Definers required: " + team.getNumOfDefiners());
                         System.out.println("  d. Guessers required: " + team.getNumOfGuessers());
+                        teamIndex++;
                     }
                     System.out.println();
                 }

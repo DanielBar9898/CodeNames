@@ -16,7 +16,7 @@ public class Game {
     private ArrayList<Team> teams;
     private int gameSerialNumber = 0;
     private Team currentTeam;
-    private int numOfWords;
+
 
     public Game(ECNGame game) {
         this.gameSerialNumber += 1;
@@ -35,9 +35,22 @@ public class Game {
         currentTeam = teams.get(0);
         name = game.getName();
     }
+    public int getNumOfWordsInSingleGame(){
+        return gameBoard.getNumOfTotalWords();
+    }
 
     public void setDictName(String dictName) {
         this.dictName = dictName;
+    }
+
+    public void checkAndActivateGame() {
+        for (Team team : teams) {
+            if (!team.isFull()) {
+                active = false;
+                return;
+            }
+        }
+        active = true;
     }
 
     public synchronized void extractWordsFromFile(File file) throws IOException {
