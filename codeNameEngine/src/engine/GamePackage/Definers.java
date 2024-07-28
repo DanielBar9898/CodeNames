@@ -2,18 +2,14 @@ package engine.GamePackage;
 
 
 public class Definers extends Player {
-    private Word.cardColor team;
     private String hint;
     private int wordsHint;
 
-    public Definers(String name, Role role, int gameSerialNumber,String team) {
-        super(name, role,gameSerialNumber,team);
+    public Definers(String name, Role role, int gameSerialNumber,String teamOfPlayer) {
+        super(name, role,gameSerialNumber,teamOfPlayer);
     }
 
-    //  public Definers(Word.cardColor team) {
-      //  this.team = team;
-   // }
-   // public Definers(){}
+
 
     public void setHint(String otherHint) {
         this.hint = otherHint;
