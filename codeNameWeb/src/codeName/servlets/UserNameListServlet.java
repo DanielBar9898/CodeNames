@@ -16,7 +16,7 @@ public class UserNameListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String action = request.getParameter("action");
-        App app = (App) getServletContext().getAttribute("app");
+        App app = (App) getServletContext().getAttribute("allGames");
 
         if (username == null || username.isEmpty() || action == null || action.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

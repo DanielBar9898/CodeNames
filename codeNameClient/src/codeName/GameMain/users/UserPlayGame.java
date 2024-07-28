@@ -24,7 +24,6 @@ public class UserPlayGame {
         String response , hint , guess;
         int choice;
         boolean first = true;
-        System.out.print("Enter your choice from the menu: ");
         choice = sc.nextInt();
         if(player == null){
             return;
@@ -55,7 +54,7 @@ public class UserPlayGame {
                         response = new PlayTurn().playTurnDefiner(player , hint , numOfWords);
                     }
                     else{
-                        //print the unvvisible board
+                        //print the unvisible board
                         System.out.println("Put your Guess:");
                         guess = sc.nextLine();
                         sc.nextInt();

@@ -21,7 +21,7 @@ public class SelectTeamServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
-        App games = (App) getServletContext().getAttribute("games");
+        App games = (App) getServletContext().getAttribute("allGames");
         String gameNumberStr = request.getParameter("gameNumber");
         String teamNumberStr = request.getParameter("teamNumber");
 
@@ -52,6 +52,11 @@ public class SelectTeamServlet extends HttpServlet {
             if (selectedTeam == null) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 out.print("{\"error\": \"Team not found\"}");
+                return;
+            }
+            if ((selectedTeam.getActiveGuessers()== selectedTeam.getNumOfGuessers())&& (selectedTeam.getActiveDefiners()== selectedTeam.getNumOfDefiners())) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                out.print("{\"error\": \"This team is already Full\"}");
                 return;
             }
 

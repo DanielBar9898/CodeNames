@@ -51,6 +51,21 @@ public class AdminMain {
                     printActiveGameDetails(response);
                     if (!response.startsWith("{\"message\":")) {
                         System.out.println("Please select the number of the game you would like to watch:");
+                    sc.nextLine();
+                    fileName = sc.nextLine();
+                    System.out.println(new FileUpload(fileName).uploadFile());
+                    first = false;
+                    break;
+                case 2:
+                    response = new ShowAllGames().showAllGames();
+                    printGameDetails(response);
+                    first = false;
+                    break;
+                case 3:
+                    response = new ActiveGames().showActiveGames();
+                    printActiveGameDetails(response);
+                    if (!response.equalsIgnoreCase("{\"error\": \"No active games\"}")) {
+                        System.out.println("Please select the number of the game you would like to watch:");
                         sc.nextLine();
                         gameNumber = sc.nextInt();
 
@@ -83,7 +98,7 @@ public class AdminMain {
         return gameDTO.getGameSerialNumber();
     }
 
-    private static void printGameDetails(String jsonResponse) {
+    public static void printAllGamesDetails(String jsonResponse) {
         Gson gson = new Gson();
         try {
             // Check if the response is an array or an object
@@ -124,6 +139,7 @@ public class AdminMain {
         } catch (JsonSyntaxException e) {
             System.out.println("Invalid JSON response: " + e.getMessage());
         }
+        System.out.println();
     }
 
     private static void printActiveGameDetails(String jsonResponse) {

@@ -1,6 +1,6 @@
 package DTO;
 
-import java.util.Set;
+import java.util.ArrayList;
 
 public class GameDTO {
     private String name;
@@ -8,13 +8,12 @@ public class GameDTO {
     private int gameWordsCount;
     private boolean active;
     private String dictName;
-    private Set<TeamDTO> teams;
+    private ArrayList<TeamDTO> teams;
     private int gameSerialNumber;
     private int numRows;
     private int numCols;
     private int gameSetSize;
-
-    public GameDTO(String name, int blackWordsCount, int gameWordsCount, boolean active, String dictName, Set<TeamDTO> teams, int gameSerialNumber, int numRows, int numCols,int wordsSize) {
+    public GameDTO(String name, int blackWordsCount, int gameWordsCount, boolean active, String dictName, ArrayList<TeamDTO> teams, int gameSerialNumber, int numRows, int numCols) {
         this.name = name;
         this.blackWordsCount = blackWordsCount;
         this.gameWordsCount = gameWordsCount;
@@ -38,8 +37,8 @@ public class GameDTO {
     public void setActive(boolean active) { this.active = active; }
     public String getDictName() { return dictName; }
     public void setDictName(String dictName) { this.dictName = dictName; }
-    public Set<TeamDTO> getTeams() { return teams; }
-    public void setTeams(Set<TeamDTO> teams) { this.teams = teams; }
+    public ArrayList<TeamDTO> getTeams() { return teams; }
+    public void setTeams(ArrayList<TeamDTO> teams) { this.teams = teams; }
     public int getGameSerialNumber() { return gameSerialNumber; }
     public void setGameSerialNumber(int gameSerialNumber) { this.gameSerialNumber = gameSerialNumber; }
     public int getNumRows() { return numRows; }
