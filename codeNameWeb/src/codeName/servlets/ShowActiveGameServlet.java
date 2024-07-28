@@ -26,14 +26,17 @@ public class ShowActiveGameServlet extends HttpServlet {
         App games = (App) getServletContext().getAttribute("allGames");
 
         if (games == null) {
-            response.getWriter().write("{\"error\": \"No games found\"}");
+            response.getWriter().write("{\"message\": \"No games found\"}");
             return;
         }
-
+        if(!games.hasActiveGame()){
+            response.getWriter().write("{\"message\": \"No active game found!\"}");
+            return;
+        }
         if (gameNumberStr == null || gameNumberStr.isEmpty()) {
             Set<Game> activeGames = games.getActiveGames();
             if (activeGames.isEmpty()) {
-                response.getWriter().write("{\"error\": \"No active games\"}");
+                response.getWriter().write("{\"message\": \"No active games\"}");
                 return;
             }
 
@@ -54,7 +57,7 @@ public class ShowActiveGameServlet extends HttpServlet {
                 int gameNumber = Integer.parseInt(gameNumberStr);
                 Game activeGame = games.getGameById(gameNumber);
                 if (activeGame == null) {
-                    response.getWriter().write("{\"error\": \"Game not found\"}");
+                    response.getWriter().write("{\"message\": \"Game not found\"}");
                     return;
                 }
 
@@ -62,7 +65,7 @@ public class ShowActiveGameServlet extends HttpServlet {
                 response.getWriter().write(json);
 
             } catch (NumberFormatException e) {
-                response.getWriter().write("{\"error\": \"Invalid game number format\"}");
+                response.getWriter().write("{\"message\": \"Invalid game number format\"}");
             }
         }
     }
