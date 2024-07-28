@@ -13,7 +13,8 @@ public class GameDTO {
     private int numRows;
     private int numCols;
     private int gameSetSize;
-    public GameDTO(String name, int blackWordsCount, int gameWordsCount, boolean active, String dictName, ArrayList<TeamDTO> teams, int gameSerialNumber, int numRows, int numCols) {
+
+    public GameDTO(String name, int blackWordsCount, int gameWordsCount, boolean active, String dictName, ArrayList<TeamDTO> teams, int gameSerialNumber, int numRows, int numCols, int wordsSize) {
         this.name = name;
         this.blackWordsCount = blackWordsCount;
         this.gameWordsCount = gameWordsCount;

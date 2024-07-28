@@ -49,22 +49,7 @@ public class AdminMain {
                 case 3:
                     response = new ActiveGames().showActiveGames();
                     printActiveGameDetails(response);
-                    if (!response.equalsIgnoreCase("{\"error\": \"No active games\"}")) {
-                        System.out.println("Please select the number of the game you would like to watch:");
-                    sc.nextLine();
-                    fileName = sc.nextLine();
-                    System.out.println(new FileUpload(fileName).uploadFile());
-                    first = false;
-                    break;
-                case 2:
-                    response = new ShowAllGames().showAllGames();
-                    printGameDetails(response);
-                    first = false;
-                    break;
-                case 3:
-                    response = new ActiveGames().showActiveGames();
-                    printActiveGameDetails(response);
-                    if (!response.equalsIgnoreCase("{\"error\": \"No active games\"}")) {
+                    if (!response.equalsIgnoreCase("{\"message\": \"No active games\"}")) {
                         System.out.println("Please select the number of the game you would like to watch:");
                         sc.nextLine();
                         gameNumber = sc.nextInt();
@@ -98,7 +83,7 @@ public class AdminMain {
         return gameDTO.getGameSerialNumber();
     }
 
-    public static void printAllGamesDetails(String jsonResponse) {
+    private static void printGameDetails(String jsonResponse) {
         Gson gson = new Gson();
         try {
             // Check if the response is an array or an object
@@ -108,7 +93,7 @@ public class AdminMain {
                 List<GameDTO> games = Arrays.asList(gamesArray);
 
                 for (GameDTO game : games) {
-                    int totalWords = game.getGameWordsCount();
+                    int totalWords = game.getGameSetSize();
                     int totalBlack = game.getBlackWordsCount();
                     int sum = totalWords - totalBlack;
                     System.out.println("1. Game name: " + game.getName());
@@ -139,7 +124,6 @@ public class AdminMain {
         } catch (JsonSyntaxException e) {
             System.out.println("Invalid JSON response: " + e.getMessage());
         }
-        System.out.println();
     }
 
     private static void printActiveGameDetails(String jsonResponse) {
