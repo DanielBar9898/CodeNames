@@ -29,21 +29,21 @@ public class PendingGamesServlet extends HttpServlet {
             response.getWriter().write("{\"error\": \"No games found\"}");
             return;
         }
-
+        Set<Game> pendingGames = games.getPendingGames();
         if (gameNumberStr == null || gameNumberStr.isEmpty()) {
-            Set<Game> pendingGames = games.getPendingGames();
+         //   Set<Game> pendingGames = games.getPendingGames();
             if (pendingGames.isEmpty()) {
                 response.getWriter().write("{\"error\": \"No pending games\"}");
                 return;
             }
 
             List<GameDTO> pendingGameDTOs = new ArrayList<>();
-            int gamePendingSerialNumber = 1;
+            //int gamePendingSerialNumber = 1;
             for (Game game : pendingGames) {
                 GameDTO gameDTO = ServletUtils.convertGameToDTO(game);
-                gameDTO.setGameSerialNumber(gamePendingSerialNumber);
+                //gameDTO.setGameSerialNumber(gamePendingSerialNumber);
                 pendingGameDTOs.add(gameDTO);
-                gamePendingSerialNumber++;
+                //gamePendingSerialNumber++;
             }
 
             String json = new Gson().toJson(pendingGameDTOs);

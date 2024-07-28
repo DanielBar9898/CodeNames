@@ -39,6 +39,7 @@ public class LoadXMLServlet extends HttpServlet {
         currentGame.extractWordsFromFile(new File(txtPath));
         currentGame.getGameBoard().assignWordsToTeams(currentGame.getTeams());
         currentGame.setBlackWords();
+        currentGame.setFileName(filePath);
         if (currentGame.validateFile(response.getWriter())) {
             allGames.setAdmin(true);
             allGames.addGame(currentGame);

@@ -14,6 +14,8 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
+import static com.sun.javafx.application.PlatformImpl.exit;
+
 public class UserPlayGame {
     public void userGameMenu(Player player) throws IOException {
         System.out.println("Welcome!\n");
@@ -28,7 +30,8 @@ public class UserPlayGame {
         if(player == null){
             return;
         }
-        while(choice!= 3){
+        boolean GameOver = false;
+        while(!GameOver){
             if(!first){
                 showUserPlayGameMenu();
                 choice = sc.nextInt();
@@ -40,7 +43,7 @@ public class UserPlayGame {
             switch(choice) {
                 case 1:
                     printGameStatus(gameStatus);
-                    if (gameStatus.getGameStatus().equalsIgnoreCase("Active"))
+             //      if (gameStatus.getGameStatus().equalsIgnoreCase("Active"))
                         displayBoard(player, gson);
                     break;
                 case 2:
@@ -63,10 +66,14 @@ public class UserPlayGame {
                             }
                             System.out.println(response);
                         } else
-                            System.out.println("This game is not active yet. Please Wait.");
+                            System.out.println("It's not your team turn. Please Wait.");
                     }
+                    else
+                        System.out.println("This game is not active yet. Please Wait.");
                     break;
                 case 3:
+                    System.out.println("Thank you for playing game!");
+                    System.exit(0);
                     break;
             }
         }
