@@ -6,8 +6,8 @@ public class Definers extends Player {
     private String hint;
     private int wordsHint;
 
-    public Definers(String name, Role role, int gameSerialNumber) {
-        super(name, role,gameSerialNumber);
+    public Definers(String name, Role role, int gameSerialNumber,String team) {
+        super(name, role,gameSerialNumber,team);
     }
 
     //  public Definers(Word.cardColor team) {

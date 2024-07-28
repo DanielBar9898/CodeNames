@@ -2,13 +2,13 @@ package DTO;
 
 public class WordDTO {
     private String word;
-    private String color;
+    private String wordType;
     private boolean found;
     private int serialNumber;
 
-    public WordDTO(String word, String color, boolean found, int serialNumber) {
+    public WordDTO(String word, String wordType, boolean found, int serialNumber) {
         this.word = word;
-        this.color = color;
+        this.wordType = wordType;
         this.found = found;
         this.serialNumber = serialNumber;
     }
@@ -17,8 +17,8 @@ public class WordDTO {
     public String getWord() { return word; }
     public void setWord(String word) { this.word = word; }
 
-    public String getColor() { return color; }
-    public void setColor(String color) { this.color = color; }
+    public String getWordType() { return wordType; }
+    public void setWordType(String wordType) { this.wordType = wordType; }
 
     public boolean isFound() { return found; }
     public void setFound(boolean found) { this.found = found; }
