@@ -64,7 +64,7 @@ public class ServletUtils {
 					game.getGameSerialNumber(),
 					game.getGameBoard().getNumRows(),
 					game.getGameBoard().getNumCols(),
-					game.getWordsSize(),game.
+					game.getWordsSize()
 			);
 
 			gameDTOs.add(gameDTO);
