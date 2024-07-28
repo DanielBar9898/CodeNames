@@ -11,6 +11,7 @@ import engine.GamePackage.Player;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -23,14 +24,14 @@ public class AdminMain {
         Scanner sc = new Scanner(System.in);
         String fileName = null;
         String response = null;
-        int choice = sc.nextInt();
+        int choice = getValidChoice(sc);
         int gameNumber;
         boolean exit = false;
         boolean first = true;
         while(!exit) {
             if(!first){
                 showAdminMenu();
-                choice = sc.nextInt();
+                choice = getValidChoice(sc);
                 first = false;
             }
             switch (choice) {
@@ -49,29 +50,14 @@ public class AdminMain {
                 case 3:
                     response = new ActiveGames().showActiveGames();
                     printActiveGameDetails(response);
-                    if (!response.startsWith("{\"message\":")) {
-                        System.out.println("Please select the number of the game you would like to watch:");
-                    sc.nextLine();
-                    fileName = sc.nextLine();
-                    System.out.println(new FileUpload(fileName).uploadFile());
-                    first = false;
-                    break;
-                case 2:
-                    response = new ShowAllGames().showAllGames();
-                    printGameDetails(response);
-                    first = false;
-                    break;
-                case 3:
-                    response = new ActiveGames().showActiveGames();
-                    printActiveGameDetails(response);
-                    if (!response.equalsIgnoreCase("{\"error\": \"No active games\"}")) {
+                    if (!response.equalsIgnoreCase("{\"message\": \"No active games\"}")) {
                         System.out.println("Please select the number of the game you would like to watch:");
                         sc.nextLine();
                         gameNumber = sc.nextInt();
 
                         String gameResponse = new ActiveGames().selectActiveGame(gameNumber);
                         int gameSerialNumber = extractGameSerialNumber(gameResponse);
-                        Player player = new Player("Admin", Player.Role.DEFINER, gameSerialNumber);
+                        Player player = new Player("Admin", Player.Role.DEFINER, gameSerialNumber,null);
                         if (gameSerialNumber != -1) {
                             String gameStatusResponse = new GameStatus().getGameStatus(gameSerialNumber);
                             Gson gson = new Gson();
@@ -98,7 +84,7 @@ public class AdminMain {
         return gameDTO.getGameSerialNumber();
     }
 
-    public static void printAllGamesDetails(String jsonResponse) {
+    private static void printGameDetails(String jsonResponse) {
         Gson gson = new Gson();
         try {
             // Check if the response is an array or an object
@@ -108,20 +94,23 @@ public class AdminMain {
                 List<GameDTO> games = Arrays.asList(gamesArray);
 
                 for (GameDTO game : games) {
-                    int totalWords = game.getGameSetSize();
+                    int totalWords = game.getNumOfWordsInSingleGame();
                     int totalBlack = game.getBlackWordsCount();
                     int sum = totalWords - totalBlack;
                     System.out.println("1. Game name: " + game.getName());
                     System.out.println("2. Game status: " + (game.isActive() ? "Active" : "Pending"));
                     System.out.println("3. Board details: " + game.getNumRows() + "X" + game.getNumCols());
-                    System.out.println("4. Dictionary file name: " + game.getDictName() + ", Unique words: " + game.getGameWordsCount());
-                    System.out.println("5. Normal words: " + sum + ", Black words: " + totalBlack);
+                    System.out.println("4. Dictionary file name: " + game.getDictName() + ", Optional game words number: " + game.getGameWordsCount());
+                    System.out.println("5. Regular words: " + sum + ", Black words: " + totalBlack);
                     System.out.println("6. Teams details:");
+                    int teamIndex=1;
                     for (TeamDTO team : game.getTeams()) {
+                        System.out.println("  Team " + teamIndex + ":");
                         System.out.println("  a. Team name: " + team.getTeamName());
                         System.out.println("  b. Words to guess: " + team.getWordsToGuess());
                         System.out.println("  c. Definers required: " + team.getNumOfDefiners());
                         System.out.println("  d. Guessers required: " + team.getNumOfGuessers());
+                        teamIndex++;
                     }
                     System.out.println();
                 }
@@ -139,7 +128,6 @@ public class AdminMain {
         } catch (JsonSyntaxException e) {
             System.out.println("Invalid JSON response: " + e.getMessage());
         }
-        System.out.println();
     }
 
     private static void printActiveGameDetails(String jsonResponse) {
@@ -189,6 +177,24 @@ public class AdminMain {
         } catch (JsonSyntaxException e) {
             System.out.println("Invalid JSON response: " + e.getMessage());
         }
+    }
+    private static int getValidChoice(Scanner sc) {
+        int choice = 0;
+        boolean valid = false;
+        while (!valid) {
+            try {
+                choice = sc.nextInt();
+                if (choice >= 1 && choice <= 4) {
+                    valid = true;
+                } else {
+                    System.out.println("Invalid input. Please enter a number between 1 and 4:");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number between 1 and 4:");
+                sc.next(); // Clear the invalid input
+            }
+        }
+        return choice;
     }
 
     public static void showAdminMenu() {
