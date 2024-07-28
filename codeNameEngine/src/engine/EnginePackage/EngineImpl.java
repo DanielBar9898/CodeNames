@@ -74,8 +74,7 @@ public class EngineImpl implements Engine {
     }
 
     public synchronized void playTurn(Team teamTurn, String hint, int numOfWordsToGuess , Response response){
-        teamTurn.showTeamWordsState();
-        teamTurn.getDefiner().playHinterTurn(hint, numOfWordsToGuess);
+        response.addMessage("So far the team guessed correctly "+teamTurn.getWordsGuessed()+"/"+teamTurn.getWordsToGuess()+" words");
         response.addMessage("The hint is : " + hint + ", number of words related are : " + numOfWordsToGuess);
     }
 

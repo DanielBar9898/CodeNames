@@ -13,5 +13,6 @@
     <orderEntry type="library" name="okhttp-4.9.1" level="project" />
     <orderEntry type="module" module-name="codeNameDTO" />
     <orderEntry type="library" name="okHttp" level="project" />
+    <orderEntry type="library" name="OkHttp" level="project" />
   </component>
 </module>

@@ -37,32 +37,27 @@ public class PlayTurnGuesserServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         if(playerName == null || playerName.equals("")) {
-            res.addMessage("Player name cannot be empty");
-            jsonResponse = gson.toJson(res);
-            out.write(jsonResponse);
+            out.write("Player name i Empty! error");
             return;
         }
         if(guess == null || guess.equals("")) {
-            res.addMessage("Guess cannot be empty");
-            jsonResponse = gson.toJson(res);
-            out.write(jsonResponse);
+            out.write("Guess is Empty! error");
             return;
         }
         Game currentGame = games.getGameById(gameID);
         Team teamTurn = currentGame.getNextTeam();
         if(!teamTurn.teamMember(playerName)){
-            res.addMessage("You are not in the playing team");
-            jsonResponse = gson.toJson(res);
-            out.write(jsonResponse);
+            out.write("Player " + playerName + " is not in the playing team");
+            return;
         }
-        EngineImpl engine = (EngineImpl) getServletContext().getAttribute("engine");
-        if(engine == null) {
-            EngineImpl e = new EngineImpl();
-            engine = e;
-            getServletContext().setAttribute("engine", e);
+        EngineImpl engine = new EngineImpl();
+        engine.playTurn(teamTurn,guessID,gameOver,res);
+        if(gameOver.getValue()){
+            out.write("GAME OVER!");
+            return;
         }
-        engine.playTurn(teamTurn,guessID,gameOver , res);
-        jsonResponse = gson.toJson(res);
-        out.write(jsonResponse);
+        for(String msg : res.getMessages()) {
+            out.write(msg);
+        }
     }
 }

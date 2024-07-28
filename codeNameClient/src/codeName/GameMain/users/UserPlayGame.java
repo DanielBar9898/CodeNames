@@ -47,7 +47,7 @@ public class UserPlayGame {
                     if (gameStatus.getGameStatus().equalsIgnoreCase("Active")) {
                         if (player.getTeam().equalsIgnoreCase(gameStatus.getCurrentTeamName())) { // if its is turn
                             if (player.getRole() == Player.Role.DEFINER) {
-                                //print the visible board
+                                displayBoard(player, gson);
                                 System.out.println("Put your hint:");
                                 hint = sc.nextLine();
                                 sc.nextInt();
@@ -55,11 +55,13 @@ public class UserPlayGame {
                                 numOfWords = sc.nextInt();
                                 response = new PlayTurn().playTurnDefiner(player, hint, numOfWords);
                             } else {
-                                //print the unvisible board
+                                displayBoard(player, gson);
                                 System.out.println("Put your Guess:");
                                 guess = sc.nextLine();
                                 sc.nextInt();
                                 response = new PlayTurn().playTurnGuesser(player, guess);
+                                if(response.equalsIgnoreCase("GAME OVER!"))
+                                    choice = 3;
                             }
                             System.out.println(response);
                         } else

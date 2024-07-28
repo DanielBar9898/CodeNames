@@ -42,7 +42,7 @@ public class UserMain {
                     try {
                         response = new PendingGames().showPendingGames();
                         printAllPendingGamesDetails(response);
-                        if (!response.equalsIgnoreCase("{\"message\":\"No pending games\"}")) {
+                        if (!response.startsWith("{\"message\":")) {
                             gameNumber = selectGame(sc);
                             if (gameNumber != 0) {
                                 teamNumber = selectTeam(sc, gameNumber);
