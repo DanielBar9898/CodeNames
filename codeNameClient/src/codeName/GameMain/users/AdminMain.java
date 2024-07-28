@@ -50,23 +50,7 @@ public class AdminMain {
                 case 3:
                     response = new ActiveGames().showActiveGames();
                     printActiveGameDetails(response);
-                    if (!response.startsWith("{\"message\":")) {
-                        System.out.println("Please select the number of the game you would like to watch:");
-                    sc.nextLine();
-                    fileName = sc.nextLine();
-                    System.out.println(new FileUpload(fileName).uploadFile());
-                    first = false;
-                    break;
-                case 2:
-                    response = new ShowAllGames().showAllGames();
-                    printGameDetails(response);
-                    first = false;
-                    break;
-                case 3:
-                    response = new ActiveGames().showActiveGames();
-                    printActiveGameDetails(response);
-                    if (!response.equalsIgnoreCase("{\"error\": \"No active games\"}")) {
-
+                    if (!response.equalsIgnoreCase("{\"message\": \"No active games\"}")) {
                         System.out.println("Please select the number of the game you would like to watch:");
                         sc.nextLine();
                         gameNumber = sc.nextInt();
