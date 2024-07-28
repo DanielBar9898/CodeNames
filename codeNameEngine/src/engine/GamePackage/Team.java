@@ -54,10 +54,10 @@ public class Team {
 
     public void addPlayerToTeam(Player player) {
         if (player.getRole() == Player.Role.DEFINER && getActiveDefiners() < numOfDefiners) {
-            Definers definersPlayer = new Definers(player.getName(), player.getRole(), player.getSerialGameNumber(), player.getTeam());
+            Definers definersPlayer = new Definers(player.getName(), player.getRole(), player.getSerialGameNumber(), player.getTeamOfPlayer());
             definers.add(definersPlayer);
         } else if (player.getRole() == Player.Role.GUESSER && getActiveGuessers() < numOfGuessers) {
-            Guessers guessersPlayer = new Guessers(player.getName(), player.getRole(), player.getSerialGameNumber(),player.getTeam());
+            Guessers guessersPlayer = new Guessers(player.getName(), player.getRole(), player.getSerialGameNumber(),player.getTeamOfPlayer());
             guessers.add(guessersPlayer);
         } else {
             throw new IllegalArgumentException("Player role is not recognized or team is full");

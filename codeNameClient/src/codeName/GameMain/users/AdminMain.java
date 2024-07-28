@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import engine.GamePackage.Player;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.InputMismatchException;
@@ -29,6 +30,7 @@ public class AdminMain {
         boolean exit = false;
         boolean first = true;
         while(!exit) {
+            showAdminMenu();
             if(!first){
                 showAdminMenu();
                 choice = getValidChoice(sc);
@@ -36,11 +38,13 @@ public class AdminMain {
             }
             switch (choice) {
                 case 1:
-                    System.out.println("Enter XML file path:");
-                    sc.nextLine();
-                    fileName = sc.nextLine();
-                    System.out.println(new FileUpload(fileName).uploadFile());
-                    first = false;
+                    sc.nextLine(); // Consume newline left-over
+                    fileName = getValidXmlFilePath(sc);
+                    try {
+                        System.out.println(new FileUpload(fileName).uploadFile());
+                    } catch (FileNotFoundException e) {
+                        System.out.println("File not found: " + fileName + ". Please enter a valid file path.");
+                    }
                     break;
                 case 2:
                     response = new ShowAllGames().showAllGames();
@@ -75,6 +79,7 @@ public class AdminMain {
                     System.out.println(response+"Bye Bye");
                     exit = true;
                     exit();
+                    break;
             }
         }
     }
@@ -84,7 +89,7 @@ public class AdminMain {
         return gameDTO.getGameSerialNumber();
     }
 
-    private static void printGameDetails(String jsonResponse) {
+    protected static void printGameDetails(String jsonResponse) {
         Gson gson = new Gson();
         try {
             // Check if the response is an array or an object
@@ -195,6 +200,19 @@ public class AdminMain {
             }
         }
         return choice;
+    }
+    private static String getValidXmlFilePath(Scanner sc) {
+        String filePath;
+        while (true) {
+            System.out.println("Enter XML file path:");
+            filePath = sc.nextLine();
+            if (filePath.endsWith(".xml")) {
+                break;
+            } else {
+                System.out.println("Invalid file path. Please enter a valid XML file path ending with .xml:");
+            }
+        }
+        return filePath;
     }
 
     public static void showAdminMenu() {

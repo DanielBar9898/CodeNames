@@ -9,18 +9,17 @@ public class Player {
     private String name;
     private int serialGameNumber;
     private Role role;
-    private String team;
+    private String teamOfPlayer;
 
-    public Player(String name, Role role, int serialGameNumber, String team) {
+    public Player(String name, Role role, int serialGameNumber, String teamNameOfPlayer) {
         this.name = name;
-        this.serialGameNumber=serialGameNumber;
+        this.serialGameNumber = serialGameNumber;
         this.role = role;
-        this.team = team;
-
+        this.teamOfPlayer = teamNameOfPlayer;
     }
 
-    public String getTeam() {
-        return team;
+    public String getTeamOfPlayer() {
+        return teamOfPlayer;
     }
 
     public String getName() {
@@ -34,5 +33,4 @@ public class Player {
     public Role getRole() {
         return role;
     }
-
 }
