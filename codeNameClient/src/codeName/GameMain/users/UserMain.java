@@ -31,50 +31,53 @@ public class UserMain {
         boolean newGame = false;
         int gameNumber = 0, teamNumber;
         showUserMenu();
-        int choice = sc.nextInt();
-        switch (choice) {
-            case 1:
-                System.out.println(new ShowAllGames().showAllGames());
-                break;
-            case 2:
-                try {
-                    response = new PendingGames().showPendingGames();
-                    printAllPendingGamesDetails(response);
-                    if (!response.equalsIgnoreCase("{\"message\":\"No pending games\"}")) {
-                        gameNumber = selectGame(sc);
-                        if (gameNumber != 0) {
-                            teamNumber = selectTeam(sc, gameNumber);
-                            if (teamNumber != 0) {
-                                String role = selectRole(sc, gameNumber, teamNumber);
-                                if (!role.isEmpty()) {
-                                    response = new JoinGame().joinGame(username, gameNumber, teamNumber, role);
-                                    System.out.println(response);
-                                    String teamName = extractTeamNameFromResponse(response);
-                                    if(role.equalsIgnoreCase("Guesser"))
-                                        player= new Player(username,Player.Role.GUESSER,gameNumber,teamName);
-                                    else
-                                        player= new Player(username,Player.Role.DEFINER,gameNumber,teamName);
-                                    newGame = true;
+        boolean exit = false;
+        while(!exit) {
+            int choice = getValidChoice(sc);
+            switch (choice) {
+                case 1:
+                    System.out.println(new ShowAllGames().showAllGames());
+                    break;
+                case 2:
+                    try {
+                        response = new PendingGames().showPendingGames();
+                        printAllPendingGamesDetails(response);
+                        if (!response.equalsIgnoreCase("{\"message\":\"No pending games\"}")) {
+                            gameNumber = selectGame(sc);
+                            if (gameNumber != 0) {
+                                teamNumber = selectTeam(sc, gameNumber);
+                                if (teamNumber != 0) {
+                                    String role = selectRole(sc, gameNumber, teamNumber);
+                                    if (!role.isEmpty()) {
+                                        response = new JoinGame().joinGame(username, gameNumber, teamNumber, role);
+                                        System.out.println(response);
+                                        String teamName = extractTeamNameFromResponse(response);
+                                        if (role.equalsIgnoreCase("Guesser"))
+                                            player = new Player(username, Player.Role.GUESSER, gameNumber, teamName);
+                                        else
+                                            player = new Player(username, Player.Role.DEFINER, gameNumber, teamName);
+                                        newGame = true;
+                                    } else {
+                                        System.out.println("Role selection canceled.");
+                                    }
                                 } else {
-                                    System.out.println("Role selection canceled.");
+                                    System.out.println("Team selection canceled.");
                                 }
                             } else {
-                                System.out.println("Team selection canceled.");
+                                System.out.println("Game selection canceled.");
                             }
-                        } else {
-                            System.out.println("Game selection canceled.");
                         }
+                    } catch (IOException e) {
+                        System.out.println("Error: " + e.getMessage());
                     }
-                } catch (IOException e) {
-                    System.out.println("Error: " + e.getMessage());
-                }
-                break;
-            case 3:
-                System.out.println("Thank you for playing!");
-                exit();
-        }
-        if (newGame) {
-            new UserPlayGame().userGameMenu(player);
+                    break;
+                case 3:
+                    System.out.println("Thank you for playing!");
+                    exit();
+            }
+            if (newGame) {
+                new UserPlayGame().userGameMenu(player);
+            }
         }
     }
 
@@ -259,7 +262,24 @@ public class UserMain {
         GameDTO game = gson.fromJson(jsonResponse, GameDTO.class);
         printPendingDetails(game);
     }
-
+    private static int getValidChoice(Scanner sc) {
+        int choice = 0;
+        boolean valid = false;
+        while (!valid) {
+            try {
+                choice = sc.nextInt();
+                if (choice >= 1 && choice <= 3) {
+                    valid = true;
+                } else {
+                    System.out.println("Invalid input. Please enter a number between 1 and 4:");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number between 1 and 4:");
+                sc.next(); // Clear the invalid input
+            }
+        }
+        return choice;
+    }
     private static void printPendingDetails(GameDTO game) {
 
         System.out.println("1. Game name: " + game.getName());
