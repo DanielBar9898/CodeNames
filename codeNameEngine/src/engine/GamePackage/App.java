@@ -78,6 +78,14 @@ public class App {
         return hasAdmin;
     }
 
+    public boolean hasActiveGame(){
+        for(Game g : games){
+            if(g.isActive()){
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     public int hashCode() {
         return userNames.hashCode();

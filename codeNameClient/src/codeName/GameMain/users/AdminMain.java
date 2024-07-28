@@ -49,7 +49,7 @@ public class AdminMain {
                 case 3:
                     response = new ActiveGames().showActiveGames();
                     printActiveGameDetails(response);
-                    if (!response.equalsIgnoreCase("{\"error\": \"No active games\"}")) {
+                    if (!response.startsWith("{\"message\":")) {
                         System.out.println("Please select the number of the game you would like to watch:");
                         sc.nextLine();
                         gameNumber = sc.nextInt();
