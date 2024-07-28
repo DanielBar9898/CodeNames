@@ -57,7 +57,7 @@ public class ServletUtils {
 			GameDTO gameDTO = new GameDTO(
 					game.getName(),
 					game.getBlackWordsCount(),
-					game.getGameWordsCount(),
+					game.getNumOfWordsInSingleGame(),
 					game.isActive(),
 					game.getDictName(),
 					teamDTOs,
@@ -120,7 +120,7 @@ public class ServletUtils {
 		for (Word word : board.getWords()) {
 			WordDTO wordDTO = new WordDTO(
 					word.toString(),
-					word.getColor().toString(),
+					word.getWordType(),
 					word.isFound(),
 					word.getSerialNumber()
 			);

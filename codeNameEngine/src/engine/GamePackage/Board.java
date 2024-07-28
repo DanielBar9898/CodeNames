@@ -47,6 +47,10 @@ public class Board {
             wordsSet.add(randomWord);
         }
     }
+    public int getNumOfTotalWords(){
+        return numOfTotalWords;
+    }
+
 
     public void printTheBoard(boolean Hidden) {
 
@@ -142,17 +146,17 @@ public class Board {
         Word w = null;
         int serial = 1;
         for (int i = 0; i < this.numOfBlackWords; i++) {
-            wordList.remove(0).setTeamWord("Black");
+            wordList.remove(0).setWordType("Black");
         }
         for(Team team : teams){
             for(int i =0;i<team.getWordsToGuess();i++){
                 w = wordList.remove(0);
-                w.setTeamWord(team.getTeamName());
+                w.setWordType(team.getTeamName());
                 team.addWordToGuess(w);
             }
         }
         for(Word remainingWords : wordList){
-            remainingWords.setTeamWord("Neutral");
+            remainingWords.setWordType("Neutral");
         }
         for(Word word: wordsSet){
             word.setSerialNumber(serial);
@@ -214,7 +218,7 @@ public class Board {
     public Set<Word> getBlackWords(){
         Set<Word> blackWords = new HashSet<>(numOfBlackWords);
         for(Word word : wordsSet){
-            if(word.getTeamWord().equalsIgnoreCase("Black")){
+            if(word.getWordType().equalsIgnoreCase("Black")){
                 blackWords.add(word);
             }
         }

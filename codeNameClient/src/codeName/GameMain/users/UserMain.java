@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import DTO.GameDTO;
 import DTO.TeamDTO;
 import engine.GamePackage.Player;
-import jakarta.servlet.http.HttpServletResponse;
 
+import java.sql.Struct;
 import java.util.InputMismatchException;
 
 import java.io.IOException;
@@ -49,10 +49,11 @@ public class UserMain {
                                 if (!role.isEmpty()) {
                                     response = new JoinGame().joinGame(username, gameNumber, teamNumber, role);
                                     System.out.println(response);
+                                    String teamName = extractTeamNameFromResponse(response);
                                     if(role.equalsIgnoreCase("Guesser"))
-                                        player= new Player(username,Player.Role.GUESSER,gameNumber);
+                                        player= new Player(username,Player.Role.GUESSER,gameNumber,teamName);
                                     else
-                                        player= new Player(username,Player.Role.DEFINER,gameNumber);
+                                        player= new Player(username,Player.Role.DEFINER,gameNumber,teamName);
                                     newGame = true;
                                 } else {
                                     System.out.println("Role selection canceled.");
@@ -122,6 +123,7 @@ public class UserMain {
     private int selectTeam(Scanner sc, int gameNumber) {
         int teamNumber = 0;
         boolean validInput = false;
+
         while (!validInput) {
             System.out.println("Please select the number of the team you would like to join (or 0 to cancel):");
             try {
@@ -227,6 +229,15 @@ public class UserMain {
 
         return username;
     }
+    private String extractTeamNameFromResponse(String response) {
+        String[] parts = response.split(" ");
+        for (int i = 0; i < parts.length; i++) {
+            if (parts[i].equalsIgnoreCase("team")) {
+                return parts[i + 1]; // The name of the team is the word after "team"
+            }
+        }
+        return "";
+    }
 
     public static void showUserMenu(){
         System.out.println("User Menu:\n");
@@ -254,7 +265,7 @@ public class UserMain {
         System.out.println("1. Game name: " + game.getName());
         System.out.println("2. Game status: " + (game.isActive() ? "Active" : "Pending"));
         System.out.println("3. Board details: " + game.getNumRows() + "X" + game.getNumCols());
-        System.out.println("4. Normal words: " + game.getGameWordsCount() + ", Black words: " + game.getBlackWordsCount());
+        System.out.println("4. Regular words: " + game.getGameWordsCount() + ", Black words: " + game.getBlackWordsCount());
         System.out.println("5. Teams details:");
 
         int teamIndex = 1;

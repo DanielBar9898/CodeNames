@@ -12,7 +12,7 @@ public class GameDTO {
     private int gameSerialNumber;
     private int numRows;
     private int numCols;
-    private int gameSetSize;
+    private int numOfWordsInSingleGame;
 
     public GameDTO(String name, int blackWordsCount, int gameWordsCount, boolean active, String dictName, ArrayList<TeamDTO> teams, int gameSerialNumber, int numRows, int numCols, int wordsSize) {
         this.name = name;
@@ -24,7 +24,7 @@ public class GameDTO {
         this.gameSerialNumber = gameSerialNumber;
         this.numRows = numRows;
         this.numCols = numCols;
-        this.gameSetSize = wordsSize;
+        this.numOfWordsInSingleGame = wordsSize;
     }
 
     // Getters and Setters
@@ -46,5 +46,5 @@ public class GameDTO {
     public void setNumRows(int numRows) { this.numRows = numRows; }
     public int getNumCols() { return numCols; }
     public void setNumCols(int numCols) { this.numCols = numCols; }
-    public int getGameSetSize() { return gameSetSize; }
+    public int getNumOfWordsInSingleGame() { return numOfWordsInSingleGame; }
 }

@@ -60,11 +60,9 @@ public class JoinGameServlet extends HttpServlet {
                 return;
             }
 
-            Player player = new Player(username, role,gameNumber);
+            Player player = new Player(username, role,gameNumber,selectedTeam.getTeamName());
             selectedTeam.addPlayerToTeam(player);
-            if ((selectedTeam.getActiveGuessers()== selectedTeam.getNumOfGuessers())&& (selectedTeam.getActiveDefiners()== selectedTeam.getNumOfDefiners())) {
-                selectedGame.setActive(true);
-            }
+            selectedGame.checkAndActivateGame();
 
             out.print("User " + username + " has joined team " + selectedTeam.getTeamName() + " as a " + role);
 
