@@ -54,10 +54,10 @@ public class Team {
 
     public void addPlayerToTeam(Player player) {
         if (player.getRole() == Player.Role.DEFINER && getActiveDefiners() < numOfDefiners) {
-            Definers definersPlayer = new Definers(player.getName(), player.getRole(), player.getSerialGameNumber());
+            Definers definersPlayer = new Definers(player.getName(), player.getRole(), player.getSerialGameNumber(), player.getTeam());
             definers.add(definersPlayer);
         } else if (player.getRole() == Player.Role.GUESSER && getActiveGuessers() < numOfGuessers) {
-            Guessers guessersPlayer = new Guessers(player.getName(), player.getRole(), player.getSerialGameNumber());
+            Guessers guessersPlayer = new Guessers(player.getName(), player.getRole(), player.getSerialGameNumber(),player.getTeam());
             guessers.add(guessersPlayer);
         } else {
             throw new IllegalArgumentException("Player role is not recognized or team is full");
@@ -76,7 +76,12 @@ public Guessers getGuesser(){
         }
         return null;
 }
-
+public boolean isFull() {
+    if (numOfDefiners == getActiveDefiners() && numOfGuessers == getActiveGuessers())
+        return true;
+    else
+        return false;
+}
     public void printTeamTurn(){
         System.out.println("Its "+teamName.toString()+" turn");
     }

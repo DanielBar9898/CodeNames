@@ -12,7 +12,7 @@ public class Word {
     private boolean found ;
     private static int serialNumber = 1;
     private int wordSerialNumber;
-    private String teamWord;
+    private String wordType;
 
     public Word(String word) {
         this.word = word;
@@ -37,8 +37,8 @@ public class Word {
         }
     }
 
-    public void setTeamWord(String teamWord){
-        this.teamWord = teamWord;
+    public void setWordType(String wordType){
+        this.wordType = wordType;
     }
     public int getSerialNumber() {
         return wordSerialNumber;
@@ -79,8 +79,8 @@ public class Word {
     public cardColor getColor() {
         return color;
     }
-    public String getTeamWord(){
-        return this.teamWord;
+    public String getWordType(){
+        return this.wordType;
     }
     public boolean isFound() {
         return found;
