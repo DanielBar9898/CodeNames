@@ -36,7 +36,7 @@ public class UserMain {
             int choice = getValidChoice(sc);
             switch (choice) {
                 case 1:
-                    System.out.println(new ShowAllGames().showAllGames());
+                    AdminMain.printGameDetails(new ShowAllGames().showAllGames());
                     break;
                 case 2:
                     try {

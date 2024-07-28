@@ -45,7 +45,7 @@ public class UserPlayGame {
                     break;
                 case 2:
                     if (gameStatus.getGameStatus().equalsIgnoreCase("Active")) {
-                        if (player.getTeam().equalsIgnoreCase(gameStatus.getCurrentTeamName())) { // if its is turn
+                        if (player.getTeamOfPlayer().equalsIgnoreCase(gameStatus.getCurrentTeamName())) { // if its is turn
                             if (player.getRole() == Player.Role.DEFINER) {
                                 displayBoard(player, gson);
                                 System.out.println("Put your hint:");
