@@ -42,5 +42,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="gson-2.8.8" level="project" />
+    <orderEntry type="library" name="OkHttp" level="project" />
   </component>
 </module>

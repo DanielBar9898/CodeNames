@@ -44,6 +44,7 @@ public class AdminMain {
                     } catch (FileNotFoundException e) {
                         System.out.println("File not found: " + fileName + ". Please enter a valid file path.");
                     }
+                    first = false;
                     break;
                 case 2:
                     response = new ShowAllGames().showAllGames();
@@ -53,7 +54,7 @@ public class AdminMain {
                 case 3:
                     response = new ActiveGames().showActiveGames();
                     printActiveGameDetails(response);
-                    if (!response.equalsIgnoreCase("{\"message\": \"No active games\"}")) {
+                    if (!response.startsWith("{\"message\":")) {
                         System.out.println("Please select the number of the game you would like to watch:");
                         sc.nextLine();
                         gameNumber = sc.nextInt();
@@ -216,7 +217,7 @@ public class AdminMain {
 
     public static void showAdminMenu() {
         System.out.println("Admin Menu:\n");
-        System.out.println("1.Load XML+TXT file\n2.Show active games info\n" +
+        System.out.println("1.Load XML+TXT file\n2.Show loaded games info\n" +
                 "3.Watch an active game\n4.Exit\nPlease enter your choice:");
     }
 }

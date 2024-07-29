@@ -12,7 +12,6 @@ public class Board {
     int numOfBlackWords;
     int numOfRegularWords;
     int numofTotalWords;
-
     public Board(ECNBoard board) {
         ECNLayout e = board.getECNLayout();
         numRows = e.getRows();
@@ -82,7 +81,7 @@ public class Board {
                     Word currWord = wordsList.get(itrWords);
                     if (currWord != null) {
                         if(Hidden) {
-                            /*currWord.found();*/
+                            currWord.found();
                             if(currWord.isFound()) {
                                 printInfoVisibleBoard(currWord);
                             }
@@ -92,7 +91,7 @@ public class Board {
 
                         }
                         else{
-                        printInfoVisibleBoard(currWord);}
+                            printInfoVisibleBoard(currWord);}
                         itrWords++;
                     }
                 }
@@ -134,11 +133,11 @@ public class Board {
             System.out.print("V");
             charCount++;
         }
-            int numSpaces = (15 - charCount);
-            String spaces = String.format("%" + numSpaces + "s", "");
-            // Print the string containing 25 spaces
-            System.out.print(spaces);
-            System.out.print("|");
+        int numSpaces = (15 - charCount);
+        String spaces = String.format("%" + numSpaces + "s", "");
+        // Print the string containing 25 spaces
+        System.out.print(spaces);
+        System.out.print("|");
     }
 
     public void printWord(Word currWord){
@@ -231,5 +230,3 @@ public class Board {
         return blackWords;
     }
 }
-
-

@@ -47,11 +47,6 @@ public class Team {
                 "d. Number of definers: " + numOfDefiners + ", Definers registered: " + getActiveDefiners() + "\n\n";
     }
 
-    public void showTeamWordsState(){
-        System.out.println("So far the team guessed correctly "+wordsGuessed+"/"+wordsToGuess+" words");
-    }
-
-
     public void addPlayerToTeam(Player player) {
         if (player.getRole() == Player.Role.DEFINER && getActiveDefiners() < numOfDefiners) {
             Definers definersPlayer = new Definers(player.getName(), player.getRole(), player.getSerialGameNumber(), player.getTeamOfPlayer());
