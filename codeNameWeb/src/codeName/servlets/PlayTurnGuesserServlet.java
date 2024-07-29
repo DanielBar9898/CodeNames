@@ -15,13 +15,13 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
-@WebServlet(name = "playTurn" , urlPatterns = "/playTurnGuesser")
+@WebServlet(name = "playTurnGuesser", urlPatterns = "/playTurnGuesser")
 public class PlayTurnGuesserServlet extends HttpServlet {
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Response res = new Response();
-        Gson gson = new Gson();
-        String jsonResponse;
         App games = (App) getServletContext().getAttribute("allGames");
         if(games == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -32,9 +32,7 @@ public class PlayTurnGuesserServlet extends HttpServlet {
         String gameNum = request.getParameter("gameNumber");
         String guess = request.getParameter("guess");
         int gameID = Integer.parseInt(gameNum);
-        int guessID = Integer.parseInt(guess);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
+        List<Integer> gueesesIndex = parseNumbers(guess);
         PrintWriter out = response.getWriter();
         if(playerName == null || playerName.equals("")) {
             out.write("Player name i Empty! error");
@@ -45,13 +43,13 @@ public class PlayTurnGuesserServlet extends HttpServlet {
             return;
         }
         Game currentGame = games.getGameById(gameID);
-        Team teamTurn = currentGame.getNextTeam();
-        if(!teamTurn.teamMember(playerName)){
-            out.write("Player " + playerName + " is not in the playing team");
-            return;
-        }
+        ArrayList<Team> teams = currentGame.getTeams();
+        Team teamTurn = currentGame.getCurrentTeam();
         EngineImpl engine = new EngineImpl();
-        engine.playTurn(teamTurn,guessID,gameOver,res);
+        for(Integer index : gueesesIndex) {
+            engine.playTurn(teamTurn,index,gameOver,res,currentGame.getGameBoard(),teams);
+        }
+        currentGame.nextTurn();
         if(gameOver.getValue()){
             out.write("GAME OVER!");
             return;
@@ -59,5 +57,26 @@ public class PlayTurnGuesserServlet extends HttpServlet {
         for(String msg : res.getMessages()) {
             out.write(msg);
         }
+    }
+    public static List<Integer> parseNumbers(String numbers) {
+        // Split the string by commas
+        String[] numberStrings = numbers.split(",");
+
+        // Create a List to hold the integers
+        List<Integer> numberList = new ArrayList<>();
+
+        // Parse each number and add it to the list
+        for (String numberString : numberStrings) {
+            try {
+                numberList.add(Integer.parseInt(numberString.trim()));
+            } catch (NumberFormatException e) {
+                // Handle the case where the string is not a valid integer
+                System.err.println("Invalid number format: " + numberString);
+                // Optionally, you can decide what to do in case of an error
+                // For example, you can skip this number or assign a default value
+                // numberList.add(0); // Uncomment to assign 0 as a default value
+            }
+        }
+        return numberList;
     }
 }

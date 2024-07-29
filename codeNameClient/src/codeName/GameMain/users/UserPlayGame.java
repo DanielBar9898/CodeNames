@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import engine.GamePackage.Board;
 import engine.GamePackage.Player;
 import engine.GamePackage.Word;
+import codeName.HttpClient.*;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -20,18 +21,18 @@ public class UserPlayGame {
     public void userGameMenu(Player player) throws IOException {
         System.out.println("Welcome!\n");
         showUserPlayGameMenu();
-        boolean Hidden=true,Visible=false;
         Scanner sc = new Scanner(System.in);
         int numOfWords;
         String response , hint , guess;
         int choice;
         boolean first = true;
         choice = sc.nextInt();
+        String teamName = player.getTeamOfPlayer();
         if(player == null){
             return;
         }
-        boolean GameOver = false;
-        while(!GameOver){
+        boolean gameOver = false;
+        while(!gameOver){
             if(!first){
                 showUserPlayGameMenu();
                 choice = sc.nextInt();
@@ -47,27 +48,50 @@ public class UserPlayGame {
                         displayBoard(player, gson);
                     break;
                 case 2:
-                if(gameStatus.getGameStatus().equalsIgnoreCase("Active")){
-                        if(player.getRole() == Player.Role.DEFINER){
-                            displayBoard(player, gson);
-                            System.out.println("Put your hint:");
-                            hint = sc.nextLine();
-                            sc.nextInt();
-                            System.out.println("How many words related?");
-                            numOfWords = sc.nextInt();
-                            response = new PlayTurn().playTurnDefiner(player, hint, numOfWords);
-                        }
+                    if(gameStatus.getGameStatus().equalsIgnoreCase("Active")){
+                        if(!new PlayingTeamTurn().playingTeamTurn(player.getSerialGameNumber()).
+                                equalsIgnoreCase(player.getTeamOfPlayer()))
+                            System.out.println("Its not your team turn!");
                         else{
-                            displayBoard(player, gson);
-                            System.out.println("Put your Guess:");
-                            guess = sc.nextLine();
-                            sc.nextInt();
-                            response = new PlayTurn().playTurnGuesser(player, guess);
+                            response = new GetNextTurn().nextTurn(teamName);
+                            if(player.getRole() == Player.Role.DEFINER){
+                                if(response.equalsIgnoreCase("Definer")){
+                                    displayBoard(player, gson);
+                                    sc.nextLine();
+                                    System.out.println("Put your hint:");
+                                    hint = sc.nextLine();
+                                    System.out.println("How many words related?");
+                                    numOfWords = getValidatedInteger();
+                                    response = new PlayTurn().playTurnDefiner(player, hint, numOfWords);
+                                    new SwitchTurn().switchTurn(teamName);
+                                    System.out.println(response);
+                                }
+                                else{
+                                    System.out.println("Wait for a guesser to guess!");
+                                }
+                            }
+                            else{
+                                if(response.equalsIgnoreCase("Guesser")){
+                                    System.out.println("The hint is: "+new DisplayHint().displayHint(teamName));
+                                    displayBoard(player, gson);
+                                    System.out.println("Put your Guess\n" +
+                                            "if its one word just put the index of the word, otherwise " +
+                                            "make sure to put ',' between the indexes " +
+                                            "i.e x,y,z");
+                                    sc.nextLine();
+                                    guess = sc.nextLine();
+                                    response = new PlayTurn().playTurnGuesser(player, guess);
+                                    if(response.equalsIgnoreCase("GAME OVER!")){
+                                        gameOver = true;
+                                    }
+                                    System.out.println(response);
+                                    new SwitchTurn().switchTurn(teamName);
+                                }
+                                else{
+                                    System.out.println("Wait for a definer to give a hint!");
+                                }
+                            }
                         }
-                        if(response.equalsIgnoreCase("GAME OVER!")){
-                            choice = 3;
-                        }
-                        System.out.println(response);
                     }
                     else{
                         System.out.println("The game is not active yet!");
@@ -120,5 +144,21 @@ public class UserPlayGame {
 
         Board board = new Board(boardDTO.getNumRows(), boardDTO.getNumCols(), boardDTO.getNumOfBlackWords(), boardDTO.getNumOfTotalWords(), words);
         return board;
+    }
+    public static int getValidatedInteger() {
+        Scanner scanner = new Scanner(System.in);
+        Integer userInput = null;
+
+        while (userInput == null) {
+            System.out.print("Please enter an integer: ");
+            String input = scanner.nextLine();
+            try {
+                userInput = Integer.parseInt(input.trim());
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid input. Please enter an integer.");
+            }
+        }
+
+        return userInput;
     }
 }

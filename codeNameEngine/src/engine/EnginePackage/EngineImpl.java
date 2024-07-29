@@ -1,5 +1,6 @@
 package engine.EnginePackage;
 
+import engine.GamePackage.Board;
 import engine.GamePackage.Game;
 import engine.GamePackage.Team;
 import engine.GamePackage.Word;
@@ -74,40 +75,45 @@ public class EngineImpl implements Engine {
     }
 
     public synchronized void playTurn(Team teamTurn, String hint, int numOfWordsToGuess , Response response){
-        response.addMessage("So far the team guessed correctly "+teamTurn.getWordsGuessed()+"/"+teamTurn.getWordsToGuess()+" words");
-        response.addMessage("The hint is : " + hint + ", number of words related are : " + numOfWordsToGuess);
+        teamTurn.getDefiner().setHint(hint);
+        teamTurn.getDefiner().setWordsHint(numOfWordsToGuess);
     }
 
 
-    public synchronized boolean playTurn(Team teamTurn, int wordIndex, BooleanWrapper gameOver, Response response) {
+    public synchronized boolean playTurn(Team teamTurn, int wordIndex, BooleanWrapper gameOver, Response response, Board teamBoard,
+                                         ArrayList<Team> teams) {
         boolean otherTeamWord;
         Word currWord;
         Set<Word> wordsSet = teamTurn.getWordsNeedToGuess();
-        currWord = teamTurn.getTeamBoard().getWordBySerialNumber(wordIndex);
-
+        currWord = teamBoard.getWordBySerialNumber(wordIndex);
+        response.addMessage("For the guess index number : " + wordIndex+"\n");
         if (currWord == null) {
-            response.addMessage("Invalid word index!");
+            response.addMessage("Invalid word index!\n");
             otherTeamWord = false;
         } else if (currWord.isFound()) {
-            response.addMessage("Someone already guessed the word, please choose another one:");
+            response.addMessage("Someone already guessed the word\n");
             otherTeamWord = false;
         } else if (wordsSet.contains(currWord)) {
-            response.addMessage("It's your team word! You've guessed correctly and earned your team 1 point!");
+            response.addMessage("It's your team word! You've guessed correctly and earned your team 1 point!\n");
             teamTurn.guessedRight();
             otherTeamWord = true;
-        } else if (currWord.getColor() == Word.cardColor.BLACK) {
-            response.addMessage("OMG! It's a black word, game over!");
+        } else if (currWord.getWordType().equalsIgnoreCase("Black")) {
+            response.addMessage("OMG! It's a black word, game over!\n");
             gameOver.setValue(true);
             response.setGameOver(true);
             otherTeamWord = false;
-        } else if (currWord.getColor() == Word.cardColor.NEUTRAL) {
+        } else if (currWord.getWordType().equalsIgnoreCase("Neutral\n")) {
             response.addMessage("It's a neutral word");
             otherTeamWord = false;
-        } else {//Need to implement how to increase the points of the opposite team
-            response.addMessage("It's a word of the other team! You've earned them a point!");
+        } else {
+            response.addMessage("It's a word of the other team! You've earned them a point!\n");
+            for(Team t : teams){
+                if(currWord.getWordType().equalsIgnoreCase(t.getTeamName())){
+                    t.guessedRight();
+                }
+            }
             otherTeamWord = true;
         }
-
         currWord.found();
         response.setOtherTeamWord(otherTeamWord);
         return otherTeamWord;

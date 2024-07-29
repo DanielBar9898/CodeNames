@@ -1,7 +1,10 @@
 package engine.EnginePackage;
 import codeName.utils.Response;
+import engine.GamePackage.Board;
 import engine.GamePackage.Game;
 import engine.GamePackage.Team;
+
+import java.util.ArrayList;
 
 public interface Engine {
 
@@ -15,7 +18,8 @@ public interface Engine {
 
     public void playTurn(Team teamTurn, String hint, int numOfWordsToGuess , Response response);
 
-    public boolean playTurn(Team teamTurn , int wordIndex, BooleanWrapper gameOver , Response response);
+    public boolean playTurn(Team teamTurn , int wordIndex, BooleanWrapper gameOver , Response response, Board teamBoard,
+                            ArrayList<Team> teams);
 
     public void printGameStats(Game currentGame,boolean team1Turn);
 

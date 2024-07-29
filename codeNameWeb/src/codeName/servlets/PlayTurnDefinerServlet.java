@@ -15,12 +15,8 @@ import java.io.PrintWriter;
 
 @WebServlet(name = "playTurn" , urlPatterns = "/playTurnDefiner")
 public class PlayTurnDefinerServlet extends HttpServlet{
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        Gson gson = new Gson();
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Response res = new Response();
-        String jsonResponse;
         App games = (App) getServletContext().getAttribute("allGames");
         if(games == null) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -42,15 +38,9 @@ public class PlayTurnDefinerServlet extends HttpServlet{
             return;
         }
         Game currentGame = games.getGameById(gameID);
-        Team teamTurn = currentGame.getNextTeam();
-        if(!teamTurn.teamMember(playerName)){
-            out.write("Player " + playerName + " is not in the current playing team");
-            return;
-        }
+        Team teamTurn = currentGame.getCurrentTeam();
         EngineImpl engine = new EngineImpl();
         engine.playTurn(teamTurn , hint ,numOfWords , res);
-        for(String msg : res.getMessages()) {
-            out.write(msg);
-        }
+        out.write("Player " + playerName + " turn completed successfully!");
     }
 }
