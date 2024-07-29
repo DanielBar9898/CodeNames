@@ -85,21 +85,15 @@ public class Word {
     public boolean isFound() {
         return found;
     }
-    public String getCharColor(){
-        switch (this.color){
-            case TEAM1:
-                return "T1";
-
-            case TEAM2:
-                return "T2";
-
-            case NEUTRAL:
+    public String getCharWordType(){
+        switch (this.wordType){
+            case "Neutral":
                 return "N";
 
-            case BLACK:
+            case "Black":
                 return "Black";
 
         }
-        return null;
+        return this.wordType;
     }
 }
