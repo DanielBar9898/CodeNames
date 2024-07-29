@@ -31,6 +31,7 @@ public class Team {
 
     }
 
+
     public Board getTeamBoard() {
         return teamBoard;
     }
@@ -98,6 +99,13 @@ public boolean isFull() {
         return teamName;
     }
 
+    public void removePlayer(Player player) {
+        if (player.getRole() == Player.Role.GUESSER) {
+            guessers.remove(new Guessers(player.getName(), player.getRole(), player.getSerialGameNumber(), player.getTeamOfPlayer()));
+        } else if (player.getRole() == Player.Role.DEFINER) {
+            definers.remove(new Definers(player.getName(), player.getRole(), player.getSerialGameNumber(), player.getTeamOfPlayer()));
+        }
+    }
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

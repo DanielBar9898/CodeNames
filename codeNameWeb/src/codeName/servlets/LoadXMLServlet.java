@@ -41,7 +41,7 @@ public class LoadXMLServlet extends HttpServlet {
         currentGame.setBlackWords();
         currentGame.setFileName(filePath);
         if (currentGame.validateFile(response.getWriter())) {
-            allGames.setAdmin(true);
+            //allGames.setAdmin(true);
             allGames.addGame(currentGame);
             getServletContext().setAttribute("game", currentGame);
             response.getWriter().write("XML file loaded and validated successfully.");

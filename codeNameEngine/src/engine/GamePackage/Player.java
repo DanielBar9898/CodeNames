@@ -1,5 +1,7 @@
 package engine.GamePackage;
 
+import java.util.Objects;
+
 public class Player {
     public enum Role {
         GUESSER,
@@ -32,5 +34,20 @@ public class Player {
 
     public Role getRole() {
         return role;
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return serialGameNumber == player.serialGameNumber &&
+                Objects.equals(name, player.name) &&
+                role == player.role &&
+                Objects.equals(teamOfPlayer, player.teamOfPlayer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, serialGameNumber, role, teamOfPlayer);
     }
 }

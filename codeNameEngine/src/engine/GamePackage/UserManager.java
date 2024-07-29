@@ -1,4 +1,4 @@
-package engine.users;
+package engine.GamePackage;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,10 +12,8 @@ of the user of this class to handle the synchronization of isUserExists with oth
 public class UserManager {
 
     private final Set<String> usersSet;
-    private final boolean hasAdmin;
 
     public UserManager() {
-        hasAdmin = false;
         usersSet = new HashSet<>();
     }
 
@@ -33,9 +31,5 @@ public class UserManager {
 
     public boolean isUserExists(String username) {
         return usersSet.contains(username);
-    }
-
-    public boolean hasAdmin() {
-        return hasAdmin;
     }
 }

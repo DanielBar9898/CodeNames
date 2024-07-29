@@ -1,5 +1,4 @@
-package codeName.HttpClient;
-
+package codeName.HttpClient.Http;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -7,13 +6,13 @@ import java.io.IOException;
 import static codeName.Configuration.GameConfig.BASE_URL;
 import static codeName.Configuration.GameConfig.HTTP_CLIENT;
 
-public class JoinGame {
-    private final String RESOURCE = "/joinGame";
 
-    public String joinGame(String username, int gameNumber, int teamNumber, String role) throws IOException {
-        String url = BASE_URL + RESOURCE + "?username=" + username + "&gameNumber=" + gameNumber + "&teamNumber=" + teamNumber + "&role=" + role;
+public class ShowAllGames {
+    private final String RESOURCE = "/gamesInfo";
+
+    public String showAllGames() throws IOException {
         Request request = new Request.Builder()
-                .url(url)
+                .url(BASE_URL + RESOURCE)
                 .get()
                 .build();
 

@@ -2,6 +2,7 @@ package codeName.GameMain.users;
 
 import DTO.GameStatusDTO;
 import codeName.HttpClient.*;
+import codeName.HttpClient.Http.*;
 import com.google.gson.Gson;
 import DTO.GameDTO;
 import DTO.TeamDTO;
@@ -16,11 +17,11 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-import static javafx.application.Platform.exit;
-
 public class AdminMain {
 
     public static void main(String[] args) throws IOException {
+        AdminLog adminLogin = new AdminLog();
+        adminLogin();
         showAdminMenu();
         Scanner sc = new Scanner(System.in);
         String fileName = null;
@@ -29,6 +30,7 @@ public class AdminMain {
         int gameNumber;
         boolean exit = false;
         boolean first = true;
+
         while(!exit) {
             if(!first){
                 showAdminMenu();
@@ -74,13 +76,41 @@ public class AdminMain {
                     }
                     break;
                 case 4:
-                    response = new AdminDisconnect().disconnectAdmin();
-                    System.out.println(response+"Bye Bye");
                     exit = true;
-                    exit();
                     break;
             }
         }
+        response =  adminLogin.adminLogout();
+        System.out.println(response+". Thank you.");
+    }
+    public static void adminLogin() {
+        Scanner sc = new Scanner(System.in);
+        AdminLog adminLogin = new AdminLog();
+        String adminName = null;
+        boolean success = false;
+
+        do {
+            System.out.println("Please enter admin name:");
+            adminName = sc.nextLine();
+            if (adminName == null || adminName.trim().isEmpty() || adminName.matches("\\d+")) {
+                System.out.println("Invalid admin name. Please enter a valid name that is not just numbers.");
+                continue;
+            }
+            try {
+                String response = adminLogin.adminLogin(adminName);
+                System.out.println( response);
+                if(response.equalsIgnoreCase("An admin is already logged in, please try again later.")) {
+                    System.exit(0);
+                }
+                if (response.contains("Admin logged in successfully")) {
+                    success = true;
+                }
+
+            } catch (IOException e) {
+                System.out.println("Error occurred while logging in as admin. Please try again.");
+                e.printStackTrace();
+            }
+        } while (!success);
     }
     private static int extractGameSerialNumber(String jsonResponse) {
         Gson gson = new Gson();

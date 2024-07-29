@@ -3,7 +3,10 @@ package codeName.GameMain.users;
 import DTO.BoardDTO;
 import DTO.GameStatusDTO;
 import DTO.WordDTO;
-import codeName.HttpClient.*;
+import codeName.HttpClient.Http.GameStatus;
+import codeName.HttpClient.Http.GetBoard;
+import codeName.HttpClient.Http.PlayTurn;
+import codeName.HttpClient.Http.UserLogout;
 import com.google.gson.Gson;
 import engine.GamePackage.Board;
 import engine.GamePackage.Player;
@@ -13,8 +16,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
-
-import static com.sun.javafx.application.PlatformImpl.exit;
 
 public class UserPlayGame {
     public void userGameMenu(Player player) throws IOException {
@@ -49,8 +50,8 @@ public class UserPlayGame {
                 case 2:
                     if (gameStatus.getGameStatus().equalsIgnoreCase("Active")) {
                         if (player.getTeamOfPlayer().equalsIgnoreCase(gameStatus.getCurrentTeamName())) { // if its is turn
+                            displayBoard(player, gson);
                             if (player.getRole() == Player.Role.DEFINER) {
-                                //print the visible board
                                 System.out.println("Put your hint:");
                                 hint = sc.nextLine();
                                 sc.nextInt();
@@ -72,10 +73,21 @@ public class UserPlayGame {
                         System.out.println("This game is not active yet. Please Wait.");
                     break;
                 case 3:
+                    response = new UserLogout().logoutPlayer(player);
+                    System.out.println(response);
                     System.out.println("Thank you for playing game!");
                     System.exit(0);
                     break;
             }
+        }
+    }
+    public void logoutUser(Player player) throws IOException {
+        UserLogout userLogout = new UserLogout();
+        try {
+            String response = userLogout.logoutPlayer(player);
+            System.out.println(response);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     public static void showUserPlayGameMenu(){

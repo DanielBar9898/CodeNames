@@ -1,13 +1,10 @@
 package codeName.GameMain.users;
-import codeName.HttpClient.*;
+import codeName.HttpClient.Http.*;
 import com.google.gson.Gson;
 import DTO.GameDTO;
 import DTO.TeamDTO;
 import engine.GamePackage.Player;
 
-import java.lang.reflect.Array;
-import java.sql.Struct;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 import java.io.IOException;
@@ -74,6 +71,8 @@ public class UserMain {
                     }
                     break;
                 case 3:
+                    response = new UserLogout().logoutUser(username);
+                    System.out.println(response);
                     System.out.println("Thank you for playing!");
                     exit=true;
                     System.exit(0);
@@ -218,7 +217,7 @@ public class UserMain {
         return role;
     }
 
-    public String getUsername() {
+    public static String getUsername() {
         String username = null;
         boolean isUnique = false;
         Scanner sc = new Scanner(System.in);
@@ -228,11 +227,13 @@ public class UserMain {
             System.out.println("Please enter your username:");
             username = sc.nextLine();
             try {
+
                 String response = userNameList.addUserName(username);
                 if (response.contains("Username added successfully")) {
                     isUnique = true;
+
                 } else {
-                    System.out.println("Username already exists, please choose another username.");
+                    System.out.println(response);
                 }
             } catch (IOException e) {
                 System.out.println("Error occurred while checking username. Please try again.");
