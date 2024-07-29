@@ -1,3 +1,4 @@
+/*
 package codeName.servlets;
 
 import engine.GamePackage.App;
@@ -48,3 +49,4 @@ public class UserNameListServlet extends HttpServlet {
         out.flush();
     }
 }
+*/

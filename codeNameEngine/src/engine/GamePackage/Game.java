@@ -86,6 +86,20 @@ public class Game {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+     public void removePlayer(Player player) {
+        Team team= getTeamByName(player.getTeamOfPlayer());
+        if (team != null) {
+            team.removePlayer(player);
+        }
+     }
+     public Team getTeamByName(String nameTeam){
+        for (Team team : teams) {
+            if (team.getTeamName().equals(nameTeam)) {
+                return team;
+            }
+        }
+        return null;
+     }
 
     public synchronized boolean validateFile(PrintWriter out) {
         boolean cardsCount, blackCardsCount, sumOfCards, rowsColumns, teamNames, guessersDefiners;
@@ -318,12 +332,4 @@ public class Game {
         return gameBoard.getWords().size();
     }
 
-    public Team getTeamByName(String teamName){
-        for(Team t : teams){
-            if(t.getTeamName().equals(teamName)){
-                return t;
-            }
-        }
-        return null;
-    }
 }

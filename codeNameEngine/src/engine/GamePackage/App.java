@@ -1,18 +1,49 @@
 package engine.GamePackage;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 public class App {
     private Set<Game> games;
-    private Set<String> userNames;
     boolean hasAdmin;
+    private String adminName;
 
     public App() {
         games = new HashSet<>();
-        userNames = new HashSet<>();
         hasAdmin = false;
+        adminName = null;
+    }
+
+    public synchronized boolean loginAdmin(String adminName) {
+        if (!hasAdmin) {
+            this.adminName = adminName;
+            this.hasAdmin = true;
+            return true;
+        }
+        return false;
+    }
+    public void removePlayer(Player player) {
+        Game game=getGameById(player.getSerialGameNumber());
+        if (game!=null) {
+            game.removePlayer(player);
+        }
+    }
+
+    public synchronized boolean logoutAdmin() {
+        if (hasAdmin) {
+            this.adminName = null;
+            this.hasAdmin = false;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isHasAdmin() {
+        return hasAdmin;
+    }
+
+    public String getAdminName() {
+        return adminName;
     }
 
     public synchronized boolean addGame(Game game) {
@@ -26,18 +57,6 @@ public class App {
             }
         }
         return true;
-    }
-
-    public void addUserName(String userName) {
-        userNames.add(userName);
-    }
-
-    public void removeUserName(String userName) {
-        userNames.remove(userName);
-    }
-
-    public Set<String> getUserNames() {
-        return userNames;
     }
 
     public Game getGameById(int gameId) {
@@ -86,8 +105,5 @@ public class App {
         }
         return false;
     }
-    @Override
-    public int hashCode() {
-        return userNames.hashCode();
-    }
+
 }
