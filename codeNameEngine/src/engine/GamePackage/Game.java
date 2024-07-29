@@ -92,7 +92,7 @@ public class Game {
             team.removePlayer(player);
         }
      }
-     private Team getTeamByName(String nameTeam){
+     public Team getTeamByName(String nameTeam){
         for (Team team : teams) {
             if (team.getTeamName().equals(nameTeam)) {
                 return team;
@@ -332,12 +332,4 @@ public class Game {
         return gameBoard.getWords().size();
     }
 
-    public Team getTeamByName(String teamName){
-        for(Team t : teams){
-            if(t.getTeamName().equals(teamName)){
-                return t;
-            }
-        }
-        return null;
-    }
 }

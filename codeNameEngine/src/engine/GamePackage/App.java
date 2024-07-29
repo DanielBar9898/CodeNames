@@ -105,8 +105,5 @@ public class App {
         }
         return false;
     }
-    @Override
-    public int hashCode() {
-        return userNames.hashCode();
-    }
+
 }
