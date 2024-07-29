@@ -10,35 +10,36 @@ public class Board {
     int numRows;
     int numCols;
     int numOfBlackWords;
-    int numOfTotalWords;
+    int numOfRegularWords;
+
 
     public Board(ECNBoard board) {
         ECNLayout e = board.getECNLayout();
         numRows = e.getRows();
         numCols = e.getColumns();
         numOfBlackWords = board.getBlackCardsCount();
-        numOfTotalWords = board.getCardsCount();
-        wordsSet = new HashSet<>(numOfTotalWords);
+        numOfRegularWords = board.getCardsCount();
+        wordsSet = new HashSet<>();
     }
     public Board(Board otherBoard) {
         numRows = otherBoard.numRows;
         numCols = otherBoard.numCols;
         numOfBlackWords = otherBoard.numOfBlackWords;
-        numOfTotalWords = otherBoard.numOfTotalWords;
+        numOfRegularWords = otherBoard.numOfRegularWords;
         wordsSet = new HashSet<>(otherBoard.getWords());
     }
-    public Board(int numRows, int numCols, int numOfBlackWords, int numOfTotalWords, Set<Word> words) {
+    public Board(int numRows, int numCols, int numOfBlackWords, int numOfRegularWords, Set<Word> words) {
         this.numRows = numRows;
         this.numCols = numCols;
         this.numOfBlackWords = numOfBlackWords;
-        this.numOfTotalWords = numOfTotalWords;
+        this.numOfRegularWords = numOfRegularWords;
         this.wordsSet = words;
     }
     public void addWordsToBoard(Set<Word> wordSet) {
         List<Word> wordList = new ArrayList<>(wordSet);
         Random random = new Random();
         // Ensure numWords does not exceed the size of the given word set
-        numOfTotalWords = Math.min(numOfTotalWords, wordSet.size());
+        int numOfTotalWords = numOfBlackWords+ numOfRegularWords;
 
         // Add random words to the board
         while(wordsSet.size() < numOfTotalWords) {
@@ -47,8 +48,8 @@ public class Board {
             wordsSet.add(randomWord);
         }
     }
-    public int getNumOfTotalWords(){
-        return numOfTotalWords;
+    public int getNumOfRegularWords(){
+        return numOfRegularWords;
     }
 
 
@@ -75,7 +76,7 @@ public class Board {
                     Word currWord = shuffleWordsSet.get(itrWords);
                     if (currWord != null) {
                         if(Hidden) {
-                            /*currWord.found();*/
+                            currWord.found();
                             if(currWord.isFound()) {
                                 printInfoVisibleBoard(currWord);
                             }
@@ -85,7 +86,7 @@ public class Board {
 
                         }
                         else{
-                        printInfoVisibleBoard(currWord);}
+                            printInfoVisibleBoard(currWord);}
                         itrWords++;
                     }
                 }
@@ -124,11 +125,11 @@ public class Board {
             System.out.print("V");
             charCount++;
         }
-            int numSpaces = (15 - charCount);
-            String spaces = String.format("%" + numSpaces + "s", "");
-            // Print the string containing 25 spaces
-            System.out.print(spaces);
-            System.out.print("|");
+        int numSpaces = (15 - charCount);
+        String spaces = String.format("%" + numSpaces + "s", "");
+        // Print the string containing 25 spaces
+        System.out.print(spaces);
+        System.out.print("|");
     }
 
     public void printWord(Word currWord){
@@ -179,7 +180,7 @@ public class Board {
         return numCols;
     }
     public int getNumOfWords(){
-        return numOfTotalWords;
+        return numOfRegularWords;
     }
     public Word getWordBySerialNumber(int serialNumber) {
         for (Word word : wordsSet) {
@@ -225,5 +226,3 @@ public class Board {
         return blackWords;
     }
 }
-
-

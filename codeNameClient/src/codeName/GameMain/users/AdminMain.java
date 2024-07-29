@@ -30,7 +30,6 @@ public class AdminMain {
         boolean exit = false;
         boolean first = true;
         while(!exit) {
-            showAdminMenu();
             if(!first){
                 showAdminMenu();
                 choice = getValidChoice(sc);
@@ -45,6 +44,7 @@ public class AdminMain {
                     } catch (FileNotFoundException e) {
                         System.out.println("File not found: " + fileName + ". Please enter a valid file path.");
                     }
+                    first = false;
                     break;
                 case 2:
                     response = new ShowAllGames().showAllGames();

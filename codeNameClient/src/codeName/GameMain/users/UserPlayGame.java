@@ -44,28 +44,30 @@ public class UserPlayGame {
                         displayBoard(player, gson);
                     break;
                 case 2:
-                    if (gameStatus.getGameStatus().equalsIgnoreCase("Active")) {
-                        if (player.getTeamOfPlayer().equalsIgnoreCase(gameStatus.getCurrentTeamName())) { // if its is turn
-                            if (player.getRole() == Player.Role.DEFINER) {
-                                displayBoard(player, gson);
-                                System.out.println("Put your hint:");
-                                hint = sc.nextLine();
-                                sc.nextInt();
-                                System.out.println("How many words related?");
-                                numOfWords = sc.nextInt();
-                                response = new PlayTurn().playTurnDefiner(player, hint, numOfWords);
-                            } else {
-                                displayBoard(player, gson);
-                                System.out.println("Put your Guess:");
-                                guess = sc.nextLine();
-                                sc.nextInt();
-                                response = new PlayTurn().playTurnGuesser(player, guess);
-                                if(response.equalsIgnoreCase("GAME OVER!"))
-                                    choice = 3;
-                            }
-                            System.out.println(response);
-                        } else
-                            System.out.println("This game is not active yet. Please Wait.");
+                    if(gameStatus.getGameStatus().equalsIgnoreCase("Active")){
+                        if(player.getRole() == Player.Role.DEFINER){
+                            displayBoard(player, gson);
+                            System.out.println("Put your hint:");
+                            hint = sc.nextLine();
+                            sc.nextInt();
+                            System.out.println("How many words related?");
+                            numOfWords = sc.nextInt();
+                            response = new PlayTurn().playTurnDefiner(player, hint, numOfWords);
+                        }
+                        else{
+                            displayBoard(player, gson);
+                            System.out.println("Put your Guess:");
+                            guess = sc.nextLine();
+                            sc.nextInt();
+                            response = new PlayTurn().playTurnGuesser(player, guess);
+                        }
+                        if(response.equalsIgnoreCase("GAME OVER!")){
+                            choice = 3;
+                        }
+                        System.out.println(response);
+                    }
+                    else{
+                        System.out.println("The game is not active yet!");
                     }
                     break;
                 case 3:

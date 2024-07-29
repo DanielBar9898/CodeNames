@@ -36,7 +36,7 @@ public class Game {
         name = game.getName();
     }
     public int getNumOfWordsInSingleGame(){
-        return gameBoard.getNumOfTotalWords();
+        return gameBoard.numOfRegularWords;
     }
 
     public void setDictName(String dictName) {
@@ -176,7 +176,7 @@ public class Game {
         result.append("3.Number of rows X columns is : " + gameBoard.getNumRows() + "X" + gameBoard.getNumCols() + "\n");
         result.append("4.The name of the dictionary file is: " + dictName);
         result.append("and the number of all words available for choice is ").append(gameWords.size()).append("\n");
-        result.append("5. In this game there will be ").append(gameBoard.numOfTotalWords - gameBoard.numOfBlackWords).append(" normal words ")
+        result.append("5. In this game there will be ").append(gameBoard.getNumOfRegularWords()).append(" normal words ")
                 .append("and ").append(gameBoard.numOfBlackWords).append(" black words\n");
         result.append("6.There is " + teams.size() + " teams, here are their information:\n");
         for (Team t : teams) {

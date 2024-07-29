@@ -30,9 +30,9 @@ public class UserMain {
         Player player = null;
         boolean newGame = false;
         int gameNumber = 0, teamNumber;
-        showUserMenu();
         boolean exit = false;
         while(!exit) {
+            showUserMenu();
             int choice = getValidChoice(sc);
             switch (choice) {
                 case 1:
