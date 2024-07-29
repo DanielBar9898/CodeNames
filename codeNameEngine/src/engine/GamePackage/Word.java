@@ -1,5 +1,7 @@
 package engine.GamePackage;
 
+import java.util.Objects;
+
 public class Word {
     public enum cardColor{
         TEAM1,
@@ -18,23 +20,6 @@ public class Word {
         this.word = word;
         wordSerialNumber = serialNumber;
         serialNumber++;
-    }
-
-    public void setColor(Word.cardColor cardColor){
-        switch (cardColor){
-            case TEAM1:
-                this.color = cardColor.TEAM1;
-                break;
-            case TEAM2:
-                this.color = cardColor.TEAM2;
-                break;
-            case NEUTRAL:
-                this.color = cardColor.NEUTRAL;
-                break;
-            case BLACK:
-                this.color = cardColor.BLACK;
-                break;
-        }
     }
 
     public void setWordType(String wordType){
@@ -68,8 +53,16 @@ public class Word {
         return word.hashCode();
     }
 
-    public boolean equals(Word word){
-        return this.word.equals(word.word);
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Word other = (Word) obj;
+        return Objects.equals(word, other.word);
     }
 
     public void checkWord(Word word,Team team){
@@ -85,6 +78,7 @@ public class Word {
     public boolean isFound() {
         return found;
     }
+
     public String getCharWordType(){
         switch (this.wordType){
             case "Neutral":

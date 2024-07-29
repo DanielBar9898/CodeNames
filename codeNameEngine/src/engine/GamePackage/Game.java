@@ -317,4 +317,13 @@ public class Game {
     public int getWordsSize(){
         return gameBoard.getWords().size();
     }
+
+    public Team getTeamByName(String teamName){
+        for(Team t : teams){
+            if(t.getTeamName().equals(teamName)){
+                return t;
+            }
+        }
+        return null;
+    }
 }

@@ -13,8 +13,8 @@ public class PlayTurn {
 
     public String playTurnGuesser(Player player , String guess) throws IOException{
         RESOURCE+="Guesser";
-        String url = BASE_URL + RESOURCE +"?gameNumber" + player.getSerialGameNumber() + "&name" + player.getName() +
-                "&guess" + guess;
+        String url = BASE_URL + RESOURCE +"?gameNumber=" + player.getSerialGameNumber() + "&name=" + player.getName() +
+                "&guess=" + guess;
 
         Request request = new Request.Builder()
                 .url(url)
@@ -31,8 +31,8 @@ public class PlayTurn {
     }
     public String playTurnDefiner(Player player , String hint , int numOfWords) throws IOException{
         RESOURCE+="Definer";
-        String url = BASE_URL + RESOURCE +"?gameNumber" + player.getSerialGameNumber() + "&name" + player.getName() +
-                "&hint" + hint + "&numOfWords" + numOfWords;
+        String url = BASE_URL + RESOURCE +"?gameNumber=" + player.getSerialGameNumber() + "&name=" + player.getName() +
+                "&hint=" + hint + "&numOfWords=" + numOfWords;
 
         Request request = new Request.Builder()
                 .url(url)

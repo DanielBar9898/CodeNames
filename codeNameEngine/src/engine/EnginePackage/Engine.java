@@ -1,5 +1,6 @@
 package engine.EnginePackage;
 import codeName.utils.Response;
+import engine.GamePackage.Board;
 import engine.GamePackage.Game;
 import engine.GamePackage.Team;
 
@@ -15,7 +16,7 @@ public interface Engine {
 
     public void playTurn(Team teamTurn, String hint, int numOfWordsToGuess , Response response);
 
-    public boolean playTurn(Team teamTurn , int wordIndex, BooleanWrapper gameOver , Response response);
+    public boolean playTurn(Team teamTurn , int wordIndex, BooleanWrapper gameOver , Response response, Board teamBoard);
 
     public void printGameStats(Game currentGame,boolean team1Turn);
 

@@ -15,6 +15,7 @@ public class Team {
     private int numOfTurns;
     private int numOfGuessers;
     private int numOfDefiners;
+    private Player.Role nextRoleToPlay;
    // private int activeGuessers;
     // private int activeDefiners; function get active!
 
@@ -28,7 +29,7 @@ public class Team {
         wordsGuessed = 0;
         guessers = new HashSet<>();
         definers = new HashSet<>();
-
+        nextRoleToPlay = Player.Role.DEFINER;
     }
 
     public Board getTeamBoard() {
@@ -58,20 +59,19 @@ public class Team {
             throw new IllegalArgumentException("Player role is not recognized or team is full");
         }
     }
-
     public Definers getDefiner() { // the first one!
         if (!definers.isEmpty()) {
             return definers.iterator().next();
         }
         return null;
     }
-public Guessers getGuesser(){
+    public Guessers getGuesser(){
         if (!guessers.isEmpty()) {
             return guessers.iterator().next();
         }
         return null;
 }
-public boolean isFull() {
+    public boolean isFull() {
     if (numOfDefiners == getActiveDefiners() && numOfGuessers == getActiveGuessers())
         return true;
     else
@@ -142,5 +142,18 @@ public boolean isFull() {
      }
      return false;
     }
-
+    public void switchTurn(){
+        if(nextRoleToPlay == Player.Role.GUESSER){
+            nextRoleToPlay = Player.Role.DEFINER;
+        }
+        else {
+            nextRoleToPlay = Player.Role.GUESSER;
+        }
+    }
+    public String getNextRoleToPlay(){
+        if(nextRoleToPlay == Player.Role.GUESSER){
+            return "Guesser";
+        }
+        return "Definer";
+    }
 }

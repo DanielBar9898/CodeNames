@@ -43,9 +43,14 @@ public class UserMain {
                 case 2:
                     try {
                         response = new PendingGames().showPendingGames();
-                        printAllPendingGamesDetails(response);
-                        if (!response.startsWith("{\"message\":")) {
-                            gameNumber = selectGame(sc);
+                        if(response.startsWith("{\"e")){
+                            System.out.println(response);
+                        }
+                        else{
+                            printAllPendingGamesDetails(response);
+                        }
+                        if (!response.startsWith("{\"e")) {
+                            gameNumber = selectGame(sc,response);
 
                             if (gameNumber != 0) {
                                 teamNumber = selectTeam(sc, gameNumber);

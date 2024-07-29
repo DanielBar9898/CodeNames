@@ -20,10 +20,12 @@ public class Definers extends Player {
     }
 
 
-    public void getHint() {
-        System.out.println("The hint is " + hint +",number of words related is " + wordsHint);
+    public String getHint() {
+        return hint;
     }
-
+    public int getWordsHint() {
+        return wordsHint;
+    }
 
     public void printFullBoard(){
         return;
