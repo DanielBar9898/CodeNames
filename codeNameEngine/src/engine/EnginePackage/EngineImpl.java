@@ -80,7 +80,8 @@ public class EngineImpl implements Engine {
     }
 
 
-    public synchronized boolean playTurn(Team teamTurn, int wordIndex, BooleanWrapper gameOver, Response response, Board teamBoard) {
+    public synchronized boolean playTurn(Team teamTurn, int wordIndex, BooleanWrapper gameOver, Response response, Board teamBoard,
+                                         ArrayList<Team> teams) {
         boolean otherTeamWord;
         Word currWord;
         Set<Word> wordsSet = teamTurn.getWordsNeedToGuess();
@@ -104,8 +105,13 @@ public class EngineImpl implements Engine {
         } else if (currWord.getWordType().equalsIgnoreCase("Neutral\n")) {
             response.addMessage("It's a neutral word");
             otherTeamWord = false;
-        } else {//Need to implement how to increase the points of the opposite team
+        } else {
             response.addMessage("It's a word of the other team! You've earned them a point!\n");
+            for(Team t : teams){
+                if(currWord.getWordType().equalsIgnoreCase(t.getTeamName())){
+                    t.guessedRight();
+                }
+            }
             otherTeamWord = true;
         }
         currWord.found();

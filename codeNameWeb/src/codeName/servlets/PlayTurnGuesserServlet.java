@@ -43,10 +43,11 @@ public class PlayTurnGuesserServlet extends HttpServlet {
             return;
         }
         Game currentGame = games.getGameById(gameID);
+        ArrayList<Team> teams = currentGame.getTeams();
         Team teamTurn = currentGame.getCurrentTeam();
         EngineImpl engine = new EngineImpl();
         for(Integer index : gueesesIndex) {
-            engine.playTurn(teamTurn,index,gameOver,res,currentGame.getGameBoard());
+            engine.playTurn(teamTurn,index,gameOver,res,currentGame.getGameBoard(),teams);
         }
         currentGame.nextTurn();
         if(gameOver.getValue()){
