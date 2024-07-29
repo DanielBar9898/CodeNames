@@ -14,12 +14,13 @@ public class Game {
     private boolean active;
     private String dictName;
     private ArrayList<Team> teams;
-    private int gameSerialNumber = 0;
+    private static int nextSerialNumber = 1;
+    private int gameSerialNumber;
     private Team currentTeam;
-
+    private String fileName;
 
     public Game(ECNGame game) {
-        this.gameSerialNumber += 1;
+        this.gameSerialNumber = nextSerialNumber++;
         int blackCards = game.getECNBoard().getBlackCardsCount();
         int cards = game.getECNBoard().getCardsCount();
         gameWords = new HashSet<>(blackCards);
@@ -81,6 +82,9 @@ public class Game {
 
     public String getName() {
         return name;
+    }
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public synchronized boolean validateFile(PrintWriter out) {

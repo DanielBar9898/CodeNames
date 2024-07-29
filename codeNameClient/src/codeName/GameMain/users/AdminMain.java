@@ -110,7 +110,7 @@ public class AdminMain {
                     System.out.println("6. Teams details:");
                     int teamIndex=1;
                     for (TeamDTO team : game.getTeams()) {
-                        System.out.println("  Team " + teamIndex + ":");
+                        System.out.println("Team " + teamIndex + ":");
                         System.out.println("  a. Team name: " + team.getTeamName());
                         System.out.println("  b. Words to guess: " + team.getWordsToGuess());
                         System.out.println("  c. Definers required: " + team.getNumOfDefiners());

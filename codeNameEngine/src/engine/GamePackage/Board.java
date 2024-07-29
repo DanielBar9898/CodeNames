@@ -11,8 +11,7 @@ public class Board {
     int numCols;
     int numOfBlackWords;
     int numOfRegularWords;
-
-
+    int numofTotalWords;
     public Board(ECNBoard board) {
         ECNLayout e = board.getECNLayout();
         numRows = e.getRows();
@@ -34,6 +33,7 @@ public class Board {
         this.numOfBlackWords = numOfBlackWords;
         this.numOfRegularWords = numOfRegularWords;
         this.wordsSet = words;
+        numofTotalWords=numOfBlackWords+numOfRegularWords;
     }
     public void addWordsToBoard(Set<Word> wordSet) {
         List<Word> wordList = new ArrayList<>(wordSet);
@@ -55,15 +55,20 @@ public class Board {
 
     public void printTheBoard(boolean Hidden) {
 
-        List<Word> shuffleWordsSet = new ArrayList<>(wordsSet);
+        List<Word> wordsList = new ArrayList<>(wordsSet);
+        wordsList.sort(Comparator.comparingInt(Word::getSerialNumber));
         int itrWords=0;
         boolean wordsLine=true;
-        System.out.println("----------------------------------------------------------------------------------");
+              for  (int i=0; i<numCols; i++) {
+                  System.out.print("-----------------");
+              }
+        System.out.println();
+        //System.out.println("----------------------------------------------------------------------------------");
         for (int i = 0; i < numRows*2; i++) {
             System.out.print("| ");
             if (wordsLine) {
                 for (int j = 0; j < numCols; j++) {
-                    Word currWord = shuffleWordsSet.get(itrWords);
+                    Word currWord = wordsList.get(itrWords);
                     if (currWord != null) {
                         printWord(currWord);
                         itrWords++;
@@ -73,7 +78,7 @@ public class Board {
             }
             else {
                 for (int j = 0; j < numCols; j++) {
-                    Word currWord = shuffleWordsSet.get(itrWords);
+                    Word currWord = wordsList.get(itrWords);
                     if (currWord != null) {
                         if(Hidden) {
                             currWord.found();
@@ -97,17 +102,20 @@ public class Board {
                 itrWords=itrWords-numCols;
             }
             else{
-                System.out.print("\n----------------------------------------------------------------------------------");
+                System.out.println();
+                for  (int J=0; J<numCols; J++) {
+                    System.out.print("-----------------");
+                }
             }
             System.out.println();
         }
 
     }
     public void printInfoVisibleBoard(Word currWord){
-        int charCount= calculateChars(currWord.getSerialNumber(),currWord.getCharColor());
+        int charCount= calculateChars(currWord.getSerialNumber(),currWord.getCharWordType());
         System.out.print("(" + currWord.getSerialNumber()+ ")");
         System.out.print(currWord.getCharFound());
-        System.out.print("(" + currWord.getCharColor() + ")");
+        System.out.print("(" + currWord.getCharWordType() + ")");
         int numSpaces=(15-charCount);
         String spaces = String.format("%" + numSpaces + "s", "");
         // Print the string containing 25 spaces
@@ -173,6 +181,10 @@ public class Board {
         return numOfBlackWords;
     }
 
+    public int getNumofTotalWords() {
+        return numofTotalWords;
+    }
+
     public int getNumRows(){
         return numRows;
     }
@@ -198,20 +210,12 @@ public class Board {
         else
             counterChars = counterChars + 2;
 
-        switch (color) {
-            case "T1":
-                counterChars = counterChars + 2;
-                break;
-            case "T2":
-                counterChars = counterChars + 2;
-                break;
-            case "N":
-                counterChars++;
-                break;
-            case "Black":
-                counterChars = counterChars + 5;
-                break;
-        }
+        if(color.equals("Black"))
+            counterChars = counterChars + 5;
+        else if (color.equals("N"))
+            counterChars++;
+        else
+            counterChars = counterChars + 2;
 
         return counterChars;
     }

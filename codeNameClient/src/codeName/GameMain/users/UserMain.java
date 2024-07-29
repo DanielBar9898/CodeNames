@@ -5,13 +5,15 @@ import DTO.GameDTO;
 import DTO.TeamDTO;
 import engine.GamePackage.Player;
 
+import java.lang.reflect.Array;
 import java.sql.Struct;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 import java.io.IOException;
 import java.util.Scanner;
 
-import static javafx.application.Platform.exit;
+
 
 public class UserMain {
     public static void main(String[] args) {
@@ -44,6 +46,7 @@ public class UserMain {
                         printAllPendingGamesDetails(response);
                         if (!response.startsWith("{\"message\":")) {
                             gameNumber = selectGame(sc);
+
                             if (gameNumber != 0) {
                                 teamNumber = selectTeam(sc, gameNumber);
                                 if (teamNumber != 0) {
@@ -73,18 +76,24 @@ public class UserMain {
                     break;
                 case 3:
                     System.out.println("Thank you for playing!");
-                    exit();
+                    exit=true;
+                    System.exit(0);
+                    break;
             }
             if (newGame) {
                 new UserPlayGame().userGameMenu(player);
+                newGame = false;
             }
         }
     }
 
 
-    private int selectGame(Scanner sc) {
+    private int selectGame(Scanner sc, String response) throws IOException {
         int gameNumber = 0;
         boolean validInput = false;
+        Gson gson = new Gson();
+        GameDTO[] games = gson.fromJson(response, GameDTO[].class);
+
         while (!validInput) {
             System.out.println("Please select the number of the game you would like to join (or 0 to cancel):");
             try {
@@ -94,8 +103,10 @@ public class UserMain {
                 if (selectedGameIndex == 0) {
                     return gameNumber; // Return 0 to cancel
                 }
+                if (selectedGameIndex <= games.length)
+                    gameNumber = games[selectedGameIndex - 1].getGameSerialNumber();
 
-                String gameDetails = new PendingGames().selectPendingGame(selectedGameIndex);
+                String gameDetails = new PendingGames().selectPendingGame(gameNumber);
 
                 // Check if the response contains an error message
                 if (gameDetails.contains("\"error\"")) {
@@ -107,7 +118,7 @@ public class UserMain {
                 printSingelPendingGameDetails(gameDetails);
 
                 // Parse the JSON response to get the game serial number
-                Gson gson = new Gson();
+
                 GameDTO game = gson.fromJson(gameDetails, GameDTO.class);
                 gameNumber = game.getGameSerialNumber();
 
@@ -155,7 +166,7 @@ public class UserMain {
                 sc.nextLine(); // Clear the invalid input
                 System.out.println("Invalid input. Please enter a valid team number.");
             } catch (IOException e) {
-                System.out.println("Team not found. Please enter a valid team number. ");
+                System.out.println("The Team you select cannot be selected. Please enter a valid team number. ");
             }
         }
         return teamNumber;
@@ -202,7 +213,7 @@ public class UserMain {
                 sc.nextLine(); // Clear the invalid input
                 System.out.println("Invalid input. Please enter 1 for Definer or 2 for Guesser.");
             } catch (IOException e) {
-                System.out.println("The role you selected cannot be selected. Please enter a valid role number.");
+                System.out.println("The role you select cannot be selected. Please enter a valid role number.");
             }
         }
         return role;
@@ -243,6 +254,7 @@ public class UserMain {
     }
 
     public static void showUserMenu(){
+        System.out.println("---------------------------------------------");
         System.out.println("User Menu:\n");
         System.out.println("1.Show All games info\n2.Join a game!\n" +
                 "3.Exit\nPlease enter your choice:");

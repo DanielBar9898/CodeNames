@@ -14,6 +14,8 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
+import static com.sun.javafx.application.PlatformImpl.exit;
+
 public class UserPlayGame {
     public void userGameMenu(Player player) throws IOException {
         System.out.println("Welcome!\n");
@@ -28,7 +30,8 @@ public class UserPlayGame {
         if(player == null){
             return;
         }
-        while(choice!= 3){
+        boolean GameOver = false;
+        while(!GameOver){
             if(!first){
                 showUserPlayGameMenu();
                 choice = sc.nextInt();
@@ -40,11 +43,11 @@ public class UserPlayGame {
             switch(choice) {
                 case 1:
                     printGameStatus(gameStatus);
-                    if (gameStatus.getGameStatus().equalsIgnoreCase("Active"))
+             //      if (gameStatus.getGameStatus().equalsIgnoreCase("Active"))
                         displayBoard(player, gson);
                     break;
                 case 2:
-                    if(gameStatus.getGameStatus().equalsIgnoreCase("Active")){
+                if(gameStatus.getGameStatus().equalsIgnoreCase("Active")){
                         if(player.getRole() == Player.Role.DEFINER){
                             displayBoard(player, gson);
                             System.out.println("Put your hint:");
@@ -71,6 +74,8 @@ public class UserPlayGame {
                     }
                     break;
                 case 3:
+                    System.out.println("Thank you for playing game!");
+                    System.exit(0);
                     break;
             }
         }
