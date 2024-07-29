@@ -28,6 +28,7 @@ public class UserPlayGame {
         boolean first = true;
         choice = sc.nextInt();
         String teamName = player.getTeamOfPlayer();
+        String playingTeam;
         if(player == null){
             return;
         }
@@ -48,14 +49,16 @@ public class UserPlayGame {
                         displayBoard(player, gson);
                     break;
                 case 2:
+                    playingTeam = new PlayingTeamTurn().playingTeamTurn(player.getSerialGameNumber());
                     if(gameStatus.getGameStatus().equalsIgnoreCase("Active")){
-                        if(!new PlayingTeamTurn().playingTeamTurn(player.getSerialGameNumber()).
+                        if(!playingTeam.
                                 equalsIgnoreCase(player.getTeamOfPlayer()))
-                            System.out.println("Its not your team turn!");
+                            System.out.println("Its not your team turn! its "+ playingTeam +" turn!");
                         else{
                             response = new GetNextTurn().nextTurn(teamName);
                             if(player.getRole() == Player.Role.DEFINER){
                                 if(response.equalsIgnoreCase("Definer")){
+//                                    printInfoOfTeam();
                                     displayBoard(player, gson);
                                     sc.nextLine();
                                     System.out.println("Put your hint:");
@@ -160,5 +163,8 @@ public class UserPlayGame {
         }
 
         return userInput;
+    }
+    public static void printInfoOfTeam (int gameNumber , String teamName) throws IOException {
+        System.out.println(new ShowTeamInfo().showTeamInfo(gameNumber , teamName));
     }
 }
