@@ -15,6 +15,7 @@ public class Guessers extends Player {
         return hiddenBoard;
     }
 
+
     public boolean checkGuess(List<Integer> wordsIndexes) {
         return false;
     }

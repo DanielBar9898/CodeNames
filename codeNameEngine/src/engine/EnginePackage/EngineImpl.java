@@ -5,7 +5,7 @@ import engine.GamePackage.Game;
 import engine.GamePackage.Team;
 import engine.GamePackage.Word;
 import engine.JAXBGenerated2.ECNGame;
-import engine.users.User;
+//import engine.users.User;
 import codeName.utils.Response;
 import com.google.gson.Gson;
 import javax.xml.bind.JAXBContext;
@@ -24,7 +24,7 @@ import java.util.Set;
 public class EngineImpl implements Engine {
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "engine.JAXBGenerated2";
     Set<Game> games;
-    Set<User> users;
+  //  Set<User> users;
 
     public Game loadXmlFile(String fileName){
             if(!(fileName.endsWith(".xml"))){

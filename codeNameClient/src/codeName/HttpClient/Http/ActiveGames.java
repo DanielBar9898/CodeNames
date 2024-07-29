@@ -1,6 +1,5 @@
-package codeName.HttpClient;
+package codeName.HttpClient.Http;
 
-import engine.GamePackage.Player;
 import okhttp3.*;
 
 import java.io.IOException;
@@ -8,16 +7,12 @@ import java.io.IOException;
 import static codeName.Configuration.GameConfig.BASE_URL;
 import static codeName.Configuration.GameConfig.HTTP_CLIENT;
 
-public class PlayTurn {
-    private String RESOURCE = "/playTurn";
+public class ActiveGames {
+    private final String RESOURCE = "/activeGame";
 
-    public String playTurnGuesser(Player player , String guess) throws IOException{
-        RESOURCE+="Guesser";
-        String url = BASE_URL + RESOURCE +"?gameNumber=" + player.getSerialGameNumber() + "&name=" + player.getName() +
-                "&guess=" + guess;
-
+    public String showActiveGames() throws IOException {
         Request request = new Request.Builder()
-                .url(url)
+                .url(BASE_URL + RESOURCE)
                 .get()
                 .build();
 
@@ -29,11 +24,8 @@ public class PlayTurn {
             return response.body().string();
         }
     }
-    public String playTurnDefiner(Player player , String hint , int numOfWords) throws IOException{
-        RESOURCE+="Definer";
-        String url = BASE_URL + RESOURCE +"?gameNumber=" + player.getSerialGameNumber() + "&name=" + player.getName() +
-                "&hint=" + hint + "&numOfWords=" + numOfWords;
-
+    public String selectActiveGame(int gameNumber) throws IOException {
+        String url = BASE_URL + RESOURCE + "?gameNumber=" + gameNumber;
         Request request = new Request.Builder()
                 .url(url)
                 .get()

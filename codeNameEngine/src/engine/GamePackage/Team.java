@@ -32,6 +32,7 @@ public class Team {
         nextRoleToPlay = Player.Role.DEFINER;
     }
 
+
     public Board getTeamBoard() {
         return teamBoard;
     }
@@ -93,6 +94,13 @@ public class Team {
         return teamName;
     }
 
+    public void removePlayer(Player player) {
+        if (player.getRole() == Player.Role.GUESSER) {
+            guessers.remove(new Guessers(player.getName(), player.getRole(), player.getSerialGameNumber(), player.getTeamOfPlayer()));
+        } else if (player.getRole() == Player.Role.DEFINER) {
+            definers.remove(new Definers(player.getName(), player.getRole(), player.getSerialGameNumber(), player.getTeamOfPlayer()));
+        }
+    }
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

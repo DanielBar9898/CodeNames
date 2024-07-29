@@ -2,9 +2,10 @@ package codeName.utils;
 
 import DTO.BoardDTO;
 import DTO.WordDTO;
+import engine.GamePackage.App;
 import engine.GamePackage.Board;
 import engine.GamePackage.Word;
-import engine.users.UserManager;
+import engine.GamePackage.UserManager;
 import jakarta.servlet.ServletContext;
 
 import com.google.gson.Gson;
@@ -22,7 +23,7 @@ public class ServletUtils {
 
 	private static final String USER_MANAGER_ATTRIBUTE_NAME = "userManager";
 	private static final String CHAT_MANAGER_ATTRIBUTE_NAME = "chatManager";
-
+	private static final String APP_ATTRIBUTE_NAME = "app";
 	/*
 	Note how the synchronization is done only on the question and\or creation of the relevant managers and once they exists -
 	the actual fetch of them is remained un-synchronized for performance POV
@@ -38,6 +39,16 @@ public class ServletUtils {
 		}
 		return (UserManager) servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME);
 	}
+
+	/*public static App getApp(ServletContext servletContext) {
+		synchronized (ServletUtils.class) {
+			if (servletContext.getAttribute(APP_ATTRIBUTE_NAME) == null) {
+				App app = new App();
+				servletContext.setAttribute(APP_ATTRIBUTE_NAME, app);
+			}
+		}
+		return (App) servletContext.getAttribute(APP_ATTRIBUTE_NAME);
+	}*/
 
 	public static String convertGamesToJson(Set<Game> games) {
 		List<GameDTO> gameDTOs = new ArrayList<>();
