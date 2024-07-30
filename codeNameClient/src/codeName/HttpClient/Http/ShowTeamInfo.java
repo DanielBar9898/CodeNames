@@ -1,17 +1,19 @@
-package codeName.HttpClient;
+package codeName.HttpClient.Http;
 
-import okhttp3.*;
+import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.IOException;
 
 import static codeName.Configuration.GameConfig.BASE_URL;
 import static codeName.Configuration.GameConfig.HTTP_CLIENT;
 
-public class DisplayHint {
-    private final String RESOURCE = "/displayHint";
+public class ShowTeamInfo {
+    private final String RESOURCE = "/teamInfo";
 
-    public String displayHint (String teamName)  throws IOException {
-        String url = BASE_URL + RESOURCE + "?teamName=" + teamName;
+    public String showTeamInfo(int gameNum , String teamName) throws IOException {
+        String url = BASE_URL + RESOURCE + "?gameID=" + gameNum + "&teamName=" + teamName;
         Request request = new Request.Builder()
                 .url(url)
                 .get()

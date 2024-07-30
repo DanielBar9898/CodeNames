@@ -90,4 +90,8 @@ public class Word {
         }
         return this.wordType;
     }
+
+    public int getLength(){
+        return this.word.length();
+    }
 }

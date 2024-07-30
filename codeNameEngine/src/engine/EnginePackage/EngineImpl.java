@@ -102,7 +102,7 @@ public class EngineImpl implements Engine {
             gameOver.setValue(true);
             response.setGameOver(true);
             otherTeamWord = false;
-        } else if (currWord.getWordType().equalsIgnoreCase("Neutral\n")) {
+        } else if (currWord.getWordType().equalsIgnoreCase("Neutral")) {
             response.addMessage("It's a neutral word");
             otherTeamWord = false;
         } else {

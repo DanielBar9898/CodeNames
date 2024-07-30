@@ -30,7 +30,8 @@ public class AdminMain {
         int gameNumber;
         boolean exit = false;
         boolean first = true;
-
+        boolean activeGame = true;
+        int subMenu;
         while(!exit) {
             if(!first){
                 showAdminMenu();
@@ -60,18 +61,24 @@ public class AdminMain {
                         System.out.println("Please select the number of the game you would like to watch:");
                         sc.nextLine();
                         gameNumber = sc.nextInt();
-
                         String gameResponse = new ActiveGames().selectActiveGame(gameNumber);
                         int gameSerialNumber = extractGameSerialNumber(gameResponse);
                         Player player = new Player("Admin", Player.Role.DEFINER, gameSerialNumber,null);
-                        if (gameSerialNumber != -1) {
-                            String gameStatusResponse = new GameStatus().getGameStatus(gameSerialNumber);
-                            Gson gson = new Gson();
-                            GameStatusDTO gameStatus = gson.fromJson(gameStatusResponse, GameStatusDTO.class);
-                            UserPlayGame.printGameStatus(gameStatus);
-                            UserPlayGame.displayBoard(player, gson);
-                        } else {
-                            System.out.println("Failed to extract game serial number.");
+                        while(activeGame){
+                            if (gameSerialNumber != -1) {
+                                String gameStatusResponse = new GameStatus().getGameStatus(gameSerialNumber);
+                                Gson gson = new Gson();
+                                GameStatusDTO gameStatus = gson.fromJson(gameStatusResponse, GameStatusDTO.class);
+                                UserPlayGame.printGameStatus(gameStatus);
+                                UserPlayGame.displayBoard(player, gson);
+                            } else {
+                                System.out.println("Failed to extract game serial number.");
+                            }
+                            showAdminSubMenu();
+                            subMenu = sc.nextInt();
+                            if(subMenu == 2){
+                                activeGame = false;
+                            }
                         }
                         first = false;
                     }
@@ -249,5 +256,8 @@ public class AdminMain {
         System.out.println("Admin Menu:\n");
         System.out.println("1.Load XML+TXT file\n2.Show loaded games info\n" +
                 "3.Watch an active game\n4.Exit\nPlease enter your choice:");
+    }
+    private static void showAdminSubMenu(){
+        System.out.println("Admin sub menu:\n1: show selected active game status\n2: exit active game watching");
     }
 }

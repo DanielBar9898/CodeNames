@@ -49,6 +49,7 @@ public class PlayTurnGuesserServlet extends HttpServlet {
         for(Integer index : gueesesIndex) {
             engine.playTurn(teamTurn,index,gameOver,res,currentGame.getGameBoard(),teams);
         }
+        teamTurn.makeTurn();
         currentGame.nextTurn();
         if(gameOver.getValue()){
             out.write("GAME OVER!");

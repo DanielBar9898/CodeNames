@@ -45,7 +45,9 @@ public class Board {
         while(wordsSet.size() < numOfTotalWords) {
             int randomIndex = random.nextInt(wordList.size());
             Word randomWord = wordList.get(randomIndex);
-            wordsSet.add(randomWord);
+            if(randomWord.getLength()<=13){
+                wordsSet.add(randomWord);
+            }
         }
     }
     public int getNumOfRegularWords(){

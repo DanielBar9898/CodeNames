@@ -16,7 +16,7 @@ import java.util.Set;
 public class ShowGamesInfoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         App games = (App) getServletContext().getAttribute("allGames");
-        if (games == null) {
+        if (games == null || games.getGames().isEmpty()) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("{\"message\":\"No games available\"}");
