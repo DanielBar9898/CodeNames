@@ -3,22 +3,14 @@ package codeName.GameMain.users;
 import DTO.BoardDTO;
 import DTO.GameStatusDTO;
 import DTO.WordDTO;
-import codeName.HttpClient.Http.GameStatus;
-import codeName.HttpClient.Http.GetBoard;
-import codeName.HttpClient.Http.PlayTurn;
-import codeName.HttpClient.Http.UserLogout;
+import codeName.HttpClient.Http.*;
 import com.google.gson.Gson;
 import engine.GamePackage.Board;
 import engine.GamePackage.Player;
 import engine.GamePackage.Word;
-import codeName.HttpClient.*;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
-
-import static com.sun.javafx.application.PlatformImpl.exit;
+import java.util.*;
 
 public class UserPlayGame {
     public void userGameMenu(Player player) throws IOException {
@@ -31,6 +23,7 @@ public class UserPlayGame {
         boolean first = true;
         choice = sc.nextInt();
         String teamName = player.getTeamOfPlayer();
+        String playingTeam;
         if(player == null){
             return;
         }
@@ -51,14 +44,16 @@ public class UserPlayGame {
                         displayBoard(player, gson);
                     break;
                 case 2:
+                    playingTeam = new PlayingTeamTurn().playingTeamTurn(player.getSerialGameNumber());
                     if(gameStatus.getGameStatus().equalsIgnoreCase("Active")){
-                        if(!new PlayingTeamTurn().playingTeamTurn(player.getSerialGameNumber()).
+                        if(!playingTeam.
                                 equalsIgnoreCase(player.getTeamOfPlayer()))
-                            System.out.println("Its not your team turn!");
+                            System.out.println("Its not your team turn! its "+ playingTeam +" turn!");
                         else{
                             response = new GetNextTurn().nextTurn(teamName);
                             if(player.getRole() == Player.Role.DEFINER){
                                 if(response.equalsIgnoreCase("Definer")){
+                                    printInfoOfTeam(player.getSerialGameNumber(),teamName);
                                     displayBoard(player, gson);
                                     sc.nextLine();
                                     System.out.println("Put your hint:");
@@ -107,6 +102,7 @@ public class UserPlayGame {
                     System.exit(0);
                     break;
             }
+            checkWordsState(player.getSerialGameNumber());
         }
     }
     public void logoutUser(Player player) throws IOException {
@@ -175,4 +171,11 @@ public class UserPlayGame {
 
         return userInput;
     }
+    public static void printInfoOfTeam (int gameNumber , String teamName) throws IOException {
+        System.out.println(new ShowTeamInfo().showTeamInfo(gameNumber , teamName));
+    }
+    public static void checkWordsState(int gameNumber) throws IOException {
+        System.out.println(new CheckTeamsWords().playingTeamTurn(gameNumber));
+    }
+
 }

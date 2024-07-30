@@ -72,15 +72,18 @@ public class Team {
         }
         return null;
 }
+    public Set<Definers> getDefiners(){
+        return definers;
+    }
+    public Set<Guessers> getGuessers(){
+        return guessers;
+    }
     public boolean isFull() {
     if (numOfDefiners == getActiveDefiners() && numOfGuessers == getActiveGuessers())
         return true;
     else
         return false;
 }
-    public void printTeamTurn(){
-        System.out.println("Its "+teamName.toString()+" turn");
-    }
 
     public void addWordToGuess(Word word){
         wordsNeedToGuess.add(word);
@@ -163,5 +166,11 @@ public class Team {
             return "Guesser";
         }
         return "Definer";
+    }
+    public boolean guessedAllWords(){
+        return wordsGuessed == wordsToGuess;
+    }
+    public void makeTurn(){
+        numOfTurns++;
     }
 }
