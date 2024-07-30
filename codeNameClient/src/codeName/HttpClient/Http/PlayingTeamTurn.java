@@ -1,4 +1,4 @@
-package codeName.HttpClient;
+package codeName.HttpClient.Http;
 
 import okhttp3.Call;
 import okhttp3.Request;
@@ -9,11 +9,10 @@ import java.io.IOException;
 import static codeName.Configuration.GameConfig.BASE_URL;
 import static codeName.Configuration.GameConfig.HTTP_CLIENT;
 
-public class ShowTeamInfo {
-    private final String RESOURCE = "/teamInfo";
-
-    public String showTeamInfo(int gameNum , String teamName) throws IOException {
-        String url = BASE_URL + RESOURCE + "?gameID=" + gameNum + "&teamName=" + teamName;
+public class PlayingTeamTurn {
+    private final String RESOURCE = "/playingTurn";
+    public String playingTeamTurn(int gameNum) throws IOException {
+        String url = BASE_URL + RESOURCE + "?gameID=" + gameNum;
         Request request = new Request.Builder()
                 .url(url)
                 .get()
