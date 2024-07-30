@@ -34,15 +34,15 @@ public class LoginServlet extends HttpServlet {
             synchronized (userManager) {
                 if (!userManager.isUserExists(username)) {
                     userManager.addUser(username);
-                    response.setStatus(HttpServletResponse.SC_OK);
+                   // response.setStatus(HttpServletResponse.SC_OK);
                     response.getWriter().write("Username added successfully");
                 } else {
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    //response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.getWriter().write("Username already exists. Please enter a different username.");
                 }
             }
         } else {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+           // response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("Username cannot be null or empty.");
         }
     }

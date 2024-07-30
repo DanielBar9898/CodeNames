@@ -28,7 +28,7 @@ public class LogoutPlayerServlet extends HttpServlet {
         Player player = gson.fromJson(request.getReader(), Player.class);
 
         if (player == null || player.getName() == null || player.getName().isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+           // response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("Player data or name is required");
             return;
         }
@@ -39,10 +39,11 @@ public class LogoutPlayerServlet extends HttpServlet {
         synchronized (app) {
             if (userManager.isUserExists(playerName)) {
                 app.removePlayer(player);
-                response.setStatus(HttpServletResponse.SC_OK);
+                userManager.removeUser(playerName);
+              //  response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().write("Player logged out and removed from games successfully");
             } else {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+              //  response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 response.getWriter().write("Player not found");
             }
         }
