@@ -26,19 +26,4 @@ public class UserNameList {
         }
     }
 
-    public String removeUserName(String userName) throws IOException {
-        String url = BASE_URL + RESOURCE + "?username=" + userName + "&action=remove";
-        Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .build();
-
-        Call call = HTTP_CLIENT.newCall(request);
-        try (Response response = call.execute()) {
-            if (!response.isSuccessful()) {
-                throw new IOException("Unexpected code " + response);
-            }
-            return response.body().string();
-        }
-    }
 }

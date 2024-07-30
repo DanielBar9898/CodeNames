@@ -83,7 +83,7 @@ public class Board {
                     Word currWord = wordsList.get(itrWords);
                     if (currWord != null) {
                         if(Hidden) {
-                            currWord.found();
+                            //currWord.found();
                             if(currWord.isFound()) {
                                 printInfoVisibleBoard(currWord);
                             }
