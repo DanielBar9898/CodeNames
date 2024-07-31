@@ -48,7 +48,6 @@ public class UserMain {
                         }
                         if (!response.contains("No")) {
                             gameNumber = selectGame(sc,response);
-
                             if (gameNumber != 0) {
                                 teamNumber = selectTeam(sc, gameNumber);
                                 if (teamNumber != 0) {

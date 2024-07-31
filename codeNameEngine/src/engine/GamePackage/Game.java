@@ -218,23 +218,6 @@ public class Game {
         currentTeam = getNextTeam();
     }
 
-    public static String checkHintInput(String hint) {
-        boolean valid = true;
-        Scanner sc = new Scanner(System.in);
-        while (valid) {
-            // Check if the input is valid
-            if (isValidHintInput(hint)) {
-                valid = false;
-                // Proceed with the logic using the valid input
-            } else {
-                System.out.println("Invalid input. Please enter one or two words without numbers or special characters.");
-                // You can prompt the user again or handle the invalid input appropriately
-                hint = sc.nextLine();
-            }
-        }
-        return hint;
-    }
-
     public boolean isValidNumInput(String input) {
         try {
             int number = Integer.parseInt(input);
@@ -245,23 +228,6 @@ public class Game {
 
     }
 
-    public int checkNumInput(String numOfWords) {
-        boolean valid = true;
-        Scanner sc = new Scanner(System.in);
-        while (valid) {
-            // Check if the input is valid
-            if (isValidNumInput(numOfWords)) {
-                valid = false;
-                // Proceed with the logic using the valid input
-            } else {
-
-                System.out.println("Invalid input. Please enter a number between 0 and " + gameBoard.getWords().size() + ":");
-                // You can prompt the user again or handle the invalid input appropriately
-                numOfWords = sc.nextLine();
-            }
-        }
-        return Integer.parseInt(numOfWords);
-    }
 
     public static boolean isValidChoiceInput(String input) {
         try {
@@ -271,23 +237,6 @@ public class Game {
             return false; // If input is not a valid integer
         }
 
-    }
-
-    public static int checkChoiceInput(String choice) {
-        boolean valid = true;
-        Scanner sc = new Scanner(System.in);
-        while (valid) {
-            // Check if the input is valid
-            if (isValidChoiceInput(choice)) {
-                valid = false;
-                // Proceed with the logic using the valid input
-            } else {
-                System.out.println("Invalid input. Please enter a number between 1-6.");
-                // You can prompt the user again or handle the invalid input appropriately
-                choice = sc.nextLine();
-            }
-        }
-        return Integer.parseInt(choice);
     }
 
     @Override
@@ -332,4 +281,21 @@ public class Game {
         return gameBoard.getWords().size();
     }
 
+    public void deactivateGame() {
+        this.active = false;
+        Iterator<Team> iterator = this.getTeams().iterator();
+        Set<Definers> def;
+        Set<Guessers> gues;
+        while (iterator.hasNext()) {
+            Team team = iterator.next();
+            def = team.getDefiners();
+            gues = team.getGuessers();
+            // Collect definers and guessers to be removed
+            List<Definers> definersToRemove = new ArrayList<>(def);
+            List<Guessers> guessersToRemove = new ArrayList<>(gues);
+            // Remove the definers and guessers from the team
+            def.removeAll(definersToRemove);
+            gues.removeAll(guessersToRemove);
+        }
+    }
 }

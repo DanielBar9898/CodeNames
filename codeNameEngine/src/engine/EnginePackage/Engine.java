@@ -4,11 +4,12 @@ import engine.GamePackage.Board;
 import engine.GamePackage.Game;
 import engine.GamePackage.Team;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public interface Engine {
 
-    public Game loadXmlFile (String filename);
+    public Game loadXmlFile (String filename, String txtName, PrintWriter out);
 
     public void showGameMenu();
 

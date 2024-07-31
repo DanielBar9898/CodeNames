@@ -16,23 +16,24 @@ public class Team {
     private int numOfGuessers;
     private int numOfDefiners;
     private Player.Role nextRoleToPlay;
-   // private int activeGuessers;
-    // private int activeDefiners; function get active!
+    boolean gueesedBlackWord;
+     private int activeGuessers;
+     private int activeDefiners;
 
     public Team(ECNTeam otherTeam){
         this.teamName = otherTeam.getName();
         this.wordsToGuess = otherTeam.getCardsCount();
         numOfGuessers = otherTeam.getGuessers();
         numOfDefiners = otherTeam.getDefiners();
-
+        activeDefiners = 0;
+        activeGuessers = 0;
         wordsNeedToGuess = new HashSet<>();
         wordsGuessed = 0;
         guessers = new HashSet<>();
         definers = new HashSet<>();
         nextRoleToPlay = Player.Role.DEFINER;
+        gueesedBlackWord = false;
     }
-
-
     public Board getTeamBoard() {
         return teamBoard;
     }
@@ -53,9 +54,11 @@ public class Team {
         if (player.getRole() == Player.Role.DEFINER && getActiveDefiners() < numOfDefiners) {
             Definers definersPlayer = new Definers(player.getName(), player.getRole(), player.getSerialGameNumber(), player.getTeamOfPlayer());
             definers.add(definersPlayer);
+            activeDefiners++;
         } else if (player.getRole() == Player.Role.GUESSER && getActiveGuessers() < numOfGuessers) {
             Guessers guessersPlayer = new Guessers(player.getName(), player.getRole(), player.getSerialGameNumber(),player.getTeamOfPlayer());
             guessers.add(guessersPlayer);
+            activeGuessers++;
         } else {
             throw new IllegalArgumentException("Player role is not recognized or team is full");
         }
@@ -83,8 +86,11 @@ public class Team {
         return true;
     else
         return false;
-}
+    }
 
+    public boolean isActive(){
+        return activeGuessers == numOfGuessers && activeDefiners == numOfDefiners;
+    }
     public void addWordToGuess(Word word){
         wordsNeedToGuess.add(word);
     }
@@ -131,11 +137,9 @@ public class Team {
     public int getActiveDefiners(){
         return definers.size();
     }
-
     public int getWordsGuessed() {
         return wordsGuessed;
     }
-
     public int getNumOfTurns() {
         return numOfTurns;
     }
@@ -172,5 +176,20 @@ public class Team {
     }
     public void makeTurn(){
         numOfTurns++;
+    }
+    public void guessedBlackWord(){
+        gueesedBlackWord = true;
+    }
+
+    public boolean isGueesedBlackWord() {
+        return gueesedBlackWord;
+    }
+
+    public void removeGuesser(){
+        activeGuessers--;
+    }
+
+    public void removeDefiner(){
+        activeDefiners--;
     }
 }
