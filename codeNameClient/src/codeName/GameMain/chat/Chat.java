@@ -1,6 +1,6 @@
 package codeName.GameMain.chat;
 
-import codeName.HttpClient.Http.ChatClient;
+import codeName.HttpClient.Http.Chat.ChatClient;
 import codeName.HttpClient.Utills.MutableInt;
 import engine.GamePackage.Player;
 import engine.chatPackage.SingleChatEntry;
@@ -24,7 +24,6 @@ public class Chat {
         if (player.getRole() == Player.Role.DEFINER)
             System.out.println("Enter chat (1 for Team chat, 2 for Definers chat, 0 to return to game menu):");
         else if (player.getRole() == Player.Role.GUESSER) {
-            System.out.println("Welcome to TeamChat! Type EXIT to leave.");
             enterTeamChat(player);
             return;
         }

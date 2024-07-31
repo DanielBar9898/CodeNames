@@ -1,5 +1,7 @@
 package codeName.GameMain.users;
-import codeName.HttpClient.Http.*;
+import codeName.HttpClient.Http.Game.*;
+import codeName.HttpClient.Http.User.UserLogout;
+import codeName.HttpClient.Http.User.UserNameList;
 import com.google.gson.Gson;
 import DTO.GameDTO;
 import DTO.TeamDTO;
@@ -280,7 +282,7 @@ public class UserMain {
         GameDTO game = gson.fromJson(jsonResponse, GameDTO.class);
         printPendingDetails(game);
     }
-    protected static int getValidChoice(Scanner sc) {
+    private static int getValidChoice(Scanner sc) {
         int choice = 0;
         boolean valid = false;
         while (!valid) {

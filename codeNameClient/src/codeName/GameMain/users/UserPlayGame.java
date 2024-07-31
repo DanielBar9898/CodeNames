@@ -4,7 +4,8 @@ import DTO.BoardDTO;
 import DTO.GameStatusDTO;
 import DTO.WordDTO;
 import codeName.GameMain.chat.Chat;
-import codeName.HttpClient.Http.*;
+import codeName.HttpClient.Http.Game.*;
+import codeName.HttpClient.Http.User.UserLogout;
 import com.google.gson.Gson;
 import engine.GamePackage.Board;
 import engine.GamePackage.Player;
@@ -22,7 +23,7 @@ public class UserPlayGame {
         String response , hint , guess;
         int choice;
         boolean first = true;
-        choice = UserMain.getValidChoice(sc);
+        choice = getValidChoice(sc);
         String teamName = player.getTeamOfPlayer();
         String playingTeam;
         if(player == null){
@@ -32,7 +33,7 @@ public class UserPlayGame {
         while(!gameOver){
             if(!first){
                 showUserPlayGameMenu();
-                choice = UserMain.getValidChoice(sc);
+                choice = getValidChoice(sc);
             }
             first = false;
             String gameStatusJson = new GameStatus().getGameStatus(player.getSerialGameNumber());
@@ -181,6 +182,24 @@ public class UserPlayGame {
     }
     public static void checkWordsState(int gameNumber) throws IOException {
         System.out.println(new CheckTeamsWords().playingTeamTurn(gameNumber));
+    }
+    private static int getValidChoice(Scanner sc) {
+        int choice = 0;
+        boolean valid = false;
+        while (!valid) {
+            try {
+                choice = sc.nextInt();
+                if (choice >= 1 && choice <= 4) {
+                    valid = true;
+                } else {
+                    System.out.println("Invalid input. Please enter a number between 1 and 4:");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number between 1 and 4:");
+                sc.next(); // Clear the invalid input
+            }
+        }
+        return choice;
     }
 
 }

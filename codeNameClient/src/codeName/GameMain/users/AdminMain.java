@@ -1,8 +1,11 @@
 package codeName.GameMain.users;
 
 import DTO.GameStatusDTO;
-import codeName.HttpClient.*;
-import codeName.HttpClient.Http.*;
+import codeName.HttpClient.Http.Admin.AdminLog;
+import codeName.HttpClient.Http.Admin.FileUpload;
+import codeName.HttpClient.Http.Game.ActiveGames;
+import codeName.HttpClient.Http.Game.GameStatus;
+import codeName.HttpClient.Http.Game.ShowAllGames;
 import com.google.gson.Gson;
 import DTO.GameDTO;
 import DTO.TeamDTO;
