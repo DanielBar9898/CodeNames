@@ -4,8 +4,7 @@ import DTO.BoardDTO;
 import DTO.GameStatusDTO;
 import DTO.WordDTO;
 import codeName.GameMain.chat.Chat;
-import codeName.HttpClient.Http.Game.*;
-import codeName.HttpClient.Http.User.UserLogout;
+import codeName.HttpClient.Http.*;
 import com.google.gson.Gson;
 import engine.GamePackage.Board;
 import engine.GamePackage.Player;
@@ -23,7 +22,7 @@ public class UserPlayGame {
         String response , hint , guess;
         int choice;
         boolean first = true;
-        choice = getValidChoice(sc);
+        choice = UserMain.getValidChoice(sc);
         String teamName = player.getTeamOfPlayer();
         String playingTeam;
         if(player == null){
@@ -33,7 +32,7 @@ public class UserPlayGame {
         while(!gameOver){
             if(!first){
                 showUserPlayGameMenu();
-                choice = getValidChoice(sc);
+                choice = UserMain.getValidChoice(sc);
             }
             first = false;
             String gameStatusJson = new GameStatus().getGameStatus(player.getSerialGameNumber());
@@ -201,5 +200,23 @@ public class UserPlayGame {
         }
         return choice;
     }
+    public static int extractNumberOfWords(String input) {
+        // Regular expression to match the integer in the string
+        String regex = ".*?(\\d+).*?";
 
+        // Create a Pattern object
+        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regex);
+
+        // Create a matcher object
+        java.util.regex.Matcher matcher = pattern.matcher(input);
+
+        // Check if the pattern matches
+        if (matcher.find()) {
+            // Return the captured group (the integer)
+            return Integer.parseInt(matcher.group(1));
+        } else {
+            // If the pattern doesn't match, throw an exception or return a default value
+            throw new IllegalArgumentException("Input string does not contain an integer");
+        }
+    }
 }

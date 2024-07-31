@@ -31,7 +31,7 @@ public class PlayTurnGuesserServlet extends HttpServlet {
         String gameNum = request.getParameter("gameNumber");
         String guess = request.getParameter("guess");
         int gameID = Integer.parseInt(gameNum);
-        List<Integer> gueesesIndex = parseNumbers(guess);
+        int guessIndex = Integer.parseInt(guess);
         PrintWriter out = response.getWriter();
         if(playerName == null || playerName.equals("")) {
             out.write("Player name i Empty! error");
@@ -45,38 +45,15 @@ public class PlayTurnGuesserServlet extends HttpServlet {
         ArrayList<Team> teams = currentGame.getTeams();
         Team teamTurn = currentGame.getCurrentTeam();
         EngineImpl engine = new EngineImpl();
-        for(Integer index : gueesesIndex) {
-            engine.playTurn(teamTurn,index,gameOver,res,currentGame.getGameBoard(),teams);
-        }
+        engine.playTurn(teamTurn,guessIndex,gameOver,res,currentGame.getGameBoard(),teams);
         teamTurn.makeTurn();
         currentGame.nextTurn();
         if(gameOver.getValue()){
-            out.write("GAME OVER!");
+            out.write("GAME OVER FOR YOUR TEAM!");
             return;
         }
         for(String msg : res.getMessages()) {
             out.write(msg);
         }
-    }
-    public static List<Integer> parseNumbers(String numbers) {
-        // Split the string by commas
-        String[] numberStrings = numbers.split(",");
-
-        // Create a List to hold the integers
-        List<Integer> numberList = new ArrayList<>();
-
-        // Parse each number and add it to the list
-        for (String numberString : numberStrings) {
-            try {
-                numberList.add(Integer.parseInt(numberString.trim()));
-            } catch (NumberFormatException e) {
-                // Handle the case where the string is not a valid integer
-                System.err.println("Invalid number format: " + numberString);
-                // Optionally, you can decide what to do in case of an error
-                // For example, you can skip this number or assign a default value
-                // numberList.add(0); // Uncomment to assign 0 as a default value
-            }
-        }
-        return numberList;
     }
 }

@@ -13,7 +13,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 @WebServlet(name = "checkTeamsWords", urlPatterns = "/checkTeamsWords")
@@ -29,17 +31,29 @@ public class CheckTeamsWordsServlet extends HttpServlet {
         Set<Guessers> gues;
         while (iterator.hasNext()) {
             Team team = iterator.next();
-            if (team.guessedAllWords()) {
+            if (team.guessedAllWords()||team.isGueesedBlackWord()) {
                 def = team.getDefiners();
                 gues = team.getGuessers();
-                for (Definers d : def) {
+
+                // Collect definers and guessers to be removed
+                List<Definers> definersToRemove = new ArrayList<>(def);
+                List<Guessers> guessersToRemove = new ArrayList<>(gues);
+
+                // Call logout servlet for definers and guessers
+                for (Definers d : definersToRemove) {
                     callLogoutPlayerServlet(d, out);
+                    team.removeDefiner();
                 }
-                for (Guessers g : gues) {
+                for (Guessers g : guessersToRemove) {
                     callLogoutPlayerServlet(g, out);
+                    team.removeGuesser();
                 }
-                out.write("Team " + team.getTeamName() + " guessed all words! They are out of the game!");
-                iterator.remove(); // Safe removal
+                if(team.isGueesedBlackWord()){
+                    out.write("Team " +team.getTeamName() + " has guessed black word! They are out of the game!");
+                }
+                else{
+                    out.write("Team " + team.getTeamName() + " guessed all words! They are out of the game!");
+                }
             }
         }
     }
