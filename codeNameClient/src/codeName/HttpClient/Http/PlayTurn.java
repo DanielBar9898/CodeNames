@@ -11,7 +11,7 @@ import static codeName.Configuration.GameConfig.HTTP_CLIENT;
 public class PlayTurn {
     private String RESOURCE = "/playTurn";
 
-    public String playTurnGuesser(Player player , String guess) throws IOException{
+    public String playTurnGuesser(Player player , int guess) throws IOException{
         RESOURCE+="Guesser";
         String url = BASE_URL + RESOURCE +"?gameNumber=" + player.getSerialGameNumber() + "&name=" + player.getName() +
                 "&guess=" + guess;

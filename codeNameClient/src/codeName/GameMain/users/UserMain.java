@@ -48,7 +48,6 @@ public class UserMain {
                         }
                         if (!response.startsWith("{\"e")) {
                             gameNumber = selectGame(sc,response);
-
                             if (gameNumber != 0) {
                                 teamNumber = selectTeam(sc, gameNumber);
                                 if (teamNumber != 0) {

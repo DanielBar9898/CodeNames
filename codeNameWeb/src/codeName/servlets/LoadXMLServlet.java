@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @WebServlet(name = "loadXml" , urlPatterns = "/loadXmlFile")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
@@ -21,12 +23,14 @@ public class LoadXMLServlet extends HttpServlet {
         Part filePathPart = request.getPart("filePath");
         String filePath = extractString(filePathPart);
         EngineImpl engine = new EngineImpl();
+        String content = readFileContent(filePath);
+        String txtName = extractDictionaryFile(content);
         App allGames = (App) getServletContext().getAttribute("allGames");
         if (allGames == null) {
             allGames = new App();
             getServletContext().setAttribute("allGames", allGames);
         }
-        Game currentGame = engine.loadXmlFile(filePath);
+        Game currentGame = engine.loadXmlFile(filePath,txtName,response.getWriter());
         if(currentGame == null) {
             response.getWriter().write("XML file could not be loaded.");
             return;
@@ -69,5 +73,29 @@ public class LoadXMLServlet extends HttpServlet {
 
         // Create the new file path by combining the path up to the last separator with the new file name
         return filePath.substring(0, lastSeparatorIndex + 1) + newFileName;
+    }
+    public static String readFileContent(String filePath) throws IOException {
+        StringBuilder content = new StringBuilder();
+
+        // Use try-with-resources to ensure the reader is closed properly
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append(System.lineSeparator());
+            }
+        }
+
+        return content.toString();
+    }
+    public static String extractDictionaryFile(String xmlContent) {
+        String patternString = "<ECN-Dictionary-File>(.*?)</ECN-Dictionary-File>";
+        Pattern pattern = Pattern.compile(patternString);
+        Matcher matcher = pattern.matcher(xmlContent);
+
+        if (matcher.find()) {
+            return matcher.group(1).trim();
+        } else {
+            return "";
+        }
     }
 }

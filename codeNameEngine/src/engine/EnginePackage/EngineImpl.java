@@ -8,26 +8,35 @@ import engine.JAXBGenerated2.ECNGame;
 //import engine.users.User;
 import codeName.utils.Response;
 import com.google.gson.Gson;
+import jdk.internal.org.xml.sax.InputSource;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-
+import java.nio.file.*;
 
 public class EngineImpl implements Engine {
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "engine.JAXBGenerated2";
     Set<Game> games;
   //  Set<User> users;
 
-    public Game loadXmlFile(String fileName){
+    public Game loadXmlFile(String fileName,String txtName,PrintWriter out){
             if(!(fileName.endsWith(".xml"))){
+                out.write("This is not an XML file!\n");
+                return null;
+            }
+            else if(!isFileInDirectory(extractFilePath(fileName),txtName)){
+                out.write("Could not find " +txtName+" in working directory!\n");
                 return null;
             }
             else{
@@ -86,7 +95,6 @@ public class EngineImpl implements Engine {
         Word currWord;
         Set<Word> wordsSet = teamTurn.getWordsNeedToGuess();
         currWord = teamBoard.getWordBySerialNumber(wordIndex);
-        response.addMessage("For the guess index number : " + wordIndex+"\n");
         if (currWord == null) {
             response.addMessage("Invalid word index!\n");
             otherTeamWord = false;
@@ -98,10 +106,11 @@ public class EngineImpl implements Engine {
             teamTurn.guessedRight();
             otherTeamWord = true;
         } else if (currWord.getWordType().equalsIgnoreCase("Black")) {
-            response.addMessage("OMG! It's a black word, game over!\n");
+            response.addMessage("OMG! It's a black word, game over for your team!\n");
             gameOver.setValue(true);
             response.setGameOver(true);
             otherTeamWord = false;
+            teamTurn.guessedBlackWord();
         } else if (currWord.getWordType().equalsIgnoreCase("Neutral")) {
             response.addMessage("It's a neutral word");
             otherTeamWord = false;
@@ -124,7 +133,23 @@ public class EngineImpl implements Engine {
        List<Team> teams = new ArrayList<>();
 
     }
+    public static boolean isFileInDirectory(String directoryPath, String fileName) {
+        Path dirPath = Paths.get(directoryPath);
+        Path filePath = dirPath.resolve(fileName);
 
+        return Files.exists(filePath) && Files.isRegularFile(filePath);
+    }
+    public static String extractFilePath(String fullPath) {
+        // Find the last separator index
+        int lastSeparatorIndex = fullPath.lastIndexOf('\\');
 
+        // Extract the directory path
+        if (lastSeparatorIndex != -1) {
+            return fullPath.substring(0, lastSeparatorIndex);
+        } else {
+            // If no separator is found, return an empty string or handle as needed
+            return "";
+        }
+    }
 }
 
