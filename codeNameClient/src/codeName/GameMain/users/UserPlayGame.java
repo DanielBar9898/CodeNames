@@ -4,7 +4,10 @@ import DTO.BoardDTO;
 import DTO.GameStatusDTO;
 import DTO.WordDTO;
 import codeName.GameMain.chat.Chat;
-import codeName.HttpClient.Http.*;
+import codeName.HttpClient.Http.Game.CheckAmountOfTeams;
+import codeName.HttpClient.Http.Game.DeactivateGame;
+import codeName.HttpClient.Http.Game.*;
+import codeName.HttpClient.Http.User.UserLogout;
 import com.google.gson.Gson;
 import engine.GamePackage.Board;
 import engine.GamePackage.Player;
@@ -23,7 +26,7 @@ public class UserPlayGame {
         int guess , currentNumOfWords;
         int choice;
         boolean first = true;
-        choice = UserMain.getValidChoice(sc);
+        choice = getValidChoice(sc);
         String teamName = player.getTeamOfPlayer();
         String playingTeam , rsp;
         String currentHint;
@@ -37,7 +40,7 @@ public class UserPlayGame {
         while(!gameOver){
             if(!first){
                 showUserPlayGameMenu();
-                choice = UserMain.getValidChoice(sc);
+                choice = getValidChoice(sc);
             }
             first = false;
             String gameStatusJson = new GameStatus().getGameStatus(gameNumber);
@@ -227,6 +230,9 @@ public class UserPlayGame {
             }
         }
         return choice;
+    }
+    public static String checkTeams(int gameNumber) throws IOException {
+        return new CheckAmountOfTeams().checkTeams(gameNumber);
     }
     public static int extractNumberOfWords(String input) {
         // Regular expression to match the integer in the string

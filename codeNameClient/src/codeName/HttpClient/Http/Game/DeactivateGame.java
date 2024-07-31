@@ -1,5 +1,4 @@
-package codeName.HttpClient.Http;
-
+package codeName.HttpClient.Http.Game;
 
 import okhttp3.Call;
 import okhttp3.Request;
@@ -10,10 +9,10 @@ import java.io.IOException;
 import static codeName.Configuration.GameConfig.BASE_URL;
 import static codeName.Configuration.GameConfig.HTTP_CLIENT;
 
-public class CheckAmountOfTeams {
-    private final String RESOURCE = "/checkAmountOfTeams";
+public class DeactivateGame {
+    private final String RESOURCE = "/deactivateGame";
 
-    public String checkTeams(int gameNum) throws IOException {
+    public String deactivateGame(int gameNum) throws IOException {
         String url = BASE_URL + RESOURCE + "?gameNum=" + gameNum; ;
         Request request = new Request.Builder()
                 .url(url)
