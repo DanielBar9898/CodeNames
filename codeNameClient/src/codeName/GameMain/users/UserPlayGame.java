@@ -19,34 +19,40 @@ public class UserPlayGame {
         showUserPlayGameMenu();
         Scanner sc = new Scanner(System.in);
         int numOfWords;
-        String response , hint , guess;
+        String response , hint;
+        int guess , currentNumOfWords;
         int choice;
         boolean first = true;
         choice = UserMain.getValidChoice(sc);
         String teamName = player.getTeamOfPlayer();
-        String playingTeam;
+        String playingTeam , rsp;
+        String currentHint;
         if(player == null){
             return;
         }
+        int gameNumber = player.getSerialGameNumber();
         boolean gameOver = false;
+        boolean activeGame = false;
+        Set <String> teamsOut = new HashSet<>();
         while(!gameOver){
             if(!first){
                 showUserPlayGameMenu();
                 choice = UserMain.getValidChoice(sc);
             }
             first = false;
-            String gameStatusJson = new GameStatus().getGameStatus(player.getSerialGameNumber());
+            String gameStatusJson = new GameStatus().getGameStatus(gameNumber);
             Gson gson = new Gson();
             GameStatusDTO gameStatus = gson.fromJson(gameStatusJson, GameStatusDTO.class);
             switch(choice) {
                 case 1:
                     printGameStatus(gameStatus);
-                   if (gameStatus.getGameStatus().equalsIgnoreCase("Active"))
+                    if (gameStatus.getGameStatus().equalsIgnoreCase("Active"))
                         displayBoard(player, gson);
                     break;
                 case 2:
-                    playingTeam = new PlayingTeamTurn().playingTeamTurn(player.getSerialGameNumber());
+                    playingTeam = new PlayingTeamTurn().playingTeamTurn(gameNumber);
                     if(gameStatus.getGameStatus().equalsIgnoreCase("Active")){
+                        activeGame = true;
                         if(!playingTeam.
                                 equalsIgnoreCase(player.getTeamOfPlayer()))
                             System.out.println("Its not your team turn! its "+ playingTeam +" turn!");
@@ -54,7 +60,7 @@ public class UserPlayGame {
                             response = new GetNextTurn().nextTurn(teamName);
                             if(player.getRole() == Player.Role.DEFINER){
                                 if(response.equalsIgnoreCase("Definer")){
-                                    printInfoOfTeam(player.getSerialGameNumber(),teamName);
+                                    printInfoOfTeam(gameNumber,teamName);
                                     displayBoard(player, gson);
                                     sc.nextLine();
                                     System.out.println("Put your hint:");
@@ -71,19 +77,24 @@ public class UserPlayGame {
                             }
                             else{
                                 if(response.equalsIgnoreCase("Guesser")){
-                                    System.out.println("The hint is: "+new DisplayHint().displayHint(teamName));
+                                    currentHint ="The hint is " + new DisplayHint().displayHint(teamName);
+                                    System.out.println(currentHint);
                                     displayBoard(player, gson);
-                                    System.out.println("Put your Guess\n" +
-                                            "if its one word just put the index of the word, otherwise " +
-                                            "make sure to put ',' between the indexes " +
-                                            "i.e x,y,z");
-                                    sc.nextLine();
-                                    guess = sc.nextLine();
-                                    response = new PlayTurn().playTurnGuesser(player, guess);
-                                    if(response.equalsIgnoreCase("GAME OVER!")){
-                                        gameOver = true;
+                                    currentNumOfWords = extractNumberOfWords(currentHint);
+                                    while(currentNumOfWords > 0 &&
+                                            !response.equalsIgnoreCase("GAME OVER FOR YOUR TEAM!")){
+                                        System.out.println("Put the index of the word you want to guess or 0 to stop turn");
+                                        sc.nextLine();
+                                        guess = sc.nextInt();
+                                        if(guess == 0){
+                                            currentNumOfWords = 0;
+                                        }
+                                        else{
+                                            response = new PlayTurn().playTurnGuesser(player, guess);
+                                            System.out.println(response);
+                                            currentNumOfWords--;
+                                        }
                                     }
-                                    System.out.println(response);
                                     new SwitchTurn().switchTurn(teamName);
                                 }
                                 else{
@@ -107,7 +118,24 @@ public class UserPlayGame {
                     System.exit(0);
                     break;
             }
-            checkWordsState(player.getSerialGameNumber());
+            if(activeGame){
+                rsp = checkWordsState(gameNumber);
+                if(!teamsOut.contains(rsp)){
+                    teamsOut.add(rsp);
+                    System.out.println(rsp);
+                    if(rsp.startsWith("Team")){
+                     logoutUser(player);
+                     gameOver = true;
+                    }
+                }
+                if(checkTeams(gameNumber).equalsIgnoreCase("Not enough teams in the game!"))
+                {
+                    System.out.println("Only 1 team left, game over!");
+                    gameOver = true;
+                    System.out.println(new DeactivateGame().deactivateGame(gameNumber));
+                    activeGame = false;
+                }
+            }
         }
     }
     public void logoutUser(Player player) throws IOException {
@@ -179,8 +207,8 @@ public class UserPlayGame {
     public static void printInfoOfTeam (int gameNumber , String teamName) throws IOException {
         System.out.println(new ShowTeamInfo().showTeamInfo(gameNumber , teamName));
     }
-    public static void checkWordsState(int gameNumber) throws IOException {
-        System.out.println(new CheckTeamsWords().playingTeamTurn(gameNumber));
+    public static String checkWordsState(int gameNumber) throws IOException {
+        return new CheckTeamsWords().playingTeamTurn(gameNumber);
     }
     private static int getValidChoice(Scanner sc) {
         int choice = 0;
