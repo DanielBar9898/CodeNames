@@ -32,6 +32,7 @@ public class UserPlayGame {
         }
         int gameNumber = player.getSerialGameNumber();
         boolean gameOver = false;
+        boolean activeGame = false;
         Set <String> teamsOut = new HashSet<>();
         while(!gameOver){
             if(!first){
@@ -51,6 +52,7 @@ public class UserPlayGame {
                 case 2:
                     playingTeam = new PlayingTeamTurn().playingTeamTurn(gameNumber);
                     if(gameStatus.getGameStatus().equalsIgnoreCase("Active")){
+                        activeGame = true;
                         if(!playingTeam.
                                 equalsIgnoreCase(player.getTeamOfPlayer()))
                             System.out.println("Its not your team turn! its "+ playingTeam +" turn!");
@@ -116,16 +118,23 @@ public class UserPlayGame {
                     System.exit(0);
                     break;
             }
-            rsp = checkWordsState(gameNumber);
-            if(!teamsOut.contains(rsp)){
-                teamsOut.add(rsp);
-                System.out.println(rsp);
-            }
-            if(checkTeams(gameNumber).equalsIgnoreCase("Not enough teams in the game!"))
-            {
-             System.out.println("Only 1 team left, game over!");
-             gameOver = true;
-             System.out.println(new DeactivateGame().deactivateGame(gameNumber));
+            if(activeGame){
+                rsp = checkWordsState(gameNumber);
+                if(!teamsOut.contains(rsp)){
+                    teamsOut.add(rsp);
+                    System.out.println(rsp);
+                    if(rsp.startsWith("Team")){
+                     logoutUser(player);
+                     gameOver = true;
+                    }
+                }
+                if(checkTeams(gameNumber).equalsIgnoreCase("Not enough teams in the game!"))
+                {
+                    System.out.println("Only 1 team left, game over!");
+                    gameOver = true;
+                    System.out.println(new DeactivateGame().deactivateGame(gameNumber));
+                    activeGame = false;
+                }
             }
         }
     }
