@@ -37,22 +37,22 @@ public class AdminLogServlet extends HttpServlet {
 
         if ("login".equals(action)) {
             if (allGames.loginAdmin(adminName)) {
-                response.setStatus(HttpServletResponse.SC_OK);
+             //   response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().write("Admin logged in successfully");
             } else {
-                response.setStatus(HttpServletResponse.SC_CONFLICT);
-                response.getWriter().write("An admin is already logged in, please try again later");
+              //  response.setStatus(HttpServletResponse.SC_CONFLICT);
+                response.getWriter().write("An admin is already logged in, please try again later.");
             }
         } else if ("logout".equals(action)) {
             if (allGames.logoutAdmin()) {
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().write("Admin logged out successfully");
             } else {
-                response.setStatus(HttpServletResponse.SC_CONFLICT);
+            //    response.setStatus(HttpServletResponse.SC_CONFLICT);
                 response.getWriter().write("No admin is logged in");
             }
         } else {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+          //  response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("Invalid action");
         }
     }

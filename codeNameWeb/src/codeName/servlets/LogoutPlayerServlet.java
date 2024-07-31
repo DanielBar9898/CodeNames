@@ -39,7 +39,7 @@ public class LogoutPlayerServlet extends HttpServlet {
         synchronized (app) {
             if (userManager.isUserExists(playerName)) {
                 app.removePlayer(player);
-                userManager.removeUser(playerName);
+                //userManager.removeUser(playerName);
               //  response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().write("Player logged out and removed from games successfully");
             } else {

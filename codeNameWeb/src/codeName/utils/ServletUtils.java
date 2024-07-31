@@ -6,6 +6,7 @@ import engine.GamePackage.App;
 import engine.GamePackage.Board;
 import engine.GamePackage.Word;
 import engine.GamePackage.UserManager;
+import engine.chatPackage.ChatManager;
 import jakarta.servlet.ServletContext;
 
 import com.google.gson.Gson;
@@ -30,6 +31,16 @@ public class ServletUtils {
 	 */
 	private static final Object userManagerLock = new Object();
 
+	public static ChatManager getChatManager(ServletContext servletContext) {
+		if (servletContext.getAttribute(CHAT_MANAGER_ATTRIBUTE_NAME) == null) {
+			synchronized (servletContext) {
+				if (servletContext.getAttribute(CHAT_MANAGER_ATTRIBUTE_NAME) == null) {
+					servletContext.setAttribute(CHAT_MANAGER_ATTRIBUTE_NAME, new ChatManager());
+				}
+			}
+		}
+		return (ChatManager) servletContext.getAttribute(CHAT_MANAGER_ATTRIBUTE_NAME);
+	}
 	public static UserManager getUserManager(ServletContext servletContext) {
 
 		synchronized (userManagerLock) {
@@ -40,15 +51,6 @@ public class ServletUtils {
 		return (UserManager) servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME);
 	}
 
-	/*public static App getApp(ServletContext servletContext) {
-		synchronized (ServletUtils.class) {
-			if (servletContext.getAttribute(APP_ATTRIBUTE_NAME) == null) {
-				App app = new App();
-				servletContext.setAttribute(APP_ATTRIBUTE_NAME, app);
-			}
-		}
-		return (App) servletContext.getAttribute(APP_ATTRIBUTE_NAME);
-	}*/
 
 	public static String convertGamesToJson(Set<Game> games) {
 		List<GameDTO> gameDTOs = new ArrayList<>();

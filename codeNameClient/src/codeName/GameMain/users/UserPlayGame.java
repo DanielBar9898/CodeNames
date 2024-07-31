@@ -3,6 +3,7 @@ package codeName.GameMain.users;
 import DTO.BoardDTO;
 import DTO.GameStatusDTO;
 import DTO.WordDTO;
+import codeName.GameMain.chat.Chat;
 import codeName.HttpClient.Http.*;
 import com.google.gson.Gson;
 import engine.GamePackage.Board;
@@ -21,7 +22,7 @@ public class UserPlayGame {
         String response , hint , guess;
         int choice;
         boolean first = true;
-        choice = sc.nextInt();
+        choice = UserMain.getValidChoice(sc);
         String teamName = player.getTeamOfPlayer();
         String playingTeam;
         if(player == null){
@@ -31,7 +32,7 @@ public class UserPlayGame {
         while(!gameOver){
             if(!first){
                 showUserPlayGameMenu();
-                choice = sc.nextInt();
+                choice = UserMain.getValidChoice(sc);
             }
             first = false;
             String gameStatusJson = new GameStatus().getGameStatus(player.getSerialGameNumber());
@@ -40,7 +41,7 @@ public class UserPlayGame {
             switch(choice) {
                 case 1:
                     printGameStatus(gameStatus);
-             //      if (gameStatus.getGameStatus().equalsIgnoreCase("Active"))
+                   if (gameStatus.getGameStatus().equalsIgnoreCase("Active"))
                         displayBoard(player, gson);
                     break;
                 case 2:
@@ -96,7 +97,11 @@ public class UserPlayGame {
                     }
                     break;
                 case 3:
+                    new Chat().enterChat(player);
+                    break;
+                case 4:
                     response = new UserLogout().logoutPlayer(player);
+                    new UserLogout().logoutUser(player.getName());
                     System.out.println(response);
                     System.out.println("Thank you for playing game!");
                     System.exit(0);
@@ -117,7 +122,7 @@ public class UserPlayGame {
     public static void showUserPlayGameMenu(){
         System.out.println("Game Menu:\n");
         System.out.println("1.Show status game \n2.Play turn!\n" +
-                "3.Exit\nPlease enter your choice:");
+                "3.Chat\n4.Exit\nPlease enter your choice:");
     }
     public static void printGameStatus(GameStatusDTO gameStatus) {
         System.out.println("Game status: " + gameStatus.getGameStatus());

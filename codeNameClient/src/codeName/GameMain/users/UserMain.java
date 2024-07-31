@@ -40,13 +40,13 @@ public class UserMain {
                 case 2:
                     try {
                         response = new PendingGames().showPendingGames();
-                        if(response.startsWith("{\"e")){
+                        if(response.contains("No")){
                             System.out.println(response);
                         }
                         else{
                             printAllPendingGamesDetails(response);
                         }
-                        if (!response.startsWith("{\"e")) {
+                        if (!response.contains("No")) {
                             gameNumber = selectGame(sc,response);
 
                             if (gameNumber != 0) {
@@ -113,7 +113,7 @@ public class UserMain {
                 String gameDetails = new PendingGames().selectPendingGame(gameNumber);
 
                 // Check if the response contains an error message
-                if (gameDetails.contains("\"error\"")) {
+                if (gameDetails.contains("error")) {
                     System.out.println("Game not found. Please enter a valid game number.");
                     continue; // Ask for input again
                 }
@@ -280,7 +280,7 @@ public class UserMain {
         GameDTO game = gson.fromJson(jsonResponse, GameDTO.class);
         printPendingDetails(game);
     }
-    private static int getValidChoice(Scanner sc) {
+    protected static int getValidChoice(Scanner sc) {
         int choice = 0;
         boolean valid = false;
         while (!valid) {
