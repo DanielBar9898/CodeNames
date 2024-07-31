@@ -285,7 +285,7 @@ public class UserMain {
         while (!valid) {
             try {
                 choice = sc.nextInt();
-                if (choice >= 1 && choice <= 3) {
+                if (choice >= 1 && choice <= 4) {
                     valid = true;
                 } else {
                     System.out.println("Invalid input. Please enter a number between 1 and 4:");
