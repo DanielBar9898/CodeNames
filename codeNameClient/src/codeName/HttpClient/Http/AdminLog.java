@@ -24,7 +24,7 @@ public class AdminLog {
         try (Response response = call.execute()) {
             String responseBody = response.body().string();
             if (response.code() == 409) {
-                return "An admin is already logged in, please try again later";
+                return "An admin is already logged in, please try again later.";
             }
             if (!response.isSuccessful()) {
                 throw new IOException("Unexpected code " + response + " with message: " + responseBody);

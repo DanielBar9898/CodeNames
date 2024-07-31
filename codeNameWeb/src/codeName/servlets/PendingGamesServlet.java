@@ -26,14 +26,14 @@ public class PendingGamesServlet extends HttpServlet {
         App games = (App) getServletContext().getAttribute("allGames");
 
         if (games == null) {
-            response.getWriter().write("{\"error\": \"No games found\"}");
+            response.getWriter().write("No games found");
             return;
         }
         Set<Game> pendingGames = games.getPendingGames();
         if (gameNumberStr == null || gameNumberStr.isEmpty()) {
          //   Set<Game> pendingGames = games.getPendingGames();
             if (pendingGames.isEmpty()) {
-                response.getWriter().write("{\"error\": \"No pending games\"}");
+                response.getWriter().write("No pending games");
                 return;
             }
 
@@ -54,7 +54,7 @@ public class PendingGamesServlet extends HttpServlet {
                 int gameNumber = Integer.parseInt(gameNumberStr);
                 Game pendingGame = games.getGameById(gameNumber);
                 if (pendingGame == null) {
-                    response.getWriter().write("{\"error\": \"Game not found\"}");
+                    response.getWriter().write("error: Game not found");
                     return;
                 }
 

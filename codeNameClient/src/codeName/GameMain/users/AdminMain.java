@@ -20,7 +20,7 @@ import java.util.Scanner;
 public class AdminMain {
 
     public static void main(String[] args) throws IOException {
-        AdminLog adminLogin = new AdminLog();
+        AdminLog adminLog = new AdminLog();
         adminLogin();
         showAdminMenu();
         Scanner sc = new Scanner(System.in);
@@ -88,7 +88,7 @@ public class AdminMain {
                     break;
             }
         }
-        response =  adminLogin.adminLogout();
+        response =  adminLog.adminLogout();
         System.out.println(response+". Thank you.");
     }
     public static void adminLogin() {
